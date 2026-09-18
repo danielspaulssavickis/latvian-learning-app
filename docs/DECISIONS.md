@@ -54,6 +54,27 @@ Wrong content is worse than no content — the learner drills the error.
 *Rules out:* bulk-generating the seed corpus; "just fill in 200 example
 sentences"; runtime AI generation of exercises.
 
+## ADR-006 — Draft/approved split for sentence content
+**2026-09-18 · accepted**
+
+New sentences start in `content/drafts/*.json`, validated against the same
+schema as `content/sentences/`, but excluded from the app's content loader — a
+draft can never generate a review card. `npm run content:approve <path>`
+validates the draft and, if it passes, sets `review: "approved"` and
+`reviewedAt: <ISO timestamp>`, writes the file into `content/sentences/`, and
+deletes the draft. If validation fails, it refuses and reports the error; no
+files move.
+
+*Why:* ADR-004 requires a human review step before content ships. Keeping
+drafts on disk (rather than in chat or a separate scratch file) lets
+`content:check` validate them early, while the directory they live in — not
+the `review` field — is the actual gate the loader honors. `review`/
+`reviewedAt` are an audit trail set only by `content:approve`, never authored
+by hand.
+
+*Rules out:* sentences reaching `content/sentences/` without going through
+`content:approve`; the loader ever reading `content/drafts/`.
+
 ---
 
 ## Open questions

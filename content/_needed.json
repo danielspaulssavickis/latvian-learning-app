@@ -1,0 +1,12 @@
+[
+  {
+    "type": "sentence",
+    "description": "An A1 sentence drilling the locative singular of a common place noun (e.g. \"in the house\" / \"in Riga\").",
+    "reason": "SPEC.md's Sentence example uses this exact case but no real sentence exists yet in content/."
+  },
+  {
+    "type": "lexeme",
+    "description": "A declension-4 feminine noun (like \"māja\") with its full singular/plural paradigm confirmed, for use as the first fully-verified lexeme.",
+    "reason": "No lexemes exist in content/lexemes/ yet; the inflection engine (M2) needs at least one lexeme per declension class to test against."
+  }
+]

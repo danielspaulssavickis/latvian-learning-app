@@ -4,7 +4,7 @@
 lands, add a dated line under "Session log", and keep "Current focus" accurate.
 Do not rewrite finished milestones; append.
 
-**Current focus:** M1 — content pipeline
+**Current focus:** M1 — content pipeline (waiting on the hand-authored seed sentences)
 
 ---
 
@@ -21,11 +21,12 @@ commands pass on a clean clone.
 
 ## M1 — Content pipeline
 
-- [ ] Zod schemas for Lexeme, Sentence, GrammarTable (`src/content/schemas.ts`)
-- [ ] `npm run content:check` validates every file in `content/` and fails loudly with the offending path
-- [ ] Loader that builds an in-memory index: lexeme by id, sentences by level, sentences by feature
-- [ ] `content/_needed.json` convention for missing content
-- [ ] 20 hand-authored A1 sentences as the seed set (I write these, not you)
+- [x] Zod schemas for Lexeme, Sentence, GrammarTable (`src/content/schemas.ts`)
+- [x] `npm run content:check` validates every file in `content/` and fails loudly with the offending path
+- [x] Loader that builds an in-memory index: lexeme by id, sentences by level, sentences by feature
+- [x] `content/_needed.json` convention for missing content
+- [ ] 20 hand-authored A1 sentences as the seed set (I write these, not you) —
+      **still open**, blocks nothing Claude needs to do next
 
 **Done when:** `content:check` catches a deliberately broken fixture, and the
 loader has tests covering a missing lexeme reference and a token with no features.
@@ -79,4 +80,16 @@ a text-only card instead of breaking the session.
 ## Session log
 
 <!-- newest first, one line each: date — what landed — what to pick up next -->
+2026-09-18 — M1 mostly done: added ADR-006 (draft/approved split for sentences,
+since the Session 1 prompt referenced it but it didn't exist yet) and the
+matching SPEC.md fields; `src/content/schemas.ts` (Zod, incl. NFC checks),
+`src/content/validate.ts` (`checkContent` + `buildApprovedSentence`, shared by
+both CLI scripts), `src/content/loader.ts` + `src/content/index.ts` (three
+indexes, drafts excluded from the glob), real `content:check` and new
+`content:approve` scripts under `scripts/`. 22 tests added, all passing;
+manually verified `content:check` against a broken fixture and
+`content:approve` end-to-end, then removed the scratch files. Left open: the
+20 hand-authored A1 seed sentences (explicitly the user's task) and the exact
+GrammarTable shape (deliberately provisional — real ending-table format is
+Session 2's job). Next: Session 2, M2 inflection engine.
 2026-09-18 — M0 done: Vite+React+TS(strict)+Tailwind v4 scaffold, Vitest+Testing Library smoke test, ESLint+Prettier, `src/{engine,content,ui,db}` + `content/` layout with READMEs, `content:check` stub. All three check commands pass on a clean `npm ci`. Next: M1 content pipeline (Zod schemas, real `content:check`, loader).

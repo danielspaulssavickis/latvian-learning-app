@@ -23,5 +23,13 @@ export default tseslint.config(
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     },
   },
+  {
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    files: ['scripts/**/*.ts'],
+    languageOptions: {
+      ecmaVersion: 2023,
+      globals: globals.node,
+    },
+  },
   prettierConfig,
 )

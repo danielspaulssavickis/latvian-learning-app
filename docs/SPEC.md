@@ -56,13 +56,18 @@ list in `content/grammar/alternations.json`, not by regex guessing.
     { surface: "dzīvoju", lexeme: "lex_dzivot", features: { tense: "pres", person: 1, number: "sg" } },
     { surface: "Rīgā",    lexeme: "lex_riga",  features: { case: "loc", number: "sg" }, drillable: true }
   ],
-  audio?: "audio/snt_0142.mp3"
+  audio?: "audio/snt_0142.mp3",
+  review?: "draft" | "approved",
+  reviewedAt?: "2026-09-18T00:00:00.000Z"   // ISO 8601
 }
 ```
 
 `drillable: true` marks a token the exercise generator may blank out. Every
 sentence needs at least one. Token alignment is what makes the whole app work —
 it is worth authoring carefully.
+
+`review` and `reviewedAt` are set by `npm run content:approve`, never authored
+by hand — see ADR-006 for the draft/approved workflow.
 
 ### Card / review state — IndexedDB, not in `content/`
 
