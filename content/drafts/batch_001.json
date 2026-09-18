@@ -1,0 +1,136 @@
+[
+  {
+    "id": "snt_0001",
+    "text": "Es dzīvoju Rīgā.",
+    "gloss": "I live in Riga.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      { "surface": "Es", "lexeme": "lex_es", "features": { "case": "nom", "number": "sg" } },
+      { "surface": "dzīvoju", "lexeme": "lex_dzivot", "features": { "tense": "pres", "person": 1, "number": "sg" } },
+      { "surface": "Rīgā", "lexeme": "lex_riga", "features": { "case": "loc", "number": "sg" }, "drillable": true }
+    ]
+  },
+  {
+    "id": "snt_0002",
+    "text": "Viņš strādā universitātē.",
+    "gloss": "He works at the university.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      { "surface": "Viņš", "lexeme": "lex_vins", "features": { "case": "nom", "number": "sg" } },
+      { "surface": "strādā", "lexeme": "lex_stradat", "features": { "tense": "pres", "person": 3, "number": "sg" } },
+      { "surface": "universitātē", "lexeme": "lex_universitate", "features": { "case": "loc", "number": "sg" }, "drillable": true }
+    ]
+  },
+  {
+    "id": "snt_0003",
+    "text": "Man ir divi bērni.",
+    "gloss": "I have two children.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      { "surface": "Man", "lexeme": "lex_es", "features": { "case": "dat", "number": "sg" }, "drillable": true },
+      { "surface": "ir", "lexeme": "lex_but", "features": { "tense": "pres", "person": 3, "number": "sg" } },
+      { "surface": "divi", "lexeme": "lex_divi", "features": {} },
+      { "surface": "bērni", "lexeme": "lex_berns", "features": { "case": "nom", "number": "pl" } }
+    ]
+  },
+  {
+    "id": "snt_0004",
+    "text": "Man patīk kafija.",
+    "gloss": "I like coffee.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      { "surface": "Man", "lexeme": "lex_es", "features": { "case": "dat", "number": "sg" }, "drillable": true },
+      { "surface": "patīk", "lexeme": "lex_patikt", "features": { "tense": "pres", "person": 3, "number": "sg" } },
+      { "surface": "kafija", "lexeme": "lex_kafija", "features": { "case": "nom", "number": "sg" } }
+    ]
+  },
+  {
+    "id": "snt_0005",
+    "text": "Man šodien jāstrādā.",
+    "gloss": "I have to work today.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      { "surface": "Man", "lexeme": "lex_es", "features": { "case": "dat", "number": "sg" } },
+      { "surface": "šodien", "lexeme": "lex_sodien", "features": {} },
+      { "surface": "jāstrādā", "lexeme": "lex_stradat", "features": { "mood": "debitive", "person": 3, "number": "sg" }, "drillable": true }
+    ]
+  },
+  {
+    "id": "snt_0006",
+    "text": "Viņa lasa grāmatu.",
+    "gloss": "She is reading a book.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      { "surface": "Viņa", "lexeme": "lex_vina", "features": { "case": "nom", "number": "sg" } },
+      { "surface": "lasa", "lexeme": "lex_lasit", "features": { "tense": "pres", "person": 3, "number": "sg" } },
+      { "surface": "grāmatu", "lexeme": "lex_gramata", "features": { "case": "acc", "number": "sg" }, "drillable": true }
+    ]
+  },
+  {
+    "id": "snt_0007",
+    "text": "Mēs braucam uz Rīgu.",
+    "gloss": "We are going to Riga.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      { "surface": "Mēs", "lexeme": "lex_mes", "features": { "case": "nom", "number": "pl" } },
+      { "surface": "braucam", "lexeme": "lex_braukt", "features": { "tense": "pres", "person": 1, "number": "pl" } },
+      { "surface": "uz", "lexeme": "lex_uz", "features": {} },
+      { "surface": "Rīgu", "lexeme": "lex_riga", "features": { "case": "acc", "number": "sg" }, "drillable": true }
+    ]
+  },
+  {
+    "id": "snt_0008",
+    "text": "Es runāju ar draugu.",
+    "gloss": "I am talking with a friend.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      { "surface": "Es", "lexeme": "lex_es", "features": { "case": "nom", "number": "sg" } },
+      { "surface": "runāju", "lexeme": "lex_runat", "features": { "tense": "pres", "person": 1, "number": "sg" } },
+      { "surface": "ar", "lexeme": "lex_ar", "features": {} },
+      { "surface": "draugu", "lexeme": "lex_draugs", "features": { "case": "ins", "number": "sg" }, "drillable": true }
+    ]
+  },
+  {
+    "id": "snt_0009",
+    "text": "Tas ir mājas numurs.",
+    "gloss": "That is the house number.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      { "surface": "Tas", "lexeme": "lex_tas", "features": { "case": "nom", "number": "sg" } },
+      { "surface": "ir", "lexeme": "lex_but", "features": { "tense": "pres", "person": 3, "number": "sg" } },
+      { "surface": "mājas", "lexeme": "lex_maja", "features": { "case": "gen", "number": "sg" }, "drillable": true },
+      { "surface": "numurs", "lexeme": "lex_numurs", "features": { "case": "nom", "number": "sg" } }
+    ]
+  },
+  {
+    "id": "snt_0010",
+    "text": "Bērni spēlējas dārzā.",
+    "gloss": "The children are playing in the garden.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      { "surface": "Bērni", "lexeme": "lex_berns", "features": { "case": "nom", "number": "pl" } },
+      { "surface": "spēlējas", "lexeme": "lex_spelet", "features": { "tense": "pres", "person": 3, "number": "pl" } },
+      { "surface": "dārzā", "lexeme": "lex_darzs", "features": { "case": "loc", "number": "sg" }, "drillable": true }
+    ]
+  }
+]
