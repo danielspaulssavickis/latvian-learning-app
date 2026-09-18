@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import { existsSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { buildApprovedSentence } from '../src/content/validate.js'
+import { buildApprovedSentence, buildApprovedSentences } from '../src/content/validate.js'
+import type { Sentence } from '../src/content/schemas.js'
 
 const CONTENT_ROOT = join(process.cwd(), 'content')
 const draftPath = process.argv[2]
@@ -29,8 +30,59 @@ function loadLexemeIds(): Set<string> {
   return ids
 }
 
+/** Writes an approved sentence, refusing to overwrite an existing published file. */
+function writeApproved(sentence: Sentence): { ok: true } | { ok: false; message: string } {
+  const destination = join(CONTENT_ROOT, 'sentences', `${sentence.id}.json`)
+  if (existsSync(destination)) {
+    return {
+      ok: false,
+      message: `refusing to overwrite existing file at ${destination.slice(process.cwd().length + 1)}`,
+    }
+  }
+  writeFileSync(destination, `${JSON.stringify(sentence, null, 2)}\n`)
+  console.log(`content:approve: approved ${sentence.id} -> ${destination.slice(process.cwd().length + 1)}`)
+  return { ok: true }
+}
+
 const raw: unknown = JSON.parse(readFileSync(absoluteDraftPath, 'utf-8'))
-const result = buildApprovedSentence(raw, loadLexemeIds(), new Date())
+const lexemeIds = loadLexemeIds()
+const now = new Date()
+
+if (Array.isArray(raw)) {
+  const results = buildApprovedSentences(raw, lexemeIds, now)
+  const stillFailing: unknown[] = []
+  let failureCount = 0
+
+  for (const result of results) {
+    if (!result.ok) {
+      stillFailing.push(result.raw)
+      failureCount += 1
+      console.error(`content:approve: ${result.id} failed validation:`)
+      for (const error of result.errors) console.error(`    ${error.message}`)
+      continue
+    }
+    const written = writeApproved(result.sentence)
+    if (!written.ok) {
+      stillFailing.push(result.sentence)
+      failureCount += 1
+      console.error(`content:approve: ${result.id} ${written.message}`)
+    }
+  }
+
+  if (failureCount === 0) {
+    rmSync(absoluteDraftPath)
+    console.log(`content:approve: approved all ${results.length} sentence(s) from ${draftPath}.`)
+    process.exit(0)
+  }
+
+  writeFileSync(absoluteDraftPath, `${JSON.stringify(stillFailing, null, 2)}\n`)
+  console.error(
+    `\ncontent:approve: ${failureCount}/${results.length} failed, ${results.length - failureCount} approved. ${draftPath} now contains only what still needs fixing.`,
+  )
+  process.exit(1)
+}
+
+const result = buildApprovedSentence(raw, lexemeIds, now)
 
 if (!result.ok) {
   console.error(`content:approve: ${draftPath} failed validation, no files changed.\n`)
@@ -40,14 +92,9 @@ if (!result.ok) {
   process.exit(1)
 }
 
-const destination = join(CONTENT_ROOT, 'sentences', `${result.sentence.id}.json`)
-if (existsSync(destination)) {
-  console.error(
-    `content:approve: refusing to overwrite existing file at ${destination.slice(process.cwd().length + 1)}`,
-  )
+const written = writeApproved(result.sentence)
+if (!written.ok) {
+  console.error(`content:approve: ${written.message}`)
   process.exit(1)
 }
-
-writeFileSync(destination, `${JSON.stringify(result.sentence, null, 2)}\n`)
 rmSync(absoluteDraftPath)
-console.log(`content:approve: approved ${result.sentence.id} -> ${destination.slice(process.cwd().length + 1)}`)

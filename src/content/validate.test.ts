@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { buildApprovedSentence, checkContent } from './validate'
+import { buildApprovedSentence, buildApprovedSentences, checkContent } from './validate'
 
 function goodLexeme() {
   return {
@@ -21,7 +21,7 @@ interface RawToken {
   drillable?: boolean
 }
 
-function goodSentence(): {
+function goodSentence(overrides: { id?: string } = {}): {
   id: string
   text: string
   gloss: string
@@ -41,6 +41,7 @@ function goodSentence(): {
         drillable: true,
       },
     ],
+    ...overrides,
   }
 }
 
@@ -142,5 +143,45 @@ describe('buildApprovedSentence', () => {
     if (!result.ok) {
       expect(result.errors.length).toBeGreaterThan(0)
     }
+  })
+})
+
+describe('buildApprovedSentences (batch)', () => {
+  const now = new Date('2026-09-18T00:00:00.000Z')
+  const lexemeIds = new Set(['lex_test_noun'])
+
+  it('approves the good sentences and reports the bad ones, without cross-contamination', () => {
+    const bad = goodSentence({ id: 'snt_bad' })
+    bad.tokens[0] = { ...bad.tokens[0], drillable: undefined }
+    const good1 = goodSentence({ id: 'snt_good_1' })
+    const good2 = goodSentence({ id: 'snt_good_2' })
+
+    const results = buildApprovedSentences([good1, bad, good2], lexemeIds, now)
+
+    expect(results).toHaveLength(3)
+    expect(results[0]).toMatchObject({ id: 'snt_good_1', ok: true })
+    expect(results[1]).toMatchObject({ id: 'snt_bad', ok: false })
+    expect(results[2]).toMatchObject({ id: 'snt_good_2', ok: true })
+
+    const good = results.filter((r) => r.ok)
+    expect(good).toHaveLength(2)
+    for (const result of good) {
+      if (result.ok) {
+        expect(result.sentence.review).toBe('approved')
+        expect(result.sentence.reviewedAt).toBe(now.toISOString())
+      }
+    }
+
+    const failed = results.find((r) => r.id === 'snt_bad')
+    if (failed && !failed.ok) {
+      expect(failed.errors.length).toBeGreaterThan(0)
+      expect(failed.raw).toBe(bad)
+    }
+  })
+
+  it('falls back to a positional id when a raw item has no string id', () => {
+    const results = buildApprovedSentences([{ nonsense: true }], lexemeIds, now)
+    expect(results[0].id).toBe('#0')
+    expect(results[0].ok).toBe(false)
   })
 })

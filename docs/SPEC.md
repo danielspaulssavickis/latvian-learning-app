@@ -58,16 +58,25 @@ list in `content/grammar/alternations.json`, not by regex guessing.
   ],
   audio?: "audio/snt_0142.mp3",
   review?: "draft" | "approved",
-  reviewedAt?: "2026-09-18T00:00:00.000Z"   // ISO 8601
+  reviewedAt?: "2026-09-18T00:00:00.000Z",   // ISO 8601
+  source?: "generated" | "human"
 }
 ```
 
 `drillable: true` marks a token the exercise generator may blank out. Every
-sentence needs at least one. Token alignment is what makes the whole app work —
-it is worth authoring carefully.
+sentence needs at least one; a non-drillable token doesn't need any `features`
+at all (e.g. a preposition or bare numeral has nothing to drill). Token
+alignment is what makes the whole app work — it is worth authoring carefully.
 
 `review` and `reviewedAt` are set by `npm run content:approve`, never authored
-by hand — see ADR-006 for the draft/approved workflow.
+by hand — see ADR-006 for the draft/approved workflow. `source` is a
+provenance audit trail: whether the draft was written by Claude or a human
+(ADR-007) — also never hand-authored, though nothing enforces that today.
+
+A token's `features` may include `mood: "debitive"` for Latvian's "must/have
+to" construction (e.g. "jāstrādā"). This is provisional — how mood interacts
+with tense is a real design question for `src/engine/inflect.ts` (M2), not yet
+resolved (see `content/_needed.json`).
 
 ### Card / review state — IndexedDB, not in `content/`
 

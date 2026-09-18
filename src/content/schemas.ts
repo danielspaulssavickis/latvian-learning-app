@@ -30,6 +30,13 @@ export const numberSchema = z.enum(['sg', 'pl'])
 export const genderSchema = z.enum(['m', 'f'])
 export const tenseSchema = z.enum(['pres', 'past', 'fut'])
 export const personSchema = z.union([z.literal(1), z.literal(2), z.literal(3)])
+/**
+ * Provisional: debitive ("must/have to") is a real, distinct Latvian mood,
+ * not a tense. Its interaction with tense (e.g. present vs. past debitive)
+ * is real linguistic design that belongs to M2's src/engine/inflect.ts —
+ * this is just enough schema surface to tag it, see content/_needed.json.
+ */
+export const moodSchema = z.enum(['indicative', 'debitive'])
 export const declensionSchema = z.union([
   z.literal(1),
   z.literal(2),
@@ -42,29 +49,35 @@ export const conjugationSchema = z.union([z.literal(1), z.literal(2), z.literal(
 export const levelSchema = z.enum(['a1', 'a2', 'b1'])
 
 /**
- * A token's grammatical features. Every drillable feature the exercise
- * generator cares about lives here; an empty object means "nothing to drill"
- * and is rejected, since that is never a useful annotation.
+ * A token's grammatical features. Uninflected words (prepositions, adverbs, a
+ * bare numeral) legitimately have none of these — whether that's acceptable
+ * depends on whether the token is drillable, so that check lives on
+ * tokenSchema below, not here.
  */
-export const featuresSchema = z
-  .strictObject({
-    case: caseSchema.optional(),
-    number: numberSchema.optional(),
-    gender: genderSchema.optional(),
-    tense: tenseSchema.optional(),
-    person: personSchema.optional(),
-    definiteness: z.enum(['definite', 'indefinite']).optional(),
-  })
-  .refine((features) => Object.keys(features).length > 0, {
-    message: 'token features must include at least one grammatical feature',
-  })
-
-export const tokenSchema = z.strictObject({
-  surface: nfcString('token surface is not NFC-normalized'),
-  lexeme: z.string().min(1),
-  features: featuresSchema,
-  drillable: z.boolean().optional(),
+export const featuresSchema = z.strictObject({
+  case: caseSchema.optional(),
+  number: numberSchema.optional(),
+  gender: genderSchema.optional(),
+  tense: tenseSchema.optional(),
+  person: personSchema.optional(),
+  mood: moodSchema.optional(),
+  definiteness: z.enum(['definite', 'indefinite']).optional(),
 })
+
+export const tokenSchema = z
+  .strictObject({
+    surface: nfcString('token surface is not NFC-normalized'),
+    lexeme: z.string().min(1),
+    features: featuresSchema,
+    drillable: z.boolean().optional(),
+  })
+  .refine(
+    (token) => !token.drillable || Object.keys(token.features).length > 0,
+    {
+      message: 'a drillable token must have at least one grammatical feature',
+      path: ['features'],
+    },
+  )
 
 export const lexemeSchema = z.strictObject({
   id: z.string().min(1),
@@ -103,6 +116,8 @@ export const sentenceBaseSchema = z
     // Set only by `npm run content:approve` (ADR-006) — never authored by hand.
     review: z.enum(['draft', 'approved']).optional(),
     reviewedAt: z.string().datetime().optional(),
+    // Provenance audit trail (ADR-007): was this drafted by Claude or a human?
+    source: z.enum(['generated', 'human']).optional(),
   })
   .refine((sentence) => sentence.tokens.some((token) => token.drillable === true), {
     message: 'sentence must have at least one drillable token',

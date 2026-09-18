@@ -91,6 +91,33 @@ describe('sentenceBaseSchema', () => {
     const result = sentenceBaseSchema.safeParse(sentence)
     expect(result.success).toBe(false)
   })
+
+  it('accepts a non-drillable token with no features (e.g. a preposition)', () => {
+    const sentence = validSentence()
+    sentence.tokens[1] = { ...sentence.tokens[1], features: {} }
+    const result = sentenceBaseSchema.safeParse(sentence)
+    expect(result.success).toBe(true)
+  })
+
+  it('accepts an optional source field', () => {
+    const result = sentenceBaseSchema.safeParse({ ...validSentence(), source: 'generated' })
+    expect(result.success).toBe(true)
+  })
+
+  it('rejects an unrecognized source value', () => {
+    const result = sentenceBaseSchema.safeParse({ ...validSentence(), source: 'invented' })
+    expect(result.success).toBe(false)
+  })
+
+  it('accepts a debitive mood feature', () => {
+    const sentence = validSentence()
+    sentence.tokens[1] = {
+      ...sentence.tokens[1],
+      features: { mood: 'debitive', person: 3, number: 'sg' },
+    }
+    const result = sentenceBaseSchema.safeParse(sentence)
+    expect(result.success).toBe(true)
+  })
 })
 
 describe('makeSentenceSchema', () => {

@@ -93,3 +93,31 @@ export function buildApprovedSentence(
     sentence: { ...result.data, review: 'approved', reviewedAt: now.toISOString() },
   }
 }
+
+export type ApproveBatchItem =
+  | { id: string; ok: true; sentence: Sentence }
+  | { id: string; ok: false; errors: ContentError[]; raw: unknown }
+
+function idOf(raw: unknown, index: number): string {
+  const id = (raw as { id?: unknown } | null)?.id
+  return typeof id === 'string' ? id : `#${index}`
+}
+
+/**
+ * The batch form of `buildApprovedSentence`: approves what validates and
+ * reports the rest individually, so one bad sentence in a batch doesn't block
+ * the good ones. `scripts/content-approve.ts` uses `raw` on a failed item to
+ * rewrite the draft file down to only what still needs fixing.
+ */
+export function buildApprovedSentences(
+  rawList: unknown[],
+  validLexemeIds: ReadonlySet<string>,
+  now: Date,
+): ApproveBatchItem[] {
+  return rawList.map((raw, index) => {
+    const id = idOf(raw, index)
+    const result = buildApprovedSentence(raw, validLexemeIds, now)
+    if (result.ok) return { id, ok: true, sentence: result.sentence }
+    return { id, ok: false, errors: result.errors, raw }
+  })
+}
