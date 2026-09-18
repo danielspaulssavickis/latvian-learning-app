@@ -4,17 +4,17 @@
 lands, add a dated line under "Session log", and keep "Current focus" accurate.
 Do not rewrite finished milestones; append.
 
-**Current focus:** M0 — repo skeleton
+**Current focus:** M1 — content pipeline
 
 ---
 
 ## M0 — Skeleton
 
-- [ ] Vite + React + TS (strict) scaffold, Tailwind configured
-- [ ] Vitest + Testing Library wired, one passing smoke test
-- [ ] ESLint + Prettier, `npm run typecheck`/`lint`/`test` scripts
-- [ ] Directory layout from CLAUDE.md created, with a README in each of `src/engine/`, `content/`
-- [ ] `.gitignore`, initial commit, GitHub repo
+- [x] Vite + React + TS (strict) scaffold, Tailwind configured
+- [x] Vitest + Testing Library wired, one passing smoke test
+- [x] ESLint + Prettier, `npm run typecheck`/`lint`/`test` scripts
+- [x] Directory layout from CLAUDE.md created, with a README in each of `src/engine/`, `content/`
+- [x] `.gitignore`, initial commit, GitHub repo
 
 **Done when:** `npm run dev` serves a blank styled page and all three check
 commands pass on a clean clone.
@@ -79,3 +79,4 @@ a text-only card instead of breaking the session.
 ## Session log
 
 <!-- newest first, one line each: date — what landed — what to pick up next -->
+2026-09-18 — M0 done: Vite+React+TS(strict)+Tailwind v4 scaffold, Vitest+Testing Library smoke test, ESLint+Prettier, `src/{engine,content,ui,db}` + `content/` layout with READMEs, `content:check` stub. All three check commands pass on a clean `npm ci`. Next: M1 content pipeline (Zod schemas, real `content:check`, loader).
