@@ -47,12 +47,16 @@ tested directly. If a piece of logic needs a component to test, it is in the wro
 
 ## Latvian content rules — read these carefully
 
-1. **Never generate Latvian content yourself.** Do not invent example sentences,
-   translations, or inflected forms and commit them to `content/`. Case usage and
-   verb government are exactly where a model produces plausible-looking errors,
-   and wrong content teaches the user wrong Latvian. If content is missing, add a
-   `TODO` entry to `content/_needed.json` and tell me what to write. Generating
-   *placeholder* content for tests is fine only under `src/**/__fixtures__/`.
+1. **Draft sentences, never publish them yourself.** You may write candidate
+   sentences into `content/drafts/*.json` — never directly into
+   `content/sentences/`. A draft ships only after I run
+   `npm run content:approve` and it passes (ADR-006/ADR-007). Lexemes,
+   glosses, and inflected forms are still off-limits to author (ADR-004):
+   case usage and verb government are exactly where a model produces
+   plausible-looking errors, and wrong content teaches the user wrong
+   Latvian. If one of those is missing, add a `TODO` entry to
+   `content/_needed.json` and tell me what to write. Generating *placeholder*
+   content for tests is fine only under `src/**/__fixtures__/`.
 
 2. **Diacritics are semantic.** `ā ē ī ū` are different letters from `a e i u`, and
    `ķ ģ ļ ņ š ž č` are distinct too. Never strip or fold them in `content/`.

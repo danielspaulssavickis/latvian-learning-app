@@ -42,17 +42,11 @@ replace the module, not the interface — `src/engine/schedule.ts` is the seam.
 
 ## ADR-004 — Content is authored, never generated
 **2026-09-18 · accepted**
+**Superseded by ADR-007 for sentence content — see below.**
 
-Every Latvian sentence, gloss and irregular form in `content/` is written or
-reviewed by a human before it ships. Claude Code may build tooling, schemas and
-generators, but may not author Latvian content.
-
-*Why:* LLM-generated Latvian is fluent-sounding and subtly wrong about case
-government and verb aspect, in exactly the places the app is meant to teach.
-Wrong content is worse than no content — the learner drills the error.
-
-*Rules out:* bulk-generating the seed corpus; "just fill in 200 example
-sentences"; runtime AI generation of exercises.
+Every Latvian lexeme, gloss and irregular form in `content/` is written or
+reviewed by a human before it ships — this still stands. Sentence drafting is
+now governed by ADR-007 instead.
 
 ## ADR-006 — Draft/approved split for sentence content
 **2026-09-18 · accepted**
@@ -74,6 +68,25 @@ by hand.
 
 *Rules out:* sentences reaching `content/sentences/` without going through
 `content:approve`; the loader ever reading `content/drafts/`.
+
+## ADR-007 — Claude may draft sentences, pending human approval
+**2026-09-19 · accepted**
+
+Claude Code may write candidate sentences into `content/drafts/*.json`. A
+draft only reaches `content/sentences/` — and only then can it generate a
+review card — after the human runs `npm run content:approve` (ADR-006) and it
+passes validation. This applies to *sentences only*; ADR-004 still fully
+applies to lexemes, glosses, and irregular forms, since ADR-006's
+draft/approve mechanism only exists for sentences.
+
+*Why:* the draft/approved split (ADR-006) already puts a hard technical gate
+between anything Claude writes and what the app actually uses — a draft
+cannot generate a review card no matter who wrote it. That gate, not a
+blanket authorship ban, is what protects the learner from wrong content.
+
+*Rules out:* Claude committing a sentence directly to `content/sentences/`;
+skipping `content:approve`; treating this as license to author lexemes or
+grammar-table endings, which have no review gate yet.
 
 ---
 
