@@ -1,0 +1,12 @@
+{
+  "id": "lex_latvietis",
+  "lemma": "latvietis",
+  "pos": "noun",
+  "gender": "m",
+  "declension": 2,
+  "conjugation": null,
+  "gloss": ["Latvian (person)"],
+  "tags": ["a1", "people"],
+  "review": "draft",
+  "source": "generated"
+}

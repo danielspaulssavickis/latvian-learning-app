@@ -1,0 +1,12 @@
+{
+  "id": "lex_sirds",
+  "lemma": "sirds",
+  "pos": "noun",
+  "gender": "f",
+  "declension": 6,
+  "conjugation": null,
+  "gloss": ["heart"],
+  "tags": ["a1", "body"],
+  "review": "draft",
+  "source": "generated"
+}

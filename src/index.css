@@ -1,1 +1,15 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+/* Installed as a home-screen app (ADR-013): keep content clear of the notch and home bar. */
+body {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Inputs at 16px+ stop iOS Safari zooming in on focus. */
+input,
+select,
+textarea {
+  font-size: max(16px, 1em);
+}

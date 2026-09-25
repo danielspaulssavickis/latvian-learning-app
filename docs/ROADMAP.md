@@ -4,7 +4,7 @@
 lands, add a dated line under "Session log", and keep "Current focus" accurate.
 Do not rewrite finished milestones; append.
 
-**Current focus:** M1 — content pipeline (waiting on the hand-authored seed sentences)
+**Current focus:** see the newest session log line.
 
 ---
 
@@ -26,51 +26,72 @@ commands pass on a clean clone.
 - [x] Loader that builds an in-memory index: lexeme by id, sentences by level, sentences by feature
 - [x] `content/_needed.json` convention for missing content
 - [ ] 20 hand-authored A1 sentences as the seed set (I write these, not you) —
-      **still open**, blocks nothing Claude needs to do next
+      **still open**, blocks nothing Claude needs to do next. *2026-09-25:* at
+      your request Claude drafted 40 more (`content/drafts/batch_002.json`)
+      plus every lexeme both batches need — all pending your review.
 
 **Done when:** `content:check` catches a deliberately broken fixture, and the
 loader has tests covering a missing lexeme reference and a token with no features.
 
 ## M2 — Inflection engine
 
-- [ ] `inflect(lexeme, features)` for nouns, declensions 1–6, sg + pl, all 7 cases
-- [ ] `irregular` overrides take precedence
-- [ ] Consonant alternation rules from `content/grammar/alternations.json`
-- [ ] Table-driven tests: at least 5 nouns per declension class, full paradigm
-- [ ] `checkAnswer` with the correct / nearMiss / wrong contract from SPEC.md
+- [x] `inflect(lexeme, features)` for nouns, declensions 1–6, sg + pl, all 7 cases
+      — voc.sg is a reported gap in every table, by design (see `_needed.json`)
+- [x] `irregular` overrides take precedence
+- [x] Consonant alternation rules from `content/grammar/alternations.json`
+- [x] Table-driven tests: at least 5 nouns per declension class, full paradigm
+- [x] `checkAnswer` with the correct / nearMiss / wrong contract from SPEC.md
+- [x] Round-trip annotation check in `content:check` (CLAUDE.md rule 6)
+- [ ] Human review + `content:approve` of the seven draft grammar files (ADR-008) —
+      **yours, not Claude's**; until then every generated form is `unverified`
 
 **Done when:** the full paradigm tests pass and `checkAnswer("Rīgā", "Riga")`
 returns `nearMiss` while `checkAnswer("Rīgā", "Rīgu")` returns `wrong`.
 
 ## M3 — Review loop
 
-- [ ] Dexie schema for cards + review log; deterministic card generation from content
-- [ ] `ts-fsrs` integration in `src/engine/schedule.ts`, injectable clock
-- [ ] Cloze review screen: keyboard-first, Enter to submit, Enter again to advance
-- [ ] Latvian diacritic input helper (clickable `ā ē ī ū ķ ģ ļ ņ š ž č` row + a dead-key hint)
-- [ ] Session summary screen
-- [ ] Daily new/review caps, configurable
+- [x] Dexie schema for cards + review log; deterministic card generation from content
+      (expected answers must never be `unverified` `inflect()` output — ADR-008;
+      cloze answers are the sentence's own surface form, so this holds)
+- [x] `ts-fsrs` integration in `src/engine/schedule.ts`, injectable clock
+- [x] Cloze review screen: keyboard-first, Enter to submit, Enter again to advance
+- [x] Latvian diacritic input helper (clickable `ā ē ī ū ķ ģ ļ ņ š ž č` row + a dead-key hint)
+- [x] Session summary screen
+- [x] Daily new/review caps, configurable (Settings tab, stored in IndexedDB)
 
 **Done when:** I can do a full 20-card session, close the tab, reopen it, and the
-scheduling state has survived.
+scheduling state has survived. *(2026-09-25: verified by Claude in Chromium on the
+draft preview — 20 new cards answered, tab closed, reopened, identical counts.
+Yours to repeat on approved content.)*
 
 ## M4 — More exercise types + progress
 
-- [ ] `inflect`, `produce`, `recognize` exercise kinds
-- [ ] Per-feature retention tracking over trailing 30 reviews
-- [ ] Dashboard: weak features surfaced, sorted worst-first
-- [ ] JSON export/import of progress
+- [x] `inflect`, `produce`, `recognize` exercise kinds (`inflect` answers are
+      vouched for by an approved sentence — ADR-012 narrows ADR-008 here)
+- [x] Per-feature retention tracking over trailing 30 reviews
+- [x] Dashboard: weak features surfaced, sorted worst-first
+- [x] JSON export/import of progress (+ weekly backup reminder)
 
 **Done when:** the dashboard correctly identifies a feature I've deliberately
 failed ten times in a row.
 
 ## M5 — Audio + polish
 
-- [ ] Audio playback for sentences that have a file; graceful absence otherwise
-- [ ] `listen` exercise kind
-- [ ] Responsive layout, works on a phone
-- [ ] Deploy (static host), basic error boundary
-- [ ] Decide and document the audio source (see ADR-005 open question)
+- [x] Audio playback for sentences that have a file; graceful absence otherwise
+- [x] `listen` exercise kind (falls back to a text prompt if the file is missing)
+- [x] Responsive layout, works on a phone (mobile-first, 16px inputs, safe areas)
+- [x] Installable PWA (ADR-013): manifest + icons, iOS meta tags, service worker
+      precaching the build — offline reload verified in Chromium
+- [ ] Install test on an actual iPhone (add to home screen, fullscreen, offline
+      session) — **yours**; needs a deployed HTTPS URL
+- [x] IndexedDB eviction risk on iOS documented with a mitigation path
+      (ADR-013): persistent-storage request + weekly export reminder built
+- [x] Deploy (static host): `.github/workflows/deploy.yml` → GitHub Pages,
+      manual trigger only; basic error boundary
+- [ ] First actual deploy — **yours**: enable Pages (Source: GitHub Actions),
+      then run the workflow
+- [x] Decide and document the audio source (ADR-005: human recordings; no TTS
+      until its licence is checked)
 
 **Done when:** deployed, usable on my phone, and a missing audio file degrades to
 a text-only card instead of breaking the session.
@@ -80,6 +101,69 @@ a text-only card instead of breaking the session.
 ## Session log
 
 <!-- newest first, one line each: date — what landed — what to pick up next -->
+2026-09-25 — Final pass: drove the app end to end in Chromium (draft
+preview, production build offline, 390px + desktop, light + dark). Fixes:
+service worker could cache a 404 as the app shell; header wrapped at 390px;
+empty grammar table; misleading "nothing due" with no content (now says no
+approved material yet); start screen re-plans every minute; CI no longer runs
+twice per PR commit. README rewritten with run / review / deploy steps.
+**What's left is yours:** review + approve the drafts (`content/_needed.json`
+lists everything), record audio if wanted (ADR-005), first deploy, iPhone
+install test. Open questions in DECISIONS.md: produce word order, and
+diacritic-only differences that are a different case.
+2026-09-25 — M5: audio (AudioPlayer; missing file → hidden button / text
+fallback, `content:check` warns), `listen` cards for sentences with audio,
+PWA (manifest, icons, iOS meta, generated service worker; offline reload
+checked against `vite preview`), error boundary, CI workflow on every push /
+PR, manual GitHub Pages deploy workflow, ADR-005 (audio source) and ADR-013
+(PWA + iOS storage risk — applies the "Ready to paste" prompt in
+docs/PROMPTS.md). Left for you: iPhone install test, first deploy.
+2026-09-25 — M4 (Session 5): `featureRetention` (pure; the "ten failures in a
+row" case is a test), recognize / produce / inflect cards and screens,
+sibling burying (one new card per sentence per day — found by driving the
+app: the inflect card was giving away the cloze answer minutes later),
+Progress tab (stat tiles + worst-first retention tables, single validated
+hue, tables double as the accessible view), Settings → Backup export/import
+with a reminder after 7 days. ADR-012. Next: M5.
+2026-09-25 — M3 UI (Session 4): `src/ui/` app shell (Review / Settings tabs),
+cloze review screen driven by the pure `reviewReducer` (wrong answers
+re-queued at the end, repeats graded but not counted in the summary), inline
+answer input with the lemma in brackets, correct / near-miss diff / wrong
+feedback, diacritic row that keeps focus, session summary with weakest
+features, daily-limit settings (db schema v2 `settings` table). Content
+material for review: 81 draft lexemes + 40-sentence `batch_002`
+(ADR-010 lexeme gate, ADR-011 `npm run dev:drafts` preview). Checked in
+Chromium via `dev:drafts`. M3's done-when (20-card session, close, reopen)
+is covered by a close/reopen test at the data level; the real-browser check
+is yours once content is approved. Next: Session 5 (M4).
+2026-09-25 — M3 data layer: `src/engine/cards.ts` (one cloze card per
+drillable token, stable ids, content order), `src/engine/schedule.ts`
+(ts-fsrs behind our own Grade/SchedulingState types, injected clock, fuzz
+off, `gradeFor` mapping), `src/engine/session.ts` (daily caps, due-first
+selection), `src/db/db.ts` + `src/db/cards.ts` (Dexie: cards + append-only
+review log indexed by feature; `syncCards` adds/retires/revives without
+touching state; `recordReview` in one transaction). ADR-009 records the card
+identity + grading decisions. Explicit test: sync, review, add a sentence,
+regenerate, re-sync → old cards and log unchanged (mutation-checked). Also a
+close/reopen persistence test. Deps: dexie, ts-fsrs, fake-indexeddb (dev).
+600 tests passing. Next: Session 4, the cloze review screen — call
+`syncCards` on startup, `loadSession` for the queue, `recordReview` per
+answer, `systemClock` as the clock; add the caps setting there.
+2026-09-25 — M2 done (engine side): `src/engine/inflect.ts` (nouns, decl 1–6,
+sg+pl, irregular overrides, longest-match consonant alternation, gaps reported
+not guessed, `confidence` verified/unverified), `src/engine/checkAnswer.ts`
+(+ `diacriticDiff` for the review screen), round-trip check wired into
+`content:check` (mismatch = error, gap = warning) and `content:approve` extended
+to approve grammar files in place. Real grammar-table format replaces the
+provisional M1 shape. Drafted all six noun tables + `alternations.json` as
+`review: "draft"` under new ADR-008; 34 fixture nouns in
+`src/engine/__fixtures__/nouns.ts` for review. No gold set in
+`content/sentences/` yet, so the round-trip had nothing to run on; a throwaway
+dry run over `batch_001`'s 11 noun tokens, using scratch lexemes (not
+committed), passed with no mismatches. 567 tests passing. Open for you: review
+and approve the grammar files, the new `_needed.json` entries (voc.sg,
+masculine decl 4/5, a few alternation rules), and the new DECISIONS open
+question about `galda`/`galdā`-type near misses. Next: Session 3, M3 data layer.
 2026-09-18 — M1 mostly done: added ADR-006 (draft/approved split for sentences,
 since the Session 1 prompt referenced it but it didn't exist yet) and the
 matching SPEC.md fields; `src/content/schemas.ts` (Zod, incl. NFC checks),

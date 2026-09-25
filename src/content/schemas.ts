@@ -48,6 +48,9 @@ export const declensionSchema = z.union([
 export const conjugationSchema = z.union([z.literal(1), z.literal(2), z.literal(3)])
 export const levelSchema = z.enum(['a1', 'a2', 'b1'])
 
+/** A noun form key, e.g. "gen.sg" — used by ending tables, alternations and `irregular`. */
+export const formKeySchema = z.templateLiteral([caseSchema, '.', numberSchema])
+
 /**
  * A token's grammatical features. Uninflected words (prepositions, adverbs, a
  * bare numeral) legitimately have none of these — whether that's acceptable
@@ -71,39 +74,107 @@ export const tokenSchema = z
     features: featuresSchema,
     drillable: z.boolean().optional(),
   })
-  .refine(
-    (token) => !token.drillable || Object.keys(token.features).length > 0,
-    {
-      message: 'a drillable token must have at least one grammatical feature',
-      path: ['features'],
-    },
-  )
+  .refine((token) => !token.drillable || Object.keys(token.features).length > 0, {
+    message: 'a drillable token must have at least one grammatical feature',
+    path: ['features'],
+  })
 
-export const lexemeSchema = z.strictObject({
+/**
+ * Review metadata shared by every file with a draft/approved gate: sentences
+ * (ADR-006, gated by directory), grammar files (ADR-008) and lexemes
+ * (ADR-010), both gated by this field. `review`/`reviewedAt` are set only by `npm run content:approve`,
+ * never authored by hand; `source` is provenance (ADR-007).
+ */
+const reviewFields = {
+  review: z.enum(['draft', 'approved']).optional(),
+  reviewedAt: z.string().datetime().optional(),
+  source: z.enum(['generated', 'human']).optional(),
+}
+
+export const lexemeSchema = z
+  .strictObject({
+    id: z.string().min(1),
+    lemma: nfcString('lemma is not NFC-normalized'),
+    pos: posSchema,
+    gender: genderSchema.nullable(),
+    declension: declensionSchema.nullable(),
+    conjugation: conjugationSchema.nullable(),
+    gloss: z.array(z.string().min(1)).min(1),
+    tags: z.array(z.string()).default([]),
+    /**
+     * Forms that override the generated one. For nouns and pronouns the key
+     * is a form key like "gen.sg" (a pronoun's whole paradigm lives here —
+     * pronouns have no ending tables); other parts of speech get their key
+     * format when the engine supports them.
+     */
+    irregular: z.record(z.string(), nfcString('irregular form is not NFC-normalized')).optional(),
+    notes: z.array(z.string()).optional(),
+    ...reviewFields,
+  })
+  .superRefine((lexeme, ctx) => {
+    if ((lexeme.pos !== 'noun' && lexeme.pos !== 'pronoun') || !lexeme.irregular) return
+    for (const key of Object.keys(lexeme.irregular)) {
+      if (!formKeySchema.safeParse(key).success) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `irregular key "${key}" is not a form key like "gen.sg"`,
+          path: ['irregular', key],
+        })
+      }
+    }
+  })
+
+// An ending may be "" (a zero ending), so this is not nfcString().
+const endingSchema = z.string().refine(isNFC, 'ending is not NFC-normalized')
+const caseEndingsSchema = z.partialRecord(caseSchema, endingSchema)
+
+/**
+ * One noun declension's ending table (ADR-008). `inflect()` strips the longest
+ * matching `lemmaEndings` entry from the lemma to get the stem, then appends
+ * the cell for the requested case and number. A missing cell is a *gap* —
+ * reported, never guessed. `gender: null` covers every gender in the
+ * declension; a gender-specific table for the same declension wins over it.
+ */
+export const nounEndingTableSchema = z.strictObject({
+  kind: z.literal('noun-endings'),
   id: z.string().min(1),
-  lemma: nfcString('lemma is not NFC-normalized'),
-  pos: posSchema,
+  declension: declensionSchema,
   gender: genderSchema.nullable(),
-  declension: declensionSchema.nullable(),
-  conjugation: conjugationSchema.nullable(),
-  gloss: z.array(z.string().min(1)).min(1),
-  tags: z.array(z.string()).default([]),
-  irregular: z.record(z.string(), z.string()).optional(),
+  lemmaEndings: z.array(nfcString('lemma ending is not NFC-normalized')).min(1),
+  endings: z.strictObject({ sg: caseEndingsSchema, pl: caseEndingsSchema }),
+  notes: z.array(z.string()).optional(),
+  ...reviewFields,
 })
 
 /**
- * Loosely shaped on purpose: SPEC.md only describes grammar tables as "ending
- * tables, keyed by class and form." The real structure gets nailed down in
- * Session 2 (M2, src/engine/inflect.ts) once real linguistic data exists —
- * this is enough to validate that a grammar table file is well-formed JSON
- * data, not a claim about the final shape.
+ * Consonant alternation (the palatalization in declensions 2, 5 and 6), as an
+ * explicit rule list rather than regex guessing (SPEC.md). `appliesTo` says
+ * which forms of which declension alternate; `rules` rewrite the end of the
+ * stem, longest `from` first. An identity rule (`from` === `to`) blocks a
+ * shorter rule, e.g. "st" → "st" stops "t" → "š" from firing.
  */
-export const grammarTableSchema = z.strictObject({
+export const alternationsSchema = z.strictObject({
+  kind: z.literal('alternations'),
   id: z.string().min(1),
-  pos: posSchema,
-  class: z.number().int().positive(),
-  endings: z.record(z.string(), z.record(z.string(), z.string())),
+  appliesTo: z.array(
+    z.strictObject({ declension: declensionSchema, forms: z.array(formKeySchema).min(1) }),
+  ),
+  rules: z
+    .array(
+      z.strictObject({
+        from: nfcString('alternation "from" is not NFC-normalized'),
+        to: nfcString('alternation "to" is not NFC-normalized'),
+      }),
+    )
+    .min(1),
+  notes: z.array(z.string()).optional(),
+  ...reviewFields,
 })
+
+export const grammarFileSchema = z.discriminatedUnion('kind', [
+  nounEndingTableSchema,
+  alternationsSchema,
+])
 
 export const sentenceBaseSchema = z
   .strictObject({
@@ -113,11 +184,7 @@ export const sentenceBaseSchema = z
     level: levelSchema,
     tokens: z.array(tokenSchema).min(1),
     audio: z.string().optional(),
-    // Set only by `npm run content:approve` (ADR-006) — never authored by hand.
-    review: z.enum(['draft', 'approved']).optional(),
-    reviewedAt: z.string().datetime().optional(),
-    // Provenance audit trail (ADR-007): was this drafted by Claude or a human?
-    source: z.enum(['generated', 'human']).optional(),
+    ...reviewFields,
   })
   .refine((sentence) => sentence.tokens.some((token) => token.drillable === true), {
     message: 'sentence must have at least one drillable token',
@@ -125,7 +192,11 @@ export const sentenceBaseSchema = z
   })
 
 export type Lexeme = z.infer<typeof lexemeSchema>
-export type GrammarTable = z.infer<typeof grammarTableSchema>
+export type NounEndingTable = z.infer<typeof nounEndingTableSchema>
+export type AlternationsFile = z.infer<typeof alternationsSchema>
+export type GrammarFile = z.infer<typeof grammarFileSchema>
+export type Features = z.infer<typeof featuresSchema>
+export type FormKey = z.infer<typeof formKeySchema>
 export type Sentence = z.infer<typeof sentenceBaseSchema>
 export type Token = z.infer<typeof tokenSchema>
 

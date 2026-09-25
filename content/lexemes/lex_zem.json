@@ -1,0 +1,13 @@
+{
+  "id": "lex_zem",
+  "lemma": "zem",
+  "pos": "preposition",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": ["under"],
+  "tags": ["a1"],
+  "notes": ["Takes the genitive."],
+  "review": "draft",
+  "source": "generated"
+}

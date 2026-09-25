@@ -1,0 +1,12 @@
+{
+  "id": "lex_arsts",
+  "lemma": "ārsts",
+  "pos": "noun",
+  "gender": "m",
+  "declension": 1,
+  "conjugation": null,
+  "gloss": ["doctor"],
+  "tags": ["a1", "people"],
+  "review": "draft",
+  "source": "generated"
+}

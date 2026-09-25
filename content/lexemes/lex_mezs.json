@@ -1,0 +1,12 @@
+{
+  "id": "lex_mezs",
+  "lemma": "mežs",
+  "pos": "noun",
+  "gender": "m",
+  "declension": 1,
+  "conjugation": null,
+  "gloss": ["forest"],
+  "tags": ["a1", "nature"],
+  "review": "draft",
+  "source": "generated"
+}

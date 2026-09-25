@@ -1,0 +1,24 @@
+{
+  "id": "lex_mes",
+  "lemma": "mēs",
+  "pos": "pronoun",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": ["we"],
+  "tags": ["a1"],
+  "irregular": {
+    "nom.pl": "mēs",
+    "gen.pl": "mūsu",
+    "dat.pl": "mums",
+    "acc.pl": "mūs",
+    "ins.pl": "mums",
+    "loc.pl": "mūsos"
+  },
+  "notes": [
+    "Plural only; tagged nom.pl in sentences.",
+    "ins = acc form in the singular and dat form in the plural, as used after 'ar'."
+  ],
+  "review": "draft",
+  "source": "generated"
+}

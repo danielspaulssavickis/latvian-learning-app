@@ -1,0 +1,12 @@
+{
+  "id": "lex_sodien",
+  "lemma": "šodien",
+  "pos": "adverb",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": ["today"],
+  "tags": ["a1"],
+  "review": "draft",
+  "source": "generated"
+}

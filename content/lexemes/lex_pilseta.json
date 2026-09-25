@@ -1,0 +1,12 @@
+{
+  "id": "lex_pilseta",
+  "lemma": "pilsēta",
+  "pos": "noun",
+  "gender": "f",
+  "declension": 4,
+  "conjugation": null,
+  "gloss": ["city", "town"],
+  "tags": ["a1", "city"],
+  "review": "draft",
+  "source": "generated"
+}

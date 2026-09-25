@@ -1,0 +1,32 @@
+{
+  "kind": "noun-endings",
+  "id": "noun_decl4",
+  "declension": 4,
+  "gender": "f",
+  "lemmaEndings": ["a"],
+  "endings": {
+    "sg": {
+      "nom": "a",
+      "gen": "as",
+      "dat": "ai",
+      "acc": "u",
+      "ins": "u",
+      "loc": "ā"
+    },
+    "pl": {
+      "nom": "as",
+      "gen": "u",
+      "dat": "ām",
+      "acc": "as",
+      "ins": "ām",
+      "loc": "ās",
+      "voc": "as"
+    }
+  },
+  "notes": [
+    "Lemma in -a. Written for feminine nouns (māja). Masculine declension-4 nouns (puika) are not covered: their dat.sg differs (-am, not -ai), so they report no-table until a masculine table exists; see content/_needed.json.",
+    "voc.sg is deliberately absent (a gap): the singular vocative has competing forms and is mostly out of scope (SPEC.md non-goals); see content/_needed.json."
+  ],
+  "review": "draft",
+  "source": "generated"
+}

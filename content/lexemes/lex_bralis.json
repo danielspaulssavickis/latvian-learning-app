@@ -1,0 +1,12 @@
+{
+  "id": "lex_bralis",
+  "lemma": "brālis",
+  "pos": "noun",
+  "gender": "m",
+  "declension": 2,
+  "conjugation": null,
+  "gloss": ["brother"],
+  "tags": ["a1", "family"],
+  "review": "draft",
+  "source": "generated"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "lex_skola",
+  "lemma": "skola",
+  "pos": "noun",
+  "gender": "f",
+  "declension": 4,
+  "conjugation": null,
+  "gloss": ["school"],
+  "tags": ["a1", "education"],
+  "review": "draft",
+  "source": "generated"
+}

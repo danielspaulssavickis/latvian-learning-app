@@ -1,0 +1,30 @@
+{
+  "id": "lex_tas",
+  "lemma": "tas",
+  "pos": "pronoun",
+  "gender": "m",
+  "declension": null,
+  "conjugation": null,
+  "gloss": ["that", "it"],
+  "tags": ["a1"],
+  "irregular": {
+    "nom.sg": "tas",
+    "gen.sg": "tā",
+    "dat.sg": "tam",
+    "acc.sg": "to",
+    "ins.sg": "to",
+    "loc.sg": "tajā",
+    "nom.pl": "tie",
+    "gen.pl": "to",
+    "dat.pl": "tiem",
+    "acc.pl": "tos",
+    "ins.pl": "tiem",
+    "loc.pl": "tajos"
+  },
+  "notes": [
+    "loc.sg also 'tanī' in some registers; 'tajā' chosen as the standard form.",
+    "ins = acc form in the singular and dat form in the plural, as used after 'ar'."
+  ],
+  "review": "draft",
+  "source": "generated"
+}

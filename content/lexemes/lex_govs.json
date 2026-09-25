@@ -1,0 +1,12 @@
+{
+  "id": "lex_govs",
+  "lemma": "govs",
+  "pos": "noun",
+  "gender": "f",
+  "declension": 6,
+  "conjugation": null,
+  "gloss": ["cow"],
+  "tags": ["a1", "animals"],
+  "review": "draft",
+  "source": "generated"
+}

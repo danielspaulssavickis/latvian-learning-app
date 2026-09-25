@@ -32,16 +32,76 @@ All content lives in `content/` as JSON, validated by Zod schemas in
   gloss: ["house", "home"],
   tags: ["a1", "living"],
   irregular?: { [formKey: string]: string }   // overrides the generated form
+                                              // (nouns, pronouns: formKey is "case.number", e.g. "gen.sg")
+  notes?: string[],
+  review?: "draft" | "approved", reviewedAt?, source?   // ADR-010, set by content:approve
 }
 ```
 
 ### Grammar table — `content/grammar/*.json`
 
-Ending tables, keyed by class and form. `inflect(lexeme, features)` in
-`src/engine/inflect.ts` applies these, checks `irregular` first, and returns
-`{ form, confidence }`. Consonant alternation in the genitive (the
-palatalization that hits declensions 2 and 5) is handled by an explicit rule
-list in `content/grammar/alternations.json`, not by regex guessing.
+Two kinds of file, told apart by `kind`. One ending table per declension (and
+gender, where a declension splits by gender):
+
+```ts
+{
+  kind: "noun-endings",
+  id: "noun_decl4",
+  declension: 4,
+  gender: "f",                // or null: covers every gender in the declension
+  lemmaEndings: ["a"],        // stripped from the lemma to get the stem, longest first
+  endings: {
+    sg: { nom: "a", gen: "as", dat: "ai", acc: "u", ins: "u", loc: "ā" },
+    pl: { nom: "as", gen: "u", /* ... */ voc: "as" }
+  },
+  notes?: string[],
+  review?: "draft" | "approved", reviewedAt?, source?   // ADR-008, set by content:approve
+}
+```
+
+A missing cell is a **gap**: `inflect()` reports it, never guesses. The
+singular vocative is a gap in every table today (see `content/_needed.json`).
+
+Consonant alternation in the genitive (the palatalization that hits
+declension 2 in gen.sg and the whole plural, and declensions 5 and 6 in
+gen.pl) is an explicit rule list in `content/grammar/alternations.json`, not
+regex guessing:
+
+```ts
+{
+  kind: "alternations",
+  id: "alternations",
+  appliesTo: [{ declension: 5, forms: ["gen.pl"] }, /* ... */],
+  rules: [{ from: "l", to: "ļ" }, { from: "ln", to: "ļņ" }, { from: "st", to: "st" }, /* ... */],
+  review?, reviewedAt?, source?
+}
+```
+
+Rules rewrite the end of the stem, longest `from` first; an identity rule
+(`st` → `st`) blocks a shorter one (`t` → `š`). Per-word exceptions
+(`akmens` gen.sg `akmens`, `acs` gen.pl `acu`) go in the lexeme's `irregular`
+map, keyed by form key (`"gen.sg"`).
+
+### `inflect(lexeme, features, grammar)` — `src/engine/inflect.ts`
+
+Nouns only in M2. Returns either
+`{ ok: true, form, confidence: "verified" | "unverified", source }` or
+`{ ok: false, reason, message }` with `reason` one of `unsupported-pos`,
+`missing-features`, `no-declension`, `no-table`, `lemma-mismatch`, `gap`.
+Precedence: `irregular[formKey]` → nom.sg is the lemma → stem (alternated if
+listed) + table ending. `confidence` is `verified` only when every piece of
+data behind the form was human-reviewed (ADR-008); an `unverified` form must
+never be shown to a learner as the expected answer.
+
+### Round-trip annotation check (`content:check`)
+
+Every annotated token whose part of speech `inflect()` supports must be
+reproducible from its lexeme and features (capitalization ignored). A
+mismatch fails `content:check` with sentence id, token index, expected and
+actual, and says whether the generated form came from reviewed data (so the
+tagging is likely wrong) or from a draft table (so the table may be). A gap
+in the tables is a warning, not a failure. Tokens the engine can't inflect
+yet (non-nouns) are skipped.
 
 ### Sentence — `content/sentences/*.json`
 
@@ -81,26 +141,42 @@ resolved (see `content/_needed.json`).
 ### Card / review state — IndexedDB, not in `content/`
 
 ```ts
+// db.cards — src/engine/session.ts StoredCard
 {
-  id, kind, targetId,           // e.g. kind: "cloze", targetId: "snt_0142#2"
-  feature: "case:loc",          // what this card actually drills
-  fsrs: { stability, difficulty, due, reps, lapses, state }
+  id: "cloze:snt_0142#2",       // `${kind}:${targetId}`, stable (ADR-009)
+  kind: "cloze",
+  targetId: "snt_0142#2",       // `${sentenceId}#${tokenIndex}`
+  sentenceId, tokenIndex,
+  feature: "case:loc",          // what this card primarily drills
+  features: ["case:loc", "number:sg", "declension:4"],
+  fsrs: { due, stability, difficulty, reps, lapses, state, ... },  // ts-fsrs Card
+  retired: false                // content gone; kept for history, never scheduled
+}
+
+// db.reviews — append-only, src/db/db.ts ReviewRecord
+{
+  id, cardId, feature, features, reviewedAt,
+  result: "correct" | "nearMiss" | "wrong", given, responseMs,
+  grade: "again" | "hard" | "good" | "easy", wasNew, fsrsLog
 }
 ```
 
-One card per *drillable feature instance*, not per sentence. The same sentence can
-produce several cards. Cards are generated deterministically from content so that
-adding content never orphans a user's history.
+One card per drillable token (ADR-009) — a sentence with two drillable tokens
+produces two cards. Cards are generated deterministically from content and
+*synced* into the database, so adding content never orphans a user's history.
 
 ## Exercise types
 
-| Kind | Prompt | Answer | Milestone |
-|---|---|---|---|
-| `cloze` | Sentence with one token blanked, lemma shown in brackets | typed form | M2 |
-| `recognize` | Latvian sentence | English gloss, multiple choice | M2 |
-| `produce` | English gloss | typed Latvian sentence | M3 |
-| `inflect` | Lemma + target features ("māja, locative singular") | typed form | M3 |
-| `listen` | Audio only | typed sentence | M5 |
+| Kind | Prompt | Answer | Cards | Milestone |
+|---|---|---|---|---|
+| `cloze` | Sentence with one token blanked, lemma shown in brackets | typed form | one per drillable token | M3 |
+| `recognize` | Latvian sentence | English gloss, multiple choice (4) | one per sentence | M4 |
+| `produce` | English gloss | typed Latvian sentence (punctuation ignored) | one per sentence | M4 |
+| `inflect` | Lemma + target features ("māja, locative singular") | typed form | one per (lexeme, case.number) an approved sentence vouches for | M4 |
+| `listen` | Audio only | typed sentence | one per sentence with audio | M5 |
+
+New cards are introduced in content order, easiest kind first within a
+sentence, and at most one new card per sentence per day (ADR-012).
 
 `cloze` is the primary type. It is deliberately the one that teaches endings as a
 reflex, which is the thing a declension chart cannot do.
@@ -116,13 +192,19 @@ reflex, which is the thing a declension chart cannot do.
   as a "hard" grade, not as a failure.
 - Everything else → `wrong`.
 
+`diacriticDiff(expected, given)` returns the expected spelling split per
+letter with the wrong-diacritic letters marked, for the review screen; `null`
+unless the answer is a near miss. (Open question in DECISIONS.md: a
+diacritic-only difference that is itself another case, like `galda`/`galdā`.)
+
 Do not use edit distance for anything else. A one-letter difference in Latvian is
 usually a different case, not a typo, and forgiving it defeats the purpose.
 
 ## Scheduling
 
 FSRS via `ts-fsrs`, four grades (again / hard / good / easy) mapped from the
-check result plus response time. New cards are introduced in content order,
+check result plus response time (`gradeFor`; the table is in ADR-009 and in
+`src/engine/schedule.ts`). New cards are introduced in content order,
 capped at a configurable daily limit (default 10 new, 100 reviews). All
 scheduling logic stays in `src/engine/schedule.ts` and is unit tested against
 fixed clock values — never `Date.now()` inside the engine.
@@ -130,7 +212,8 @@ fixed clock values — never `Date.now()` inside the engine.
 ## Progress model
 
 Per grammatical feature (`case:loc`, `tense:past`, `declension:2`), track
-retention over the last 30 reviews. The dashboard shows which features are weak.
+retention over the last 30 reviews: the share answered correctly or as a
+near miss (`src/engine/retention.ts`). The dashboard shows which features are weak.
 This is the feature that makes the app worth building rather than downloading
 something existing: the learner can see that their locative is solid and their
 genitive is not.
@@ -138,6 +221,7 @@ genitive is not.
 ## Explicit non-goals
 
 No speech recognition. No AI-generated content at runtime. No accounts or sync —
-progress lives in the browser, with JSON export/import as the backup path. No
+progress lives in the browser, with JSON export/import as the backup path
+(Settings → Backup; format `latvian-trainer-progress` v1, `src/db/backup.ts`). No
 attempt to cover C-level grammar (participles, aspect subtleties, the vocative
 beyond a fixed phrase list).

@@ -158,6 +158,8 @@ small one, skip the "wait for confirm" step and just say so.
 
 ### Ready to paste: PWA target + iOS storage risk
 
+*Applied 2026-09-25 — see ADR-013 and the M5 items in docs/ROADMAP.md.*
+
 This fills in the template above for the decision from our last conversation —
 the app stays a website, targets installable PWA so it works on iPhone, and
 IndexedDB persistence on iOS Safari is a known risk to design around rather

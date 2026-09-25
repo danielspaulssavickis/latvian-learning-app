@@ -1,0 +1,12 @@
+{
+  "id": "lex_gulet",
+  "lemma": "gulēt",
+  "pos": "verb",
+  "gender": null,
+  "declension": null,
+  "conjugation": 3,
+  "gloss": ["to sleep"],
+  "tags": ["a1"],
+  "review": "draft",
+  "source": "generated"
+}

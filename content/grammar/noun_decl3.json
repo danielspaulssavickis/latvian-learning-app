@@ -1,0 +1,32 @@
+{
+  "kind": "noun-endings",
+  "id": "noun_decl3",
+  "declension": 3,
+  "gender": "m",
+  "lemmaEndings": ["us"],
+  "endings": {
+    "sg": {
+      "nom": "us",
+      "gen": "us",
+      "dat": "um",
+      "acc": "u",
+      "ins": "u",
+      "loc": "ū"
+    },
+    "pl": {
+      "nom": "i",
+      "gen": "u",
+      "dat": "iem",
+      "acc": "us",
+      "ins": "iem",
+      "loc": "os",
+      "voc": "i"
+    }
+  },
+  "notes": [
+    "Masculine, lemma in -us (tirgus). Small, closed class.",
+    "voc.sg is deliberately absent (a gap): the singular vocative has competing forms and is mostly out of scope (SPEC.md non-goals); see content/_needed.json."
+  ],
+  "review": "draft",
+  "source": "generated"
+}

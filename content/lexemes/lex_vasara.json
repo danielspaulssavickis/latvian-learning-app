@@ -1,0 +1,12 @@
+{
+  "id": "lex_vasara",
+  "lemma": "vasara",
+  "pos": "noun",
+  "gender": "f",
+  "declension": 4,
+  "conjugation": null,
+  "gloss": ["summer"],
+  "tags": ["a1", "time"],
+  "review": "draft",
+  "source": "generated"
+}

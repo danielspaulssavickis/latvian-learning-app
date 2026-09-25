@@ -1,0 +1,13 @@
+{
+  "id": "lex_no",
+  "lemma": "no",
+  "pos": "preposition",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": ["from"],
+  "tags": ["a1"],
+  "notes": ["Takes the genitive."],
+  "review": "draft",
+  "source": "generated"
+}

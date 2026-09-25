@@ -1,0 +1,13 @@
+{
+  "id": "lex_patikt",
+  "lemma": "patikt",
+  "pos": "verb",
+  "gender": null,
+  "declension": null,
+  "conjugation": 1,
+  "gloss": ["to like", "to please"],
+  "tags": ["a1"],
+  "notes": ["Takes a dative experiencer: 'Man patīk kafija.'"],
+  "review": "draft",
+  "source": "generated"
+}

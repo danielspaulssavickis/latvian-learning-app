@@ -1,0 +1,12 @@
+{
+  "id": "lex_darbs",
+  "lemma": "darbs",
+  "pos": "noun",
+  "gender": "m",
+  "declension": 1,
+  "conjugation": null,
+  "gloss": ["work", "job"],
+  "tags": ["a1", "work"],
+  "review": "draft",
+  "source": "generated"
+}

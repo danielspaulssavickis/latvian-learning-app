@@ -1,0 +1,12 @@
+{
+  "id": "lex_universitate",
+  "lemma": "universitāte",
+  "pos": "noun",
+  "gender": "f",
+  "declension": 5,
+  "conjugation": null,
+  "gloss": ["university"],
+  "tags": ["a1", "education"],
+  "review": "draft",
+  "source": "generated"
+}

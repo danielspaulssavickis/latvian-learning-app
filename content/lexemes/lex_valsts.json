@@ -1,0 +1,12 @@
+{
+  "id": "lex_valsts",
+  "lemma": "valsts",
+  "pos": "noun",
+  "gender": "f",
+  "declension": 6,
+  "conjugation": null,
+  "gloss": ["country", "state"],
+  "tags": ["a1", "place"],
+  "review": "draft",
+  "source": "generated"
+}

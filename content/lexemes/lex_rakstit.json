@@ -1,0 +1,12 @@
+{
+  "id": "lex_rakstit",
+  "lemma": "rakstīt",
+  "pos": "verb",
+  "gender": null,
+  "declension": null,
+  "conjugation": 3,
+  "gloss": ["to write"],
+  "tags": ["a1"],
+  "review": "draft",
+  "source": "generated"
+}

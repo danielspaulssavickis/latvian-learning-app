@@ -1,0 +1,12 @@
+{
+  "id": "lex_kakis",
+  "lemma": "kaķis",
+  "pos": "noun",
+  "gender": "m",
+  "declension": 2,
+  "conjugation": null,
+  "gloss": ["cat"],
+  "tags": ["a1", "animals"],
+  "review": "draft",
+  "source": "generated"
+}

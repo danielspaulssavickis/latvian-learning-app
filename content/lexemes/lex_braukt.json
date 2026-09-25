@@ -1,0 +1,12 @@
+{
+  "id": "lex_braukt",
+  "lemma": "braukt",
+  "pos": "verb",
+  "gender": null,
+  "declension": null,
+  "conjugation": 1,
+  "gloss": ["to go (by vehicle)", "to drive"],
+  "tags": ["a1"],
+  "review": "draft",
+  "source": "generated"
+}

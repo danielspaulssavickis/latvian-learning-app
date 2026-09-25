@@ -1,0 +1,12 @@
+{
+  "id": "lex_jura",
+  "lemma": "jūra",
+  "pos": "noun",
+  "gender": "f",
+  "declension": 4,
+  "conjugation": null,
+  "gloss": ["sea"],
+  "tags": ["a1", "nature"],
+  "review": "draft",
+  "source": "generated"
+}

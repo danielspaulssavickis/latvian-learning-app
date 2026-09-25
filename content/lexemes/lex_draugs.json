@@ -1,0 +1,12 @@
+{
+  "id": "lex_draugs",
+  "lemma": "draugs",
+  "pos": "noun",
+  "gender": "m",
+  "declension": 1,
+  "conjugation": null,
+  "gloss": ["friend"],
+  "tags": ["a1", "people"],
+  "review": "draft",
+  "source": "generated"
+}

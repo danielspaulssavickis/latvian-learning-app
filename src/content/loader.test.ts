@@ -43,6 +43,15 @@ describe('loadContent', () => {
     expect(content.lexemeById.get('lex_test_noun')?.lemma).toBe('testvārds')
   })
 
+  it('indexes sentences by id', () => {
+    const content = loadContent({
+      lexemes: { 'content/lexemes/test_noun.json': goodLexeme() },
+      sentences: { 'content/sentences/snt_0001.json': goodSentence() },
+      grammar: {},
+    })
+    expect(content.sentenceById.get('snt_0001')?.text).toBe('Testvārds testā.')
+  })
+
   it('indexes sentences by level', () => {
     const content = loadContent({
       lexemes: { 'content/lexemes/test_noun.json': goodLexeme() },
@@ -87,6 +96,31 @@ describe('loadContent', () => {
     // "nom" is on a non-drillable token and must not appear in the index.
     expect(content.sentencesByFeature.has('case:nom')).toBe(false)
     expect(content.sentencesByFeature.get('case:loc')?.map((s) => s.id)).toEqual(['snt_0001'])
+  })
+
+  it('builds the grammar from content/grammar files', () => {
+    const content = loadContent({
+      lexemes: {},
+      sentences: {},
+      grammar: {
+        'content/grammar/noun_decl4.json': {
+          kind: 'noun-endings',
+          id: 'noun_decl4',
+          declension: 4,
+          gender: 'f',
+          lemmaEndings: ['a'],
+          endings: { sg: { gen: 'as' }, pl: {} },
+        },
+        'content/grammar/alternations.json': {
+          kind: 'alternations',
+          id: 'alternations',
+          appliesTo: [],
+          rules: [{ from: 'l', to: 'ļ' }],
+        },
+      },
+    })
+    expect(content.grammar.nounTables.map((t) => t.id)).toEqual(['noun_decl4'])
+    expect(content.grammar.alternations?.id).toBe('alternations')
   })
 
   it('throws one aggregated, descriptive error when content is invalid', () => {

@@ -1,0 +1,1629 @@
+[
+  {
+    "id": "snt_0011",
+    "text": "Es eju uz skolu.",
+    "gloss": "I am going to school.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Es",
+        "lexeme": "lex_es",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "eju",
+        "lexeme": "lex_iet",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "uz",
+        "lexeme": "lex_uz",
+        "features": {}
+      },
+      {
+        "surface": "skolu",
+        "lexeme": "lex_skola",
+        "features": {
+          "case": "acc",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0012",
+    "text": "Mēs dzīvojam Latvijā.",
+    "gloss": "We live in Latvia.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Mēs",
+        "lexeme": "lex_mes",
+        "features": {
+          "case": "nom",
+          "number": "pl"
+        }
+      },
+      {
+        "surface": "dzīvojam",
+        "lexeme": "lex_dzivot",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "pl"
+        }
+      },
+      {
+        "surface": "Latvijā",
+        "lexeme": "lex_latvija",
+        "features": {
+          "case": "loc",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0013",
+    "text": "Viņa strādā skolā.",
+    "gloss": "She works at a school.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Viņa",
+        "lexeme": "lex_vina",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "strādā",
+        "lexeme": "lex_stradat",
+        "features": {
+          "tense": "pres",
+          "person": 3,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "skolā",
+        "lexeme": "lex_skola",
+        "features": {
+          "case": "loc",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0014",
+    "text": "Es dzeru kafiju bez cukura.",
+    "gloss": "I drink coffee without sugar.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Es",
+        "lexeme": "lex_es",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "dzeru",
+        "lexeme": "lex_dzert",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "kafiju",
+        "lexeme": "lex_kafija",
+        "features": {
+          "case": "acc",
+          "number": "sg"
+        },
+        "drillable": true
+      },
+      {
+        "surface": "bez",
+        "lexeme": "lex_bez",
+        "features": {}
+      },
+      {
+        "surface": "cukura",
+        "lexeme": "lex_cukurs",
+        "features": {
+          "case": "gen",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0015",
+    "text": "Viņš nāk no darba.",
+    "gloss": "He is coming from work.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Viņš",
+        "lexeme": "lex_vins",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "nāk",
+        "lexeme": "lex_nakt",
+        "features": {
+          "tense": "pres",
+          "person": 3,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "no",
+        "lexeme": "lex_no",
+        "features": {}
+      },
+      {
+        "surface": "darba",
+        "lexeme": "lex_darbs",
+        "features": {
+          "case": "gen",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0016",
+    "text": "Mēs ejam pie ārsta.",
+    "gloss": "We are going to the doctor.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Mēs",
+        "lexeme": "lex_mes",
+        "features": {
+          "case": "nom",
+          "number": "pl"
+        }
+      },
+      {
+        "surface": "ejam",
+        "lexeme": "lex_iet",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "pl"
+        }
+      },
+      {
+        "surface": "pie",
+        "lexeme": "lex_pie",
+        "features": {}
+      },
+      {
+        "surface": "ārsta",
+        "lexeme": "lex_arsts",
+        "features": {
+          "case": "gen",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0017",
+    "text": "Es dodu grāmatu draugam.",
+    "gloss": "I am giving the book to a friend.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Es",
+        "lexeme": "lex_es",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "dodu",
+        "lexeme": "lex_dot",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "grāmatu",
+        "lexeme": "lex_gramata",
+        "features": {
+          "case": "acc",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "draugam",
+        "lexeme": "lex_draugs",
+        "features": {
+          "case": "dat",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0018",
+    "text": "Suns guļ zem galda.",
+    "gloss": "The dog is sleeping under the table.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Suns",
+        "lexeme": "lex_suns",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "guļ",
+        "lexeme": "lex_gulet",
+        "features": {
+          "tense": "pres",
+          "person": 3,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "zem",
+        "lexeme": "lex_zem",
+        "features": {}
+      },
+      {
+        "surface": "galda",
+        "lexeme": "lex_galds",
+        "features": {
+          "case": "gen",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0019",
+    "text": "Mēs runājam par darbu.",
+    "gloss": "We are talking about work.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Mēs",
+        "lexeme": "lex_mes",
+        "features": {
+          "case": "nom",
+          "number": "pl"
+        }
+      },
+      {
+        "surface": "runājam",
+        "lexeme": "lex_runat",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "pl"
+        }
+      },
+      {
+        "surface": "par",
+        "lexeme": "lex_par",
+        "features": {}
+      },
+      {
+        "surface": "darbu",
+        "lexeme": "lex_darbs",
+        "features": {
+          "case": "acc",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0020",
+    "text": "Es mācos latviešu valodu.",
+    "gloss": "I am learning Latvian.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Es",
+        "lexeme": "lex_es",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "mācos",
+        "lexeme": "lex_macities",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "latviešu",
+        "lexeme": "lex_latvietis",
+        "features": {
+          "case": "gen",
+          "number": "pl"
+        }
+      },
+      {
+        "surface": "valodu",
+        "lexeme": "lex_valoda",
+        "features": {
+          "case": "acc",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0021",
+    "text": "Upē ir daudz zivju.",
+    "gloss": "There are a lot of fish in the river.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Upē",
+        "lexeme": "lex_upe",
+        "features": {
+          "case": "loc",
+          "number": "sg"
+        },
+        "drillable": true
+      },
+      {
+        "surface": "ir",
+        "lexeme": "lex_but",
+        "features": {
+          "tense": "pres",
+          "person": 3,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "daudz",
+        "lexeme": "lex_daudz",
+        "features": {}
+      },
+      {
+        "surface": "zivju",
+        "lexeme": "lex_zivs",
+        "features": {
+          "case": "gen",
+          "number": "pl"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0022",
+    "text": "Es redzu pili.",
+    "gloss": "I see a castle.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Es",
+        "lexeme": "lex_es",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "redzu",
+        "lexeme": "lex_redzet",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "pili",
+        "lexeme": "lex_pils",
+        "features": {
+          "case": "acc",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0023",
+    "text": "Mēs ejam uz tirgu.",
+    "gloss": "We are going to the market.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Mēs",
+        "lexeme": "lex_mes",
+        "features": {
+          "case": "nom",
+          "number": "pl"
+        }
+      },
+      {
+        "surface": "ejam",
+        "lexeme": "lex_iet",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "pl"
+        }
+      },
+      {
+        "surface": "uz",
+        "lexeme": "lex_uz",
+        "features": {}
+      },
+      {
+        "surface": "tirgu",
+        "lexeme": "lex_tirgus",
+        "features": {
+          "case": "acc",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0024",
+    "text": "Es pērku medu tirgū.",
+    "gloss": "I buy honey at the market.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Es",
+        "lexeme": "lex_es",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "pērku",
+        "lexeme": "lex_pirkt",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "medu",
+        "lexeme": "lex_medus",
+        "features": {
+          "case": "acc",
+          "number": "sg"
+        },
+        "drillable": true
+      },
+      {
+        "surface": "tirgū",
+        "lexeme": "lex_tirgus",
+        "features": {
+          "case": "loc",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0025",
+    "text": "Viņam sāp sirds.",
+    "gloss": "His heart hurts.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Viņam",
+        "lexeme": "lex_vins",
+        "features": {
+          "case": "dat",
+          "number": "sg"
+        },
+        "drillable": true
+      },
+      {
+        "surface": "sāp",
+        "lexeme": "lex_sapet",
+        "features": {
+          "tense": "pres",
+          "person": 3,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "sirds",
+        "lexeme": "lex_sirds",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      }
+    ]
+  },
+  {
+    "id": "snt_0026",
+    "text": "Pie mājas aug egle.",
+    "gloss": "A spruce grows by the house.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Pie",
+        "lexeme": "lex_pie",
+        "features": {}
+      },
+      {
+        "surface": "mājas",
+        "lexeme": "lex_maja",
+        "features": {
+          "case": "gen",
+          "number": "sg"
+        },
+        "drillable": true
+      },
+      {
+        "surface": "aug",
+        "lexeme": "lex_augt",
+        "features": {
+          "tense": "pres",
+          "person": 3,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "egle",
+        "lexeme": "lex_egle",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      }
+    ]
+  },
+  {
+    "id": "snt_0027",
+    "text": "Mežā ir daudz egļu.",
+    "gloss": "There are a lot of spruces in the forest.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Mežā",
+        "lexeme": "lex_mezs",
+        "features": {
+          "case": "loc",
+          "number": "sg"
+        },
+        "drillable": true
+      },
+      {
+        "surface": "ir",
+        "lexeme": "lex_but",
+        "features": {
+          "tense": "pres",
+          "person": 3,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "daudz",
+        "lexeme": "lex_daudz",
+        "features": {}
+      },
+      {
+        "surface": "egļu",
+        "lexeme": "lex_egle",
+        "features": {
+          "case": "gen",
+          "number": "pl"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0028",
+    "text": "Es rakstu vēstuli brālim.",
+    "gloss": "I am writing a letter to my brother.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Es",
+        "lexeme": "lex_es",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "rakstu",
+        "lexeme": "lex_rakstit",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "vēstuli",
+        "lexeme": "lex_vestule",
+        "features": {
+          "case": "acc",
+          "number": "sg"
+        },
+        "drillable": true
+      },
+      {
+        "surface": "brālim",
+        "lexeme": "lex_bralis",
+        "features": {
+          "case": "dat",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0029",
+    "text": "Mēs dzīvojam pie upes.",
+    "gloss": "We live by the river.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Mēs",
+        "lexeme": "lex_mes",
+        "features": {
+          "case": "nom",
+          "number": "pl"
+        }
+      },
+      {
+        "surface": "dzīvojam",
+        "lexeme": "lex_dzivot",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "pl"
+        }
+      },
+      {
+        "surface": "pie",
+        "lexeme": "lex_pie",
+        "features": {}
+      },
+      {
+        "surface": "upes",
+        "lexeme": "lex_upe",
+        "features": {
+          "case": "gen",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0030",
+    "text": "Kaķis sēž uz skapja.",
+    "gloss": "The cat is sitting on the cupboard.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Kaķis",
+        "lexeme": "lex_kakis",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "sēž",
+        "lexeme": "lex_sedet",
+        "features": {
+          "tense": "pres",
+          "person": 3,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "uz",
+        "lexeme": "lex_uz",
+        "features": {}
+      },
+      {
+        "surface": "skapja",
+        "lexeme": "lex_skapis",
+        "features": {
+          "case": "gen",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0031",
+    "text": "Grāmata ir uz galda.",
+    "gloss": "The book is on the table.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Grāmata",
+        "lexeme": "lex_gramata",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "ir",
+        "lexeme": "lex_but",
+        "features": {
+          "tense": "pres",
+          "person": 3,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "uz",
+        "lexeme": "lex_uz",
+        "features": {}
+      },
+      {
+        "surface": "galda",
+        "lexeme": "lex_galds",
+        "features": {
+          "case": "gen",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0032",
+    "text": "Es nāku no Rīgas.",
+    "gloss": "I come from Riga.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Es",
+        "lexeme": "lex_es",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "nāku",
+        "lexeme": "lex_nakt",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "no",
+        "lexeme": "lex_no",
+        "features": {}
+      },
+      {
+        "surface": "Rīgas",
+        "lexeme": "lex_riga",
+        "features": {
+          "case": "gen",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0033",
+    "text": "Mēs braucam uz jūru.",
+    "gloss": "We are going to the sea.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Mēs",
+        "lexeme": "lex_mes",
+        "features": {
+          "case": "nom",
+          "number": "pl"
+        }
+      },
+      {
+        "surface": "braucam",
+        "lexeme": "lex_braukt",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "pl"
+        }
+      },
+      {
+        "surface": "uz",
+        "lexeme": "lex_uz",
+        "features": {}
+      },
+      {
+        "surface": "jūru",
+        "lexeme": "lex_jura",
+        "features": {
+          "case": "acc",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0034",
+    "text": "Vasarā mēs esam pie jūras.",
+    "gloss": "In summer we are at the seaside.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Vasarā",
+        "lexeme": "lex_vasara",
+        "features": {
+          "case": "loc",
+          "number": "sg"
+        },
+        "drillable": true
+      },
+      {
+        "surface": "mēs",
+        "lexeme": "lex_mes",
+        "features": {
+          "case": "nom",
+          "number": "pl"
+        }
+      },
+      {
+        "surface": "esam",
+        "lexeme": "lex_but",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "pl"
+        }
+      },
+      {
+        "surface": "pie",
+        "lexeme": "lex_pie",
+        "features": {}
+      },
+      {
+        "surface": "jūras",
+        "lexeme": "lex_jura",
+        "features": {
+          "case": "gen",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0035",
+    "text": "Ziemā ir sniegs.",
+    "gloss": "In winter there is snow.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Ziemā",
+        "lexeme": "lex_ziema",
+        "features": {
+          "case": "loc",
+          "number": "sg"
+        },
+        "drillable": true
+      },
+      {
+        "surface": "ir",
+        "lexeme": "lex_but",
+        "features": {
+          "tense": "pres",
+          "person": 3,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "sniegs",
+        "lexeme": "lex_sniegs",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      }
+    ]
+  },
+  {
+    "id": "snt_0036",
+    "text": "Es gaidu draugu.",
+    "gloss": "I am waiting for a friend.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Es",
+        "lexeme": "lex_es",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "gaidu",
+        "lexeme": "lex_gaidit",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "draugu",
+        "lexeme": "lex_draugs",
+        "features": {
+          "case": "acc",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0037",
+    "text": "Es runāju ar tēvu.",
+    "gloss": "I am talking with my father.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Es",
+        "lexeme": "lex_es",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "runāju",
+        "lexeme": "lex_runat",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "ar",
+        "lexeme": "lex_ar",
+        "features": {}
+      },
+      {
+        "surface": "tēvu",
+        "lexeme": "lex_tevs",
+        "features": {
+          "case": "ins",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0038",
+    "text": "Mēs ejam uz pilsētu ar draugiem.",
+    "gloss": "We are going to town with friends.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Mēs",
+        "lexeme": "lex_mes",
+        "features": {
+          "case": "nom",
+          "number": "pl"
+        }
+      },
+      {
+        "surface": "ejam",
+        "lexeme": "lex_iet",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "pl"
+        }
+      },
+      {
+        "surface": "uz",
+        "lexeme": "lex_uz",
+        "features": {}
+      },
+      {
+        "surface": "pilsētu",
+        "lexeme": "lex_pilseta",
+        "features": {
+          "case": "acc",
+          "number": "sg"
+        },
+        "drillable": true
+      },
+      {
+        "surface": "ar",
+        "lexeme": "lex_ar",
+        "features": {}
+      },
+      {
+        "surface": "draugiem",
+        "lexeme": "lex_draugs",
+        "features": {
+          "case": "ins",
+          "number": "pl"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0039",
+    "text": "Sievai patīk rozes.",
+    "gloss": "My wife likes roses.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Sievai",
+        "lexeme": "lex_sieva",
+        "features": {
+          "case": "dat",
+          "number": "sg"
+        },
+        "drillable": true
+      },
+      {
+        "surface": "patīk",
+        "lexeme": "lex_patikt",
+        "features": {
+          "tense": "pres",
+          "person": 3
+        }
+      },
+      {
+        "surface": "rozes",
+        "lexeme": "lex_roze",
+        "features": {
+          "case": "nom",
+          "number": "pl"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0040",
+    "text": "Bērniem patīk medus.",
+    "gloss": "Children like honey.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Bērniem",
+        "lexeme": "lex_berns",
+        "features": {
+          "case": "dat",
+          "number": "pl"
+        },
+        "drillable": true
+      },
+      {
+        "surface": "patīk",
+        "lexeme": "lex_patikt",
+        "features": {
+          "tense": "pres",
+          "person": 3
+        }
+      },
+      {
+        "surface": "medus",
+        "lexeme": "lex_medus",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      }
+    ]
+  },
+  {
+    "id": "snt_0041",
+    "text": "Es esmu mājās.",
+    "gloss": "I am at home.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Es",
+        "lexeme": "lex_es",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "esmu",
+        "lexeme": "lex_but",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "mājās",
+        "lexeme": "lex_maja",
+        "features": {
+          "case": "loc",
+          "number": "pl"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0042",
+    "text": "Viņš iet uz darbu.",
+    "gloss": "He is going to work.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Viņš",
+        "lexeme": "lex_vins",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "iet",
+        "lexeme": "lex_iet",
+        "features": {
+          "tense": "pres",
+          "person": 3,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "uz",
+        "lexeme": "lex_uz",
+        "features": {}
+      },
+      {
+        "surface": "darbu",
+        "lexeme": "lex_darbs",
+        "features": {
+          "case": "acc",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0043",
+    "text": "Man nav laika.",
+    "gloss": "I don't have time.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Man",
+        "lexeme": "lex_es",
+        "features": {
+          "case": "dat",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "nav",
+        "lexeme": "lex_but",
+        "features": {
+          "tense": "pres",
+          "person": 3,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "laika",
+        "lexeme": "lex_laiks",
+        "features": {
+          "case": "gen",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0044",
+    "text": "Man nav brāļa.",
+    "gloss": "I don't have a brother.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Man",
+        "lexeme": "lex_es",
+        "features": {
+          "case": "dat",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "nav",
+        "lexeme": "lex_but",
+        "features": {
+          "tense": "pres",
+          "person": 3,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "brāļa",
+        "lexeme": "lex_bralis",
+        "features": {
+          "case": "gen",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0045",
+    "text": "Es dzīvoju Baltijas valstī.",
+    "gloss": "I live in a Baltic country.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Es",
+        "lexeme": "lex_es",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "dzīvoju",
+        "lexeme": "lex_dzivot",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "Baltijas",
+        "lexeme": "lex_baltija",
+        "features": {
+          "case": "gen",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "valstī",
+        "lexeme": "lex_valsts",
+        "features": {
+          "case": "loc",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0046",
+    "text": "Naktī es guļu.",
+    "gloss": "At night I sleep.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Naktī",
+        "lexeme": "lex_nakts",
+        "features": {
+          "case": "loc",
+          "number": "sg"
+        },
+        "drillable": true
+      },
+      {
+        "surface": "es",
+        "lexeme": "lex_es",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "guļu",
+        "lexeme": "lex_gulet",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "sg"
+        }
+      }
+    ]
+  },
+  {
+    "id": "snt_0047",
+    "text": "Govis ēd zāli.",
+    "gloss": "The cows are eating grass.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Govis",
+        "lexeme": "lex_govs",
+        "features": {
+          "case": "nom",
+          "number": "pl"
+        },
+        "drillable": true
+      },
+      {
+        "surface": "ēd",
+        "lexeme": "lex_est",
+        "features": {
+          "tense": "pres",
+          "person": 3,
+          "number": "pl"
+        }
+      },
+      {
+        "surface": "zāli",
+        "lexeme": "lex_zale",
+        "features": {
+          "case": "acc",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0048",
+    "text": "Es dzīvoju pie brāļa.",
+    "gloss": "I live at my brother's.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Es",
+        "lexeme": "lex_es",
+        "features": {
+          "case": "nom",
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "dzīvoju",
+        "lexeme": "lex_dzivot",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "pie",
+        "lexeme": "lex_pie",
+        "features": {}
+      },
+      {
+        "surface": "brāļa",
+        "lexeme": "lex_bralis",
+        "features": {
+          "case": "gen",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0049",
+    "text": "Mēs sēžam pie galda.",
+    "gloss": "We are sitting at the table.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Mēs",
+        "lexeme": "lex_mes",
+        "features": {
+          "case": "nom",
+          "number": "pl"
+        }
+      },
+      {
+        "surface": "sēžam",
+        "lexeme": "lex_sedet",
+        "features": {
+          "tense": "pres",
+          "person": 1,
+          "number": "pl"
+        }
+      },
+      {
+        "surface": "pie",
+        "lexeme": "lex_pie",
+        "features": {}
+      },
+      {
+        "surface": "galda",
+        "lexeme": "lex_galds",
+        "features": {
+          "case": "gen",
+          "number": "sg"
+        },
+        "drillable": true
+      }
+    ]
+  },
+  {
+    "id": "snt_0050",
+    "text": "Latvijā ir daudz upju.",
+    "gloss": "There are many rivers in Latvia.",
+    "level": "a1",
+    "review": "draft",
+    "source": "generated",
+    "tokens": [
+      {
+        "surface": "Latvijā",
+        "lexeme": "lex_latvija",
+        "features": {
+          "case": "loc",
+          "number": "sg"
+        },
+        "drillable": true
+      },
+      {
+        "surface": "ir",
+        "lexeme": "lex_but",
+        "features": {
+          "tense": "pres",
+          "person": 3,
+          "number": "sg"
+        }
+      },
+      {
+        "surface": "daudz",
+        "lexeme": "lex_daudz",
+        "features": {}
+      },
+      {
+        "surface": "upju",
+        "lexeme": "lex_upe",
+        "features": {
+          "case": "gen",
+          "number": "pl"
+        },
+        "drillable": true
+      }
+    ]
+  }
+]
