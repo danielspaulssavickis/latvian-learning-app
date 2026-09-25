@@ -1,0 +1,12 @@
+{
+  "id": "lex_tevs",
+  "lemma": "tēvs",
+  "pos": "noun",
+  "gender": "m",
+  "declension": 1,
+  "conjugation": null,
+  "gloss": ["father"],
+  "tags": ["a1", "family"],
+  "review": "draft",
+  "source": "generated"
+}

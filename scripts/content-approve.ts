@@ -2,124 +2,151 @@
 import { existsSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { join, relative, sep } from 'node:path'
 import {
+  buildApproveContext,
   buildApprovedGrammarFile,
+  buildApprovedLexeme,
   buildApprovedSentence,
   buildApprovedSentences,
+  type ContentFile,
 } from '../src/content/validate.js'
 import type { Sentence } from '../src/content/schemas.js'
 
+/**
+ * Human-only (ADR-006, ADR-008, ADR-010). Accepts any number of paths:
+ *
+ *   content/lexemes/<id>.json   approved in place
+ *   content/grammar/<file>.json approved in place
+ *   content/drafts/<file>.json  validated, then moved into content/sentences/
+ *
+ * Lexemes and grammar files are processed first, so one command can approve
+ * a batch of sentences together with the lexemes they need.
+ */
+
 const CONTENT_ROOT = join(process.cwd(), 'content')
-const draftPath = process.argv[2]
+const paths = process.argv.slice(2)
 
-if (!draftPath) {
-  console.error('Usage: npm run content:approve -- content/drafts/<file>.json')
-  console.error('       npm run content:approve -- content/grammar/<file>.json')
+if (paths.length === 0) {
+  console.error('Usage: npm run content:approve -- <path> [<path> ...]')
+  console.error('  paths under content/lexemes/, content/grammar/ or content/drafts/')
   process.exit(1)
 }
 
-const absoluteDraftPath = join(process.cwd(), draftPath)
-if (!existsSync(absoluteDraftPath)) {
-  console.error(`content:approve: no such file: ${draftPath}`)
-  process.exit(1)
+function under(dir: string, absolute: string): boolean {
+  return relative(join(CONTENT_ROOT, dir), absolute).split(sep)[0] !== '..'
 }
 
-// Grammar files (ADR-008) are approved in place: the `review` field, not the
-// directory, is what inflect() honors. Sentences move out of drafts/ instead.
-const grammarDir = join(CONTENT_ROOT, 'grammar')
-if (relative(grammarDir, absoluteDraftPath).split(sep)[0] !== '..') {
-  const result = buildApprovedGrammarFile(
-    JSON.parse(readFileSync(absoluteDraftPath, 'utf-8')),
-    new Date(),
+function readJson(absolute: string): unknown {
+  return JSON.parse(readFileSync(absolute, 'utf-8'))
+}
+
+function writeJson(absolute: string, data: unknown): void {
+  writeFileSync(absolute, `${JSON.stringify(data, null, 2)}\n`)
+}
+
+function readDir(dir: string): ContentFile[] {
+  const absolute = join(CONTENT_ROOT, dir)
+  if (!existsSync(absolute)) return []
+  return readdirSync(absolute)
+    .filter((name) => name.endsWith('.json'))
+    .map((name) => ({ path: name, data: readJson(join(absolute, name)) }))
+}
+
+let failures = 0
+const now = new Date()
+const resolved = paths.map((path) => ({ path, absolute: join(process.cwd(), path) }))
+const inPlace = resolved.filter(
+  ({ absolute }) => under('lexemes', absolute) || under('grammar', absolute),
+)
+const drafts = resolved.filter(({ absolute }) => under('drafts', absolute))
+const other = resolved.filter((entry) => !inPlace.includes(entry) && !drafts.includes(entry))
+
+for (const { path } of other) {
+  console.error(
+    `content:approve: ${path} is not under content/lexemes, content/grammar or content/drafts`,
   )
-  if (!result.ok) {
-    console.error(`content:approve: ${draftPath} failed validation, no files changed.\n`)
-    for (const error of result.errors) console.error(`    ${error.message}`)
-    process.exit(1)
-  }
-  writeFileSync(absoluteDraftPath, `${JSON.stringify(result.file, null, 2)}\n`)
-  console.log(`content:approve: approved grammar file ${result.file.id} in place (${draftPath}).`)
-  process.exit(0)
+  failures += 1
 }
 
-function loadLexemeIds(): Set<string> {
-  const dir = join(CONTENT_ROOT, 'lexemes')
-  if (!existsSync(dir)) return new Set()
-  const ids = new Set<string>()
-  for (const name of readdirSync(dir)) {
-    if (!name.endsWith('.json')) continue
-    const data = JSON.parse(readFileSync(join(dir, name), 'utf-8')) as { id?: unknown }
-    if (typeof data.id === 'string') ids.add(data.id)
+for (const { path, absolute } of inPlace) {
+  if (!existsSync(absolute)) {
+    console.error(`content:approve: no such file: ${path}`)
+    failures += 1
+    continue
   }
-  return ids
+  const raw = readJson(absolute)
+  const result = under('lexemes', absolute)
+    ? buildApprovedLexeme(raw, now)
+    : buildApprovedGrammarFile(raw, now)
+  if (!result.ok) {
+    console.error(`content:approve: ${path} failed validation, not changed:`)
+    for (const error of result.errors) console.error(`    ${error.message}`)
+    failures += 1
+    continue
+  }
+  writeJson(absolute, 'lexeme' in result ? result.lexeme : result.file)
+  console.log(`content:approve: approved ${path} in place`)
 }
 
 /** Writes an approved sentence, refusing to overwrite an existing published file. */
-function writeApproved(sentence: Sentence): { ok: true } | { ok: false; message: string } {
+function writeApproved(sentence: Sentence): boolean {
   const destination = join(CONTENT_ROOT, 'sentences', `${sentence.id}.json`)
+  const shown = relative(process.cwd(), destination)
   if (existsSync(destination)) {
-    return {
-      ok: false,
-      message: `refusing to overwrite existing file at ${destination.slice(process.cwd().length + 1)}`,
-    }
+    console.error(`content:approve: ${sentence.id}: refusing to overwrite existing ${shown}`)
+    return false
   }
-  writeFileSync(destination, `${JSON.stringify(sentence, null, 2)}\n`)
-  console.log(
-    `content:approve: approved ${sentence.id} -> ${destination.slice(process.cwd().length + 1)}`,
-  )
-  return { ok: true }
+  writeJson(destination, sentence)
+  console.log(`content:approve: approved ${sentence.id} -> ${shown}`)
+  return true
 }
 
-const raw: unknown = JSON.parse(readFileSync(absoluteDraftPath, 'utf-8'))
-const lexemeIds = loadLexemeIds()
-const now = new Date()
+if (drafts.length > 0) {
+  // Read after the in-place approvals above, so lexemes approved in this run count.
+  const context = buildApproveContext({ lexemes: readDir('lexemes'), grammar: readDir('grammar') })
 
-if (Array.isArray(raw)) {
-  const results = buildApprovedSentences(raw, lexemeIds, now)
-  const stillFailing: unknown[] = []
-  let failureCount = 0
-
-  for (const result of results) {
-    if (!result.ok) {
-      stillFailing.push(result.raw)
-      failureCount += 1
-      console.error(`content:approve: ${result.id} failed validation:`)
-      for (const error of result.errors) console.error(`    ${error.message}`)
+  for (const { path, absolute } of drafts) {
+    if (!existsSync(absolute)) {
+      console.error(`content:approve: no such file: ${path}`)
+      failures += 1
       continue
     }
-    const written = writeApproved(result.sentence)
-    if (!written.ok) {
-      stillFailing.push(result.sentence)
-      failureCount += 1
-      console.error(`content:approve: ${result.id} ${written.message}`)
+    const raw = readJson(absolute)
+
+    if (!Array.isArray(raw)) {
+      const result = buildApprovedSentence(raw, context, now)
+      if (!result.ok) {
+        console.error(`content:approve: ${path} failed validation, no files changed:`)
+        for (const error of result.errors) console.error(`    ${error.message}`)
+        failures += 1
+        continue
+      }
+      if (writeApproved(result.sentence)) rmSync(absolute)
+      else failures += 1
+      continue
+    }
+
+    const stillFailing: unknown[] = []
+    for (const result of buildApprovedSentences(raw, context, now)) {
+      if (!result.ok) {
+        stillFailing.push(result.raw)
+        console.error(`content:approve: ${result.id} failed validation:`)
+        for (const error of result.errors) console.error(`    ${error.message}`)
+        continue
+      }
+      if (!writeApproved(result.sentence)) stillFailing.push(result.sentence)
+    }
+
+    if (stillFailing.length === 0) {
+      rmSync(absolute)
+      console.log(`content:approve: approved all ${raw.length} sentence(s) from ${path}.`)
+    } else {
+      writeJson(absolute, stillFailing)
+      failures += stillFailing.length
+      console.error(
+        `content:approve: ${stillFailing.length}/${raw.length} not approved; ${path} now contains only those.`,
+      )
     }
   }
-
-  if (failureCount === 0) {
-    rmSync(absoluteDraftPath)
-    console.log(`content:approve: approved all ${results.length} sentence(s) from ${draftPath}.`)
-    process.exit(0)
-  }
-
-  writeFileSync(absoluteDraftPath, `${JSON.stringify(stillFailing, null, 2)}\n`)
-  console.error(
-    `\ncontent:approve: ${failureCount}/${results.length} failed, ${results.length - failureCount} approved. ${draftPath} now contains only what still needs fixing.`,
-  )
-  process.exit(1)
 }
 
-const result = buildApprovedSentence(raw, lexemeIds, now)
-
-if (!result.ok) {
-  console.error(`content:approve: ${draftPath} failed validation, no files changed.\n`)
-  for (const error of result.errors) {
-    console.error(`    ${error.message}`)
-  }
-  process.exit(1)
-}
-
-const written = writeApproved(result.sentence)
-if (!written.ok) {
-  console.error(`content:approve: ${written.message}`)
-  process.exit(1)
-}
-rmSync(absoluteDraftPath)
+process.exit(failures === 0 ? 0 : 1)

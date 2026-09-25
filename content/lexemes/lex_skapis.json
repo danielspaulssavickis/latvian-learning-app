@@ -1,0 +1,12 @@
+{
+  "id": "lex_skapis",
+  "lemma": "skapis",
+  "pos": "noun",
+  "gender": "m",
+  "declension": 2,
+  "conjugation": null,
+  "gloss": ["cupboard", "wardrobe"],
+  "tags": ["a1", "home"],
+  "review": "draft",
+  "source": "generated"
+}

@@ -5,14 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && tsx scripts/check-dist.ts",
     "preview": "vite preview",
     "test": "vitest run",
     "typecheck": "tsc -b",
     "lint": "eslint .",
     "format": "prettier --write .",
     "content:check": "tsx scripts/content-check.ts",
-    "content:approve": "tsx scripts/content-approve.ts"
+    "content:check:drafts": "tsx scripts/content-check.ts --drafts",
+    "content:approve": "tsx scripts/content-approve.ts",
+    "dev:drafts": "vite --mode drafts"
   },
   "dependencies": {
     "dexie": "^4.4.6",

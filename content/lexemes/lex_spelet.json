@@ -1,0 +1,15 @@
+{
+  "id": "lex_spelet",
+  "lemma": "spēlēties",
+  "pos": "verb",
+  "gender": null,
+  "declension": null,
+  "conjugation": 2,
+  "gloss": ["to play"],
+  "tags": ["a1"],
+  "notes": [
+    "Reflexive lemma chosen per the open question in content/_needed.json: a reflexive verb is its own lexeme."
+  ],
+  "review": "draft",
+  "source": "generated"
+}

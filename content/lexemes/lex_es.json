@@ -1,0 +1,21 @@
+{
+  "id": "lex_es",
+  "lemma": "es",
+  "pos": "pronoun",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": ["I"],
+  "tags": ["a1"],
+  "irregular": {
+    "nom.sg": "es",
+    "gen.sg": "manis",
+    "dat.sg": "man",
+    "acc.sg": "mani",
+    "ins.sg": "mani",
+    "loc.sg": "manī"
+  },
+  "notes": ["ins = acc form in the singular and dat form in the plural, as used after 'ar'."],
+  "review": "draft",
+  "source": "generated"
+}

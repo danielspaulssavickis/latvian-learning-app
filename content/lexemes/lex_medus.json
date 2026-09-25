@@ -1,0 +1,12 @@
+{
+  "id": "lex_medus",
+  "lemma": "medus",
+  "pos": "noun",
+  "gender": "m",
+  "declension": 3,
+  "conjugation": null,
+  "gloss": ["honey"],
+  "tags": ["a1", "food"],
+  "review": "draft",
+  "source": "generated"
+}

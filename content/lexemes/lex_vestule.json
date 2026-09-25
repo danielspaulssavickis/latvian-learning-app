@@ -1,0 +1,12 @@
+{
+  "id": "lex_vestule",
+  "lemma": "vēstule",
+  "pos": "noun",
+  "gender": "f",
+  "declension": 5,
+  "conjugation": null,
+  "gloss": ["letter"],
+  "tags": ["a1", "things"],
+  "review": "draft",
+  "source": "generated"
+}

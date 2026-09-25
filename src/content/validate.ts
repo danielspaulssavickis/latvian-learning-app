@@ -1,4 +1,4 @@
-import { buildGrammar } from '../engine/inflect.js'
+import { buildGrammar, type Grammar } from '../engine/inflect.js'
 import { checkRoundTrip } from './roundTrip.js'
 import {
   grammarFileSchema,
@@ -141,27 +141,69 @@ export function checkContent(tree: ContentTree): CheckResult {
 
 export type ApproveResult = { ok: true; sentence: Sentence } | { ok: false; errors: ContentError[] }
 
+/** What a sentence is approved against: the current lexemes and grammar. */
+export interface ApproveContext {
+  lexemeById: ReadonlyMap<string, Lexeme>
+  grammar: Grammar
+}
+
 /**
- * The pure core of `npm run content:approve` (ADR-006): validates a draft
- * sentence against the known lexeme ids and, only if it passes, returns the
- * sentence with `review`/`reviewedAt` set. Never touches the filesystem —
- * that's `scripts/content-approve.ts`'s job — so the approval logic itself is
- * unit-testable without a real draft file.
+ * Builds an ApproveContext from a content tree, skipping files that don't
+ * parse — those are reported by `checkContent`, not here.
+ */
+export function buildApproveContext(
+  tree: Pick<ContentTree, 'lexemes' | 'grammar'>,
+): ApproveContext {
+  const lexemeById = new Map<string, Lexeme>()
+  for (const { data } of tree.lexemes) {
+    const result = lexemeSchema.safeParse(data)
+    if (result.success) lexemeById.set(result.data.id, result.data)
+  }
+  const grammarFiles: GrammarFile[] = []
+  for (const { data } of tree.grammar) {
+    const result = grammarFileSchema.safeParse(data)
+    if (result.success) grammarFiles.push(result.data)
+  }
+  return { lexemeById, grammar: buildGrammar(grammarFiles) }
+}
+
+/**
+ * The pure core of `npm run content:approve` for sentences (ADR-006): a
+ * draft is approved only if it validates, every lexeme it references is
+ * itself approved (ADR-010 — the learner sees lemmas and glosses), and it
+ * passes the round-trip check (CLAUDE.md rule 6), so an approved sentence
+ * can never make the app's content fail to load. Only then does it get
+ * `review`/`reviewedAt`. Never touches the filesystem.
  */
 export function buildApprovedSentence(
   raw: unknown,
-  validLexemeIds: ReadonlySet<string>,
+  context: ApproveContext,
   now: Date,
 ): ApproveResult {
-  const schema = makeSentenceSchema(validLexemeIds)
+  const schema = makeSentenceSchema(new Set(context.lexemeById.keys()))
   const result = schema.safeParse(raw)
   if (!result.success) {
     return { ok: false, errors: formatIssues('<draft>', result.error.issues) }
   }
-  return {
-    ok: true,
-    sentence: { ...result.data, review: 'approved', reviewedAt: now.toISOString() },
+  const sentence = result.data
+
+  const errors: ContentError[] = []
+  const unapproved = new Set<string>()
+  for (const token of sentence.tokens) {
+    if (context.lexemeById.get(token.lexeme)?.review !== 'approved') unapproved.add(token.lexeme)
   }
+  for (const id of unapproved) {
+    errors.push({
+      file: '<draft>',
+      message: `lexeme ${id} is not approved yet — approve content/lexemes/${id}.json first`,
+    })
+  }
+  for (const finding of checkRoundTrip([sentence], context.lexemeById, context.grammar)) {
+    if (finding.kind === 'mismatch') errors.push({ file: '<draft>', message: finding.message })
+  }
+  if (errors.length > 0) return { ok: false, errors }
+
+  return { ok: true, sentence: { ...sentence, review: 'approved', reviewedAt: now.toISOString() } }
 }
 
 export type ApproveBatchItem =
@@ -181,12 +223,12 @@ function idOf(raw: unknown, index: number): string {
  */
 export function buildApprovedSentences(
   rawList: unknown[],
-  validLexemeIds: ReadonlySet<string>,
+  context: ApproveContext,
   now: Date,
 ): ApproveBatchItem[] {
   return rawList.map((raw, index) => {
     const id = idOf(raw, index)
-    const result = buildApprovedSentence(raw, validLexemeIds, now)
+    const result = buildApprovedSentence(raw, context, now)
     if (result.ok) return { id, ok: true, sentence: result.sentence }
     return { id, ok: false, errors: result.errors, raw }
   })
@@ -208,4 +250,19 @@ export function buildApprovedGrammarFile(raw: unknown, now: Date): ApproveGramma
     return { ok: false, errors: formatIssues('<grammar>', result.error.issues) }
   }
   return { ok: true, file: { ...result.data, review: 'approved', reviewedAt: now.toISOString() } }
+}
+
+export type ApproveLexemeResult =
+  { ok: true; lexeme: Lexeme } | { ok: false; errors: ContentError[] }
+
+/**
+ * The lexeme form of `content:approve` (ADR-010): validates one lexeme file
+ * and returns it with `review: "approved"` + `reviewedAt`, approved in place.
+ */
+export function buildApprovedLexeme(raw: unknown, now: Date): ApproveLexemeResult {
+  const result = lexemeSchema.safeParse(raw)
+  if (!result.success) {
+    return { ok: false, errors: formatIssues('<lexeme>', result.error.issues) }
+  }
+  return { ok: true, lexeme: { ...result.data, review: 'approved', reviewedAt: now.toISOString() } }
 }

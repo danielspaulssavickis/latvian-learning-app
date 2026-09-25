@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import {
+  buildApproveContext,
   buildApprovedGrammarFile,
+  buildApprovedLexeme,
   buildApprovedSentence,
   buildApprovedSentences,
   checkContent,
@@ -221,7 +223,10 @@ describe('buildApprovedGrammarFile', () => {
 
 describe('buildApprovedSentence', () => {
   const now = new Date('2026-09-18T00:00:00.000Z')
-  const lexemeIds = new Set(['lex_test_noun'])
+  const lexemeIds = buildApproveContext({
+    lexemes: [{ path: 'l.json', data: { ...goodLexeme(), review: 'approved' } }],
+    grammar: [{ path: 'g.json', data: goodGrammarTable() }],
+  })
 
   it('sets review and reviewedAt on a valid draft', () => {
     const result = buildApprovedSentence(goodSentence(), lexemeIds, now)
@@ -243,9 +248,57 @@ describe('buildApprovedSentence', () => {
   })
 })
 
+describe('buildApprovedSentence — gates', () => {
+  const now = new Date('2026-09-25T00:00:00.000Z')
+
+  it('refuses a sentence whose lexeme is still a draft (ADR-010)', () => {
+    const context = buildApproveContext({
+      lexemes: [{ path: 'l.json', data: { ...goodLexeme(), review: 'draft' } }],
+      grammar: [],
+    })
+    const result = buildApprovedSentence(goodSentence(), context, now)
+    expect(result).toMatchObject({
+      ok: false,
+      errors: [{ message: expect.stringContaining('lex_test_noun is not approved') }],
+    })
+  })
+
+  it('refuses a sentence that fails the round-trip check', () => {
+    const context = buildApproveContext({
+      lexemes: [{ path: 'l.json', data: { ...goodLexeme(), review: 'approved' } }],
+      grammar: [{ path: 'g.json', data: goodGrammarTable() }],
+    })
+    const bad = goodSentence()
+    bad.tokens[0] = {
+      ...bad.tokens[0],
+      surface: 'Testvārda',
+      features: { case: 'loc', number: 'sg' },
+    }
+    const result = buildApprovedSentence(bad, context, now)
+    expect(result).toMatchObject({
+      ok: false,
+      errors: [{ message: expect.stringContaining('expected "Testvārda"') }],
+    })
+  })
+})
+
+describe('buildApprovedLexeme', () => {
+  it('approves a valid lexeme in place and refuses an invalid one', () => {
+    const now = new Date('2026-09-25T00:00:00.000Z')
+    expect(buildApprovedLexeme({ ...goodLexeme(), review: 'draft' }, now)).toMatchObject({
+      ok: true,
+      lexeme: { review: 'approved', reviewedAt: now.toISOString() },
+    })
+    expect(buildApprovedLexeme({ id: 'x' }, now).ok).toBe(false)
+  })
+})
+
 describe('buildApprovedSentences (batch)', () => {
   const now = new Date('2026-09-18T00:00:00.000Z')
-  const lexemeIds = new Set(['lex_test_noun'])
+  const lexemeIds = buildApproveContext({
+    lexemes: [{ path: 'l.json', data: { ...goodLexeme(), review: 'approved' } }],
+    grammar: [{ path: 'g.json', data: goodGrammarTable() }],
+  })
 
   it('approves the good sentences and reports the bad ones, without cross-contamination', () => {
     const bad = goodSentence({ id: 'snt_bad' })

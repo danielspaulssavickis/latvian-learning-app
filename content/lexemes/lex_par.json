@@ -1,0 +1,13 @@
+{
+  "id": "lex_par",
+  "lemma": "par",
+  "pos": "preposition",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": ["about", "for"],
+  "tags": ["a1"],
+  "notes": ["Takes the accusative."],
+  "review": "draft",
+  "source": "generated"
+}

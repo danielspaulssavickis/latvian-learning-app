@@ -1,0 +1,12 @@
+{
+  "id": "lex_macities",
+  "lemma": "mācīties",
+  "pos": "verb",
+  "gender": null,
+  "declension": null,
+  "conjugation": 3,
+  "gloss": ["to learn", "to study"],
+  "tags": ["a1"],
+  "review": "draft",
+  "source": "generated"
+}

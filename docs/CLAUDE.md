@@ -17,7 +17,9 @@ npm run test         # Vitest, watch off in CI
 npm run typecheck    # tsc --noEmit
 npm run lint         # eslint
 npm run content:check # validate every file in content/ against the Zod schemas + round-trip check
-npm run content:approve -- <path>  # human-only: approve a draft sentence file or a grammar file
+npm run content:check:drafts  # same, also checking content/drafts/ as if published
+npm run content:approve -- <path>...  # human-only: approve lexemes, grammar files, draft sentences
+npm run dev:drafts    # dev server with drafts visible (ADR-011); never in a build
 ```
 
 Run `npm run typecheck && npm run test && npm run content:check` before saying a task is done.
@@ -54,12 +56,13 @@ tested directly. If a piece of logic needs a component to test, it is in the wro
    `npm run content:approve` and it passes (ADR-006/ADR-007). Grammar files
    in `content/grammar/` may be drafted too, always with `review: "draft"`
    (ADR-008) — list every cell you're unsure of in `content/_needed.json`
-   instead of filling it. Lexemes, glosses, and `irregular` forms are still
-   off-limits to author (ADR-004):
-   case usage and verb government are exactly where a model produces
-   plausible-looking errors, and wrong content teaches the user wrong
-   Latvian. If one of those is missing, add a `TODO` entry to
-   `content/_needed.json` and tell me what to write. Generating *placeholder*
+   instead of filling it. Lexemes may be drafted in `content/lexemes/` with
+   `review: "draft"` (ADR-010); never set `review: "approved"` yourself —
+   only `content:approve` does, and only the human runs it. Be most careful
+   with case usage and verb government: that's exactly where a model
+   produces plausible-looking errors, and wrong content teaches the user
+   wrong Latvian. When unsure, add an entry to `content/_needed.json`
+   instead of guessing, and say so. Generating *placeholder*
    content for tests is fine only under `src/**/__fixtures__/`.
 
 2. **Diacritics are semantic.** `ā ē ī ū` are different letters from `a e i u`, and

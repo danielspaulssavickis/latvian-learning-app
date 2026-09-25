@@ -1,0 +1,12 @@
+{
+  "id": "lex_valoda",
+  "lemma": "valoda",
+  "pos": "noun",
+  "gender": "f",
+  "declension": 4,
+  "conjugation": null,
+  "gloss": ["language"],
+  "tags": ["a1", "education"],
+  "review": "draft",
+  "source": "generated"
+}

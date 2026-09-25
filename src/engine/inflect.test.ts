@@ -48,6 +48,7 @@ function lexeme(overrides: Partial<Lexeme> = {}): Lexeme {
     conjugation: null,
     gloss: ['test'],
     tags: [],
+    review: 'approved',
     ...overrides,
   }
 }
@@ -214,6 +215,51 @@ describe('inflect — confidence follows the review gate (ADR-008)', () => {
     // ...but a form the draft rule file didn't touch keeps the table's confidence.
     expect(inflect(lexeme(), { case: 'dat', number: 'sg' }, g)).toMatchObject({
       confidence: 'verified',
+    })
+  })
+})
+
+describe('inflect — lexeme review gate (ADR-010)', () => {
+  it('marks a table form unverified when the lexeme is a draft', () => {
+    const g = buildGrammar([table()])
+    expect(inflect(lexeme({ review: 'draft' }), { case: 'dat', number: 'sg' }, g)).toMatchObject({
+      confidence: 'unverified',
+    })
+  })
+
+  it('marks an irregular form and the lemma unverified when the lexeme is a draft', () => {
+    const lex = lexeme({ review: 'draft', irregular: { 'gen.sg': 'bolX' } })
+    const g = buildGrammar([table()])
+    expect(inflect(lex, { case: 'gen', number: 'sg' }, g)).toMatchObject({
+      confidence: 'unverified',
+    })
+    expect(inflect(lex, { case: 'nom', number: 'sg' }, g)).toMatchObject({
+      confidence: 'unverified',
+    })
+  })
+})
+
+describe('inflect — pronouns', () => {
+  const pronoun = lexeme({
+    pos: 'pronoun',
+    lemma: 'es',
+    declension: null,
+    gender: null,
+    irregular: { 'dat.sg': 'man' },
+  })
+
+  it('reads the paradigm from irregular', () => {
+    expect(inflect(pronoun, { case: 'dat', number: 'sg' }, buildGrammar([]))).toMatchObject({
+      ok: true,
+      form: 'man',
+      source: 'irregular',
+    })
+  })
+
+  it('reports a gap, never a table form, for a missing pronoun form', () => {
+    expect(inflect(pronoun, { case: 'loc', number: 'sg' }, buildGrammar([table()]))).toMatchObject({
+      ok: false,
+      reason: 'gap',
     })
   })
 })

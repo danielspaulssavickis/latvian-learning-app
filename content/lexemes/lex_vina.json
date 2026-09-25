@@ -1,0 +1,30 @@
+{
+  "id": "lex_vina",
+  "lemma": "viņa",
+  "pos": "pronoun",
+  "gender": "f",
+  "declension": null,
+  "conjugation": null,
+  "gloss": ["she"],
+  "tags": ["a1"],
+  "irregular": {
+    "nom.sg": "viņa",
+    "gen.sg": "viņas",
+    "dat.sg": "viņai",
+    "acc.sg": "viņu",
+    "ins.sg": "viņu",
+    "loc.sg": "viņā",
+    "nom.pl": "viņas",
+    "gen.pl": "viņu",
+    "dat.pl": "viņām",
+    "acc.pl": "viņas",
+    "ins.pl": "viņām",
+    "loc.pl": "viņās"
+  },
+  "notes": [
+    "Plural forms are 'they' (feminine).",
+    "ins = acc form in the singular and dat form in the plural, as used after 'ar'."
+  ],
+  "review": "draft",
+  "source": "generated"
+}

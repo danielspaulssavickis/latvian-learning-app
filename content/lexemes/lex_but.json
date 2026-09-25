@@ -1,0 +1,13 @@
+{
+  "id": "lex_but",
+  "lemma": "būt",
+  "pos": "verb",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": ["to be"],
+  "tags": ["a1"],
+  "notes": ["Irregular; present 'esmu, esi, ir, esam, esat, ir', negative 'nav'."],
+  "review": "draft",
+  "source": "generated"
+}

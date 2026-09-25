@@ -1,0 +1,15 @@
+{
+  "id": "lex_divi",
+  "lemma": "divi",
+  "pos": "numeral",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": ["two"],
+  "tags": ["a1"],
+  "notes": [
+    "Left feature-less in sentences for now: it does agree with the noun in gender and case, which isn't drilled yet."
+  ],
+  "review": "draft",
+  "source": "generated"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "lex_iet",
+  "lemma": "iet",
+  "pos": "verb",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": ["to go (on foot)"],
+  "tags": ["a1"],
+  "notes": ["Irregular."],
+  "review": "draft",
+  "source": "generated"
+}

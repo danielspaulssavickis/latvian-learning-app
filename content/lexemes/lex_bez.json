@@ -1,0 +1,13 @@
+{
+  "id": "lex_bez",
+  "lemma": "bez",
+  "pos": "preposition",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": ["without"],
+  "tags": ["a1"],
+  "notes": ["Takes the genitive."],
+  "review": "draft",
+  "source": "generated"
+}

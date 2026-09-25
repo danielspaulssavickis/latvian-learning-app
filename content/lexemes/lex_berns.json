@@ -1,0 +1,12 @@
+{
+  "id": "lex_berns",
+  "lemma": "bērns",
+  "pos": "noun",
+  "gender": "m",
+  "declension": 1,
+  "conjugation": null,
+  "gloss": ["child"],
+  "tags": ["a1", "family"],
+  "review": "draft",
+  "source": "generated"
+}

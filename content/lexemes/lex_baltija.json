@@ -1,0 +1,12 @@
+{
+  "id": "lex_baltija",
+  "lemma": "Baltija",
+  "pos": "noun",
+  "gender": "f",
+  "declension": 4,
+  "conjugation": null,
+  "gloss": ["the Baltics"],
+  "tags": ["a1", "place"],
+  "review": "draft",
+  "source": "generated"
+}

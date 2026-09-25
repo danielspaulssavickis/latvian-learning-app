@@ -1,0 +1,13 @@
+{
+  "id": "lex_pie",
+  "lemma": "pie",
+  "pos": "preposition",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": ["at", "by", "near"],
+  "tags": ["a1"],
+  "notes": ["Takes the genitive."],
+  "review": "draft",
+  "source": "generated"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "lex_gramata",
+  "lemma": "grāmata",
+  "pos": "noun",
+  "gender": "f",
+  "declension": 4,
+  "conjugation": null,
+  "gloss": ["book"],
+  "tags": ["a1", "things"],
+  "review": "draft",
+  "source": "generated"
+}

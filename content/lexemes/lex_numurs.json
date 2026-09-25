@@ -1,0 +1,12 @@
+{
+  "id": "lex_numurs",
+  "lemma": "numurs",
+  "pos": "noun",
+  "gender": "m",
+  "declension": 1,
+  "conjugation": null,
+  "gloss": ["number"],
+  "tags": ["a1", "things"],
+  "review": "draft",
+  "source": "generated"
+}

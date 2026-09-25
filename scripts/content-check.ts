@@ -20,11 +20,26 @@ function readJsonFiles(dir: string): ContentFile[] {
     })
 }
 
+// content/drafts is excluded by default (ADR-006): content:check validates
+// published content. `--drafts` also checks every draft sentence (schema +
+// round-trip) as if it were published — the pre-flight for content:approve.
+const includeDrafts = process.argv.includes('--drafts')
+
+/** Draft files hold one sentence or an array of them; split arrays per sentence. */
+function readDrafts(dir: string): ContentFile[] {
+  return readJsonFiles(dir).flatMap(({ path, data }) =>
+    Array.isArray(data)
+      ? data.map((sentence, index) => ({ path: `${path}[${index}]`, data: sentence }))
+      : [{ path, data }],
+  )
+}
+
 const tree = {
   lexemes: readJsonFiles(join(CONTENT_ROOT, 'lexemes')),
-  // content/drafts is intentionally excluded here too (ADR-006): content:check
-  // validates published content, not work-in-progress drafts.
-  sentences: readJsonFiles(join(CONTENT_ROOT, 'sentences')),
+  sentences: [
+    ...readJsonFiles(join(CONTENT_ROOT, 'sentences')),
+    ...(includeDrafts ? readDrafts(join(CONTENT_ROOT, 'drafts')) : []),
+  ],
   grammar: readJsonFiles(join(CONTENT_ROOT, 'grammar')),
 }
 

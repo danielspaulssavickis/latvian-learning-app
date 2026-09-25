@@ -1,0 +1,12 @@
+{
+  "id": "lex_pirkt",
+  "lemma": "pirkt",
+  "pos": "verb",
+  "gender": null,
+  "declension": null,
+  "conjugation": 1,
+  "gloss": ["to buy"],
+  "tags": ["a1"],
+  "review": "draft",
+  "source": "generated"
+}

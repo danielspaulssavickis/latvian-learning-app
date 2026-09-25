@@ -42,7 +42,7 @@ replace the module, not the interface — `src/engine/schedule.ts` is the seam.
 
 ## ADR-004 — Content is authored, never generated
 **2026-09-18 · accepted**
-**Superseded by ADR-007 for sentence content — see below.**
+**Superseded by ADR-007 for sentence content and by ADR-010 for lexemes — see below.**
 
 Every Latvian lexeme, gloss and irregular form in `content/` is written or
 reviewed by a human before it ships — this still stands. Sentence drafting is
@@ -156,6 +156,47 @@ Date()` anywhere in `src/engine/` (the one real clock is `systemClock` in
 *Dependencies added:* `dexie` and `ts-fsrs` (both already in CLAUDE.md's
 stack), and dev-only `fake-indexeddb`, which replaces nothing: jsdom has no
 IndexedDB, so without it `src/db/` can't be tested under Vitest.
+
+## ADR-010 — Lexemes get a review gate; Claude may draft them
+**2026-09-25 · accepted** · supersedes ADR-004 for lexemes
+
+Lexeme files carry `review`/`reviewedAt`/`source` like grammar files, and
+are approved in place with `npm run content:approve -- content/lexemes/<id>.json`
+(any number of paths; shell globs work). Consequences:
+
+- `inflect()` marks a form `verified` only if its **lexeme** is approved too —
+  including `irregular` overrides and the lemma itself.
+- A sentence can only be approved once **every lexeme it references is
+  approved** and it **passes the round-trip check**. So an approved sentence
+  never shows a learner an unreviewed lemma or gloss, and approval can never
+  produce content that makes the app fail to load.
+- Pronouns keep their whole paradigm in `irregular` (they're suppletive);
+  `inflect()` never builds a pronoun form from an ending table.
+
+*Why:* you asked Claude to produce the material the app needs and review
+the language later. The chain lexeme → sentence approval keeps "nothing
+unreviewed reaches a learner" true without blocking the drafting.
+
+*Rules out:* approving a sentence ahead of its lexemes; hand-editing
+`review`; a lexeme without `review: "approved"` counting as human-checked.
+
+## ADR-011 — Dev-only draft preview
+**2026-09-25 · accepted** · narrows ADR-006's "loader never reads drafts"
+
+`npm run dev:drafts` (Vite mode `drafts`) runs the app on published content
+**plus** `content/drafts/`, so drafts can be tried in context before
+approval. `src/content/index.ts` still never globs drafts; the separate
+`src/content/preview.ts` does, and `src/main.tsx` imports it only when
+`import.meta.env.DEV && MODE === 'drafts'`. Preview progress goes to a
+separate IndexedDB (`latvian-trainer-preview`), and the app shows a
+persistent "unreviewed content" banner. `npm run build` ends with
+`scripts/check-dist.ts`, which fails if any draft sentence text is in `dist/`.
+
+*Why:* reviewing a sentence in the exercise it will actually appear in
+catches problems a JSON diff doesn't (an odd blank, a confusing gloss).
+
+*Rules out:* a production or deployed build that can show drafts; draft
+cards entering the real review history.
 
 ---
 

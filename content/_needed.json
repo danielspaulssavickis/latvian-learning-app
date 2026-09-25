@@ -1,163 +1,19 @@
 [
   {
-    "type": "lexeme",
-    "id": "lex_es",
-    "description": "Pronoun \"es\" (I). Fully suppletive paradigm (es/manis/man/mani/manī) — will need a complete `irregular` map, not table-generated endings. Dative singular must be \"man\" (confirmed 2026-09-19, used in content/drafts/batch_001.json snt_0003-0005).",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
+    "type": "review",
+    "id": "review:content/lexemes",
+    "description": "All 81 files in content/lexemes/ are Claude drafts (review: \"draft\", source: \"generated\") covering every lexeme used by content/drafts/batch_001.json and batch_002.json. Check lemma, gender, declension/conjugation, gloss and — for the five pronouns — the full irregular paradigm, then approve: `npm run content:approve -- content/lexemes/*.json`. Sentences can't be approved before their lexemes (ADR-010).",
+    "reason": "ADR-010: draft lexemes make every form built from them `unverified`, and block sentence approval."
   },
   {
-    "type": "lexeme",
-    "id": "lex_dzivot",
-    "description": "Verb \"dzīvot\" (to live/reside). Surface \"dzīvoju\" = 1sg present in batch_001 snt_0001.",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_riga",
-    "description": "Proper noun \"Rīga\". Used with locative \"Rīgā\" and accusative \"Rīgu\" in batch_001. Likely declension 4 (like māja) but needs confirmation — proper place names sometimes have quirks.",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_vins",
-    "description": "Pronoun \"viņš\" (he). Likely suppletive/irregular across cases like \"es\" — needs its full paradigm confirmed, not assumed regular.",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_stradat",
-    "description": "Verb \"strādāt\" (to work). Needs both the regular present tense (batch_001 snt_0002/0008: strādā, runāju-style) and the debitive form \"jāstrādā\" (snt_0005) — debitive isn't in the schema's feature set yet, see the schema note below.",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_universitate",
-    "description": "Noun \"universitāte\" (university). Used with locative \"universitātē\" in batch_001 snt_0002.",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_but",
-    "description": "Verb \"būt\" (to be). Surface \"ir\" = 3rd person present, batch_001 snt_0003/0009. Almost certainly irregular/suppletive like most \"to be\" verbs.",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_divi",
-    "description": "Numeral \"divi\" (two). Used adverbially with no case/number tagged in batch_001 snt_0003 — confirm whether it should ever carry features (e.g. agreement with the counted noun) or stays feature-less.",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_berns",
-    "description": "Noun \"bērns\" (child). Only plural nominative \"bērni\" used so far (batch_001 snt_0003/0010).",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_patikt",
-    "description": "Verb \"patikt\" (to like/please). Surface \"patīk\" = 3rd person present, batch_001 snt_0004. Likely takes a dative experiencer (matches \"Man patīk\").",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_kafija",
-    "description": "Noun \"kafija\" (coffee). Only nominative singular used so far (batch_001 snt_0004).",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_sodien",
-    "description": "Adverb \"šodien\" (today). Feature-less token in batch_001 snt_0005 — confirm it should never carry grammatical features.",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_vina",
-    "description": "Pronoun \"viņa\" (she). Likely suppletive/irregular across cases like \"es\"/\"viņš\".",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_lasit",
-    "description": "Verb \"lasīt\" (to read). Surface \"lasa\" = 3rd person present, batch_001 snt_0006.",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_gramata",
-    "description": "Noun \"grāmata\" (book). Used with accusative \"grāmatu\" in batch_001 snt_0006.",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_mes",
-    "description": "Pronoun \"mēs\" (we). Likely suppletive/irregular across cases like the other personal pronouns.",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_braukt",
-    "description": "Verb \"braukt\" (to go/travel by vehicle). Surface \"braucam\" = 1st person plural present, batch_001 snt_0007.",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_uz",
-    "description": "Preposition \"uz\" (to/onto). Feature-less token in batch_001 snt_0007 — governs accusative on \"Rīgu\" in that sentence; confirm prepositions should never carry their own features.",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_runat",
-    "description": "Verb \"runāt\" (to talk/speak). Surface \"runāju\" = 1st person singular present, batch_001 snt_0008.",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_ar",
-    "description": "Preposition \"ar\" (with). Feature-less token in batch_001 snt_0008 — governs instrumental on \"draugu\" in that sentence.",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_draugs",
-    "description": "Noun \"draugs\" (friend). Used with instrumental \"draugu\" in batch_001 snt_0008.",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_tas",
-    "description": "Pronoun \"tas\" (that/it). Likely suppletive/irregular across cases like the personal pronouns.",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_maja",
-    "description": "Noun \"māja\" (house) — declension 4 feminine, the paradigm SPEC.md itself uses as the running example. Used with genitive \"mājas\" in batch_001 snt_0009.",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists. Also the first lexeme M2's inflection engine needs to test against."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_numurs",
-    "description": "Noun \"numurs\" (number). Only nominative singular used so far (batch_001 snt_0009).",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_spelet",
-    "description": "Verb, surface \"spēlējas\" (reflexive, batch_001 snt_0010) — confirm whether the lemma/lexeme should be reflexive \"spēlēties\" rather than \"spēlēt\", and how reflexive verbs should be modeled generally (own feature? separate lexeme per reflexive/non-reflexive pair?).",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists; also an open modeling question, not just a missing file."
-  },
-  {
-    "type": "lexeme",
-    "id": "lex_darzs",
-    "description": "Noun \"dārzs\" (garden). Used with locative \"dārzā\" in batch_001 snt_0010.",
-    "reason": "Referenced by content/drafts/batch_001.json but no lexeme file exists."
+    "type": "review",
+    "id": "review:content/drafts/batch_002.json",
+    "description": "40 A1 sentences drafted by Claude (snt_0011–snt_0050), 50 drillable tokens, aimed at noun cases across all six declensions plus common preposition government (uz + acc/gen, no/pie/bez/zem + gen, par + acc, ar + ins). Check each text, gloss and tagging; `npm run content:check:drafts` shows they validate and round-trip. Approve with `npm run content:approve -- content/drafts/batch_002.json` once the lexemes are approved. Try them first in the app with `npm run dev:drafts` (ADR-011).",
+    "reason": "ADR-007: drafts only ship after human approval."
   },
   {
     "type": "grammar",
-    "description": "Latvian personal/demonstrative pronouns (es, viņš, viņa, mēs, tas, ...) appear to be entirely suppletive and don't follow the noun declension-table system SPEC.md describes for declensions 1-6. Needs a decision: full per-pronoun `irregular` maps on each lexeme, or a separate closed-class pronoun-paradigm mechanism in src/engine/inflect.ts.",
+    "description": "RESOLVED as a draft (2026-09-25, ADR-010): pronouns keep their whole paradigm in the lexeme's `irregular` map, keyed by form key; inflect() never uses ending tables for them. See lex_es, lex_mes, lex_vins, lex_vina, lex_tas — please confirm the approach while reviewing those paradigms.",
     "reason": "Surfaced while reviewing content/drafts/batch_001.json for M2 prep; blocks writing correct lexeme entries for any pronoun above."
   },
   {
@@ -200,5 +56,11 @@
     "id": "exceptions-need-irregular",
     "description": "Known words that skip or change the regular pattern must carry an `irregular` map on their lexeme once they're authored: declension 2 nouns in -ns/-ss with gen.sg in -s (akmens, ūdens, rudens, mēness, zibens), declension 2 nouns without alternation (tētis → tēta, viesis → viesa), declension 6 nouns without alternation in gen.pl (acs → acu, auss → ausu, zoss → zosu, balss → balsu). This list is a reminder, not complete.",
     "reason": "The round-trip check will flag these as mismatches if the irregular map is missing — that's the intended signal."
+  },
+  {
+    "type": "lexeme",
+    "id": "lex_spelet",
+    "description": "Modeling choice made as a draft: the lemma is the reflexive 'spēlēties' and a reflexive verb is its own lexeme (non-reflexive 'spēlēt' would be a separate lexeme if needed). Confirm or change while reviewing.",
+    "reason": "Was an open question in the previous version of this file."
   }
 ]

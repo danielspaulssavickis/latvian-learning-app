@@ -1,0 +1,13 @@
+{
+  "id": "lex_daudz",
+  "lemma": "daudz",
+  "pos": "adverb",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": ["a lot", "many", "much"],
+  "tags": ["a1"],
+  "notes": ["Takes the genitive plural: 'daudz zivju'."],
+  "review": "draft",
+  "source": "generated"
+}

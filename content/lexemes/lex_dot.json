@@ -1,0 +1,13 @@
+{
+  "id": "lex_dot",
+  "lemma": "dot",
+  "pos": "verb",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": ["to give"],
+  "tags": ["a1"],
+  "notes": ["Irregular."],
+  "review": "draft",
+  "source": "generated"
+}

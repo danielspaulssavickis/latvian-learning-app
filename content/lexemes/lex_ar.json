@@ -1,0 +1,15 @@
+{
+  "id": "lex_ar",
+  "lemma": "ar",
+  "pos": "preposition",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": ["with"],
+  "tags": ["a1"],
+  "notes": [
+    "Takes the instrumental (the accusative form in the singular, dative form in the plural)."
+  ],
+  "review": "draft",
+  "source": "generated"
+}

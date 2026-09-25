@@ -1,0 +1,12 @@
+{
+  "id": "lex_nakts",
+  "lemma": "nakts",
+  "pos": "noun",
+  "gender": "f",
+  "declension": 6,
+  "conjugation": null,
+  "gloss": ["night"],
+  "tags": ["a1", "time"],
+  "review": "draft",
+  "source": "generated"
+}

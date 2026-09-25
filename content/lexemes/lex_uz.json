@@ -1,0 +1,15 @@
+{
+  "id": "lex_uz",
+  "lemma": "uz",
+  "pos": "preposition",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": ["to", "onto", "on"],
+  "tags": ["a1"],
+  "notes": [
+    "With the accusative for direction (uz Rīgu), with the genitive for location (uz galda); dative in the plural."
+  ],
+  "review": "draft",
+  "source": "generated"
+}

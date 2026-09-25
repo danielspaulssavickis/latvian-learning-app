@@ -90,7 +90,7 @@ describe('lexemeSchema', () => {
   it('rejects a noun irregular key that is not a form key', () => {
     const result = lexemeSchema.safeParse({ ...noun, irregular: { genitive: 'testvārds' } })
     expect(result.success).toBe(false)
-    expect(result.error?.issues[0].message).toMatch(/"genitive" is not a noun form key/)
+    expect(result.error?.issues[0].message).toMatch(/"genitive" is not a form key/)
   })
 })
 

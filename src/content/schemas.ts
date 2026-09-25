@@ -79,6 +79,18 @@ export const tokenSchema = z
     path: ['features'],
   })
 
+/**
+ * Review metadata shared by every file with a draft/approved gate: sentences
+ * (ADR-006, gated by directory), grammar files (ADR-008) and lexemes
+ * (ADR-010), both gated by this field. `review`/`reviewedAt` are set only by `npm run content:approve`,
+ * never authored by hand; `source` is provenance (ADR-007).
+ */
+const reviewFields = {
+  review: z.enum(['draft', 'approved']).optional(),
+  reviewedAt: z.string().datetime().optional(),
+  source: z.enum(['generated', 'human']).optional(),
+}
+
 export const lexemeSchema = z
   .strictObject({
     id: z.string().min(1),
@@ -90,36 +102,27 @@ export const lexemeSchema = z
     gloss: z.array(z.string().min(1)).min(1),
     tags: z.array(z.string()).default([]),
     /**
-     * Hand-authored forms that override the generated one (ADR-004). For nouns
-     * the key is a form key like "gen.sg"; other parts of speech get their key
+     * Forms that override the generated one. For nouns and pronouns the key
+     * is a form key like "gen.sg" (a pronoun's whole paradigm lives here —
+     * pronouns have no ending tables); other parts of speech get their key
      * format when the engine supports them.
      */
     irregular: z.record(z.string(), nfcString('irregular form is not NFC-normalized')).optional(),
+    notes: z.array(z.string()).optional(),
+    ...reviewFields,
   })
   .superRefine((lexeme, ctx) => {
-    if (lexeme.pos !== 'noun' || !lexeme.irregular) return
+    if ((lexeme.pos !== 'noun' && lexeme.pos !== 'pronoun') || !lexeme.irregular) return
     for (const key of Object.keys(lexeme.irregular)) {
       if (!formKeySchema.safeParse(key).success) {
         ctx.addIssue({
           code: 'custom',
-          message: `irregular key "${key}" is not a noun form key like "gen.sg"`,
+          message: `irregular key "${key}" is not a form key like "gen.sg"`,
           path: ['irregular', key],
         })
       }
     }
   })
-
-/**
- * Review metadata shared by every file with a draft/approved gate: sentences
- * (ADR-006, gated by directory) and grammar files (ADR-008, gated by this
- * field). `review`/`reviewedAt` are set only by `npm run content:approve`,
- * never authored by hand; `source` is provenance (ADR-007).
- */
-const reviewFields = {
-  review: z.enum(['draft', 'approved']).optional(),
-  reviewedAt: z.string().datetime().optional(),
-  source: z.enum(['generated', 'human']).optional(),
-}
 
 // An ending may be "" (a zero ending), so this is not nfcString().
 const endingSchema = z.string().refine(isNFC, 'ending is not NFC-normalized')

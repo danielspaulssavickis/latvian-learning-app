@@ -1,0 +1,12 @@
+{
+  "id": "lex_riga",
+  "lemma": "Rīga",
+  "pos": "noun",
+  "gender": "f",
+  "declension": 4,
+  "conjugation": null,
+  "gloss": ["Riga"],
+  "tags": ["a1", "place"],
+  "review": "draft",
+  "source": "generated"
+}

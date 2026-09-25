@@ -15,10 +15,9 @@ export interface Grammar {
 
 /**
  * `verified` means every piece of data that produced the form went through
- * human review: an `irregular` override or the lemma itself (lexemes are
- * human-authored, ADR-004), or table cells and alternation rules from files
- * with `review: "approved"` (ADR-008). Anything else is `unverified` and must
- * not be shown to a learner as the expected answer.
+ * human review: the lexeme (ADR-010) and, for table-built forms, the ending
+ * table and any alternation rules (ADR-008). Anything else is `unverified`
+ * and must not be shown to a learner as the expected answer.
  */
 export type Confidence = 'verified' | 'unverified'
 
@@ -85,33 +84,43 @@ function alternate(
 }
 
 /**
- * Produces the inflected form of a noun lexeme for a case + number, from the
- * ending tables and alternation rules in content/grammar/. Never guesses: a
- * missing table cell is reported as a `gap`, not filled with something
- * plausible. Order of precedence:
+ * Produces the inflected form of a noun or pronoun lexeme for a case +
+ * number, from the ending tables and alternation rules in content/grammar/.
+ * Never guesses: a missing table cell is reported as a `gap`, not filled
+ * with something plausible. Order of precedence:
  *
  * 1. the lexeme's `irregular[key]` override, if present;
  * 2. nom.sg is the lemma itself;
- * 3. stem (lemma minus its longest matching table `lemmaEndings` entry),
- *    alternated if content/grammar/alternations.json lists this form for this
- *    declension, plus the table's ending.
+ * 3. pronouns stop here — their paradigm lives entirely in `irregular`
+ *    (they are suppletive: es → man, mani), so anything else is a gap;
+ * 4. nouns: stem (lemma minus its longest matching table `lemmaEndings`
+ *    entry), alternated if content/grammar/alternations.json lists this form
+ *    for this declension, plus the table's ending.
+ *
+ * `confidence` is `verified` only if the lexeme and every grammar file used
+ * are approved (ADR-008, ADR-010).
  */
 export function inflect(lexeme: Lexeme, features: Features, grammar: Grammar): InflectResult {
-  if (lexeme.pos !== 'noun') {
-    return fail('unsupported-pos', `inflect() only supports nouns so far, not ${lexeme.pos}`)
+  if (lexeme.pos !== 'noun' && lexeme.pos !== 'pronoun') {
+    return fail('unsupported-pos', `inflect() only supports nouns and pronouns, not ${lexeme.pos}`)
   }
   const { case: grammaticalCase, number } = features
   if (!grammaticalCase || !number) {
-    return fail('missing-features', 'a noun form needs both case and number')
+    return fail('missing-features', `a ${lexeme.pos} form needs both case and number`)
   }
   const key: FormKey = `${grammaticalCase}.${number}`
+  const lexemeApproved = lexeme.review === 'approved'
+  const fromLexeme = lexemeApproved ? 'verified' : 'unverified'
 
   const override = lexeme.irregular?.[key]
   if (override !== undefined) {
-    return { ok: true, form: override, confidence: 'verified', source: 'irregular' }
+    return { ok: true, form: override, confidence: fromLexeme, source: 'irregular' }
   }
   if (key === 'nom.sg') {
-    return { ok: true, form: lexeme.lemma, confidence: 'verified', source: 'lemma' }
+    return { ok: true, form: lexeme.lemma, confidence: fromLexeme, source: 'lemma' }
+  }
+  if (lexeme.pos === 'pronoun') {
+    return fail('gap', `pronoun ${lexeme.id} has no irregular form for ${key}`)
   }
 
   if (lexeme.declension === null) {
@@ -139,6 +148,7 @@ export function inflect(lexeme: Lexeme, features: Features, grammar: Grammar): I
   const stem = lexeme.lemma.slice(0, lexeme.lemma.length - lemmaEnding.length)
   const alternated = alternate(stem, lexeme.declension, key, grammar.alternations)
   const verified =
+    lexemeApproved &&
     table.review === 'approved' &&
     (alternated === null || grammar.alternations?.review === 'approved')
 

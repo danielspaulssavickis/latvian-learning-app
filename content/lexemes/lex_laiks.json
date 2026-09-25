@@ -1,0 +1,12 @@
+{
+  "id": "lex_laiks",
+  "lemma": "laiks",
+  "pos": "noun",
+  "gender": "m",
+  "declension": 1,
+  "conjugation": null,
+  "gloss": ["time", "weather"],
+  "tags": ["a1", "time"],
+  "review": "draft",
+  "source": "generated"
+}

@@ -1,0 +1,30 @@
+{
+  "id": "lex_vins",
+  "lemma": "viņš",
+  "pos": "pronoun",
+  "gender": "m",
+  "declension": null,
+  "conjugation": null,
+  "gloss": ["he"],
+  "tags": ["a1"],
+  "irregular": {
+    "nom.sg": "viņš",
+    "gen.sg": "viņa",
+    "dat.sg": "viņam",
+    "acc.sg": "viņu",
+    "ins.sg": "viņu",
+    "loc.sg": "viņā",
+    "nom.pl": "viņi",
+    "gen.pl": "viņu",
+    "dat.pl": "viņiem",
+    "acc.pl": "viņus",
+    "ins.pl": "viņiem",
+    "loc.pl": "viņos"
+  },
+  "notes": [
+    "Plural forms are 'they' (masculine or mixed).",
+    "ins = acc form in the singular and dat form in the plural, as used after 'ar'."
+  ],
+  "review": "draft",
+  "source": "generated"
+}

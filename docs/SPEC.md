@@ -32,7 +32,9 @@ All content lives in `content/` as JSON, validated by Zod schemas in
   gloss: ["house", "home"],
   tags: ["a1", "living"],
   irregular?: { [formKey: string]: string }   // overrides the generated form
-                                              // (nouns: formKey is "case.number", e.g. "gen.sg")
+                                              // (nouns, pronouns: formKey is "case.number", e.g. "gen.sg")
+  notes?: string[],
+  review?: "draft" | "approved", reviewedAt?, source?   // ADR-010, set by content:approve
 }
 ```
 

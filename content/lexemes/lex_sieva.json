@@ -1,0 +1,12 @@
+{
+  "id": "lex_sieva",
+  "lemma": "sieva",
+  "pos": "noun",
+  "gender": "f",
+  "declension": 4,
+  "conjugation": null,
+  "gloss": ["wife"],
+  "tags": ["a1", "family"],
+  "review": "draft",
+  "source": "generated"
+}

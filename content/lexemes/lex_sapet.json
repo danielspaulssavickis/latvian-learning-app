@@ -1,0 +1,13 @@
+{
+  "id": "lex_sapet",
+  "lemma": "sāpēt",
+  "pos": "verb",
+  "gender": null,
+  "declension": null,
+  "conjugation": 3,
+  "gloss": ["to hurt"],
+  "tags": ["a1"],
+  "notes": ["Takes a dative experiencer: 'Viņam sāp sirds.'"],
+  "review": "draft",
+  "source": "generated"
+}

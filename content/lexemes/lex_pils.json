@@ -1,0 +1,12 @@
+{
+  "id": "lex_pils",
+  "lemma": "pils",
+  "pos": "noun",
+  "gender": "f",
+  "declension": 6,
+  "conjugation": null,
+  "gloss": ["castle"],
+  "tags": ["a1", "city"],
+  "review": "draft",
+  "source": "generated"
+}

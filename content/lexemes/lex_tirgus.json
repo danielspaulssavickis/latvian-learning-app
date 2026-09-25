@@ -1,0 +1,12 @@
+{
+  "id": "lex_tirgus",
+  "lemma": "tirgus",
+  "pos": "noun",
+  "gender": "m",
+  "declension": 3,
+  "conjugation": null,
+  "gloss": ["market"],
+  "tags": ["a1", "city"],
+  "review": "draft",
+  "source": "generated"
+}
