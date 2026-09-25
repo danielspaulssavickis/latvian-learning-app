@@ -58,3 +58,11 @@ export function selectSession(
 
   return { reviews, newCards }
 }
+
+/**
+ * Local midnight at or before `now` — the boundary the daily caps reset at.
+ * Uses the runtime's time zone, not the clock: `now` is always passed in.
+ */
+export function startOfLocalDay(now: Date): Date {
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate())
+}

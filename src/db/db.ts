@@ -20,9 +20,16 @@ export interface ReviewRecord {
   fsrsLog: SchedulingLog
 }
 
+/** Key/value rows; see src/db/settings.ts for what's stored. */
+export interface SettingRecord {
+  key: string
+  value: unknown
+}
+
 export type TrainerDb = Dexie & {
   cards: EntityTable<StoredCard, 'id'>
   reviews: EntityTable<ReviewRecord, 'id'>
+  settings: EntityTable<SettingRecord, 'key'>
 }
 
 /**
@@ -38,6 +45,7 @@ export function openDb(name = 'latvian-trainer', options?: DexieOptions): Traine
     cards: 'id, sentenceId, feature, fsrs.due',
     reviews: '++id, cardId, reviewedAt, *features',
   })
+  db.version(2).stores({ settings: 'key' })
   return db
 }
 

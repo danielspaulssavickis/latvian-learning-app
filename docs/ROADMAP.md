@@ -4,10 +4,7 @@
 lands, add a dated line under "Session log", and keep "Current focus" accurate.
 Do not rewrite finished milestones; append.
 
-**Current focus:** M3 data layer done. Next session: M3 UI (Session 4). Still
-waiting on human review of the draft grammar tables (ADR-008) and on real
-approved sentences — the review screen will have nothing to show until
-`content/sentences/` has some.
+**Current focus:** see the newest session log line.
 
 ---
 
@@ -55,12 +52,10 @@ returns `nearMiss` while `checkAnswer("Rīgā", "Rīgu")` returns `wrong`.
       (expected answers must never be `unverified` `inflect()` output — ADR-008;
       cloze answers are the sentence's own surface form, so this holds)
 - [x] `ts-fsrs` integration in `src/engine/schedule.ts`, injectable clock
-- [ ] Cloze review screen: keyboard-first, Enter to submit, Enter again to advance
-- [ ] Latvian diacritic input helper (clickable `ā ē ī ū ķ ģ ļ ņ š ž č` row + a dead-key hint)
-- [ ] Session summary screen
-- [ ] Daily new/review caps, configurable — engine + db side done
-      (`selectSession`, `countDoneSince`, `loadSession`, defaults 10/100);
-      still needs a settings control and persisted limits (Session 4)
+- [x] Cloze review screen: keyboard-first, Enter to submit, Enter again to advance
+- [x] Latvian diacritic input helper (clickable `ā ē ī ū ķ ģ ļ ņ š ž č` row + a dead-key hint)
+- [x] Session summary screen
+- [x] Daily new/review caps, configurable (Settings tab, stored in IndexedDB)
 
 **Done when:** I can do a full 20-card session, close the tab, reopen it, and the
 scheduling state has survived.
@@ -92,6 +87,17 @@ a text-only card instead of breaking the session.
 ## Session log
 
 <!-- newest first, one line each: date — what landed — what to pick up next -->
+2026-09-25 — M3 UI (Session 4): `src/ui/` app shell (Review / Settings tabs),
+cloze review screen driven by the pure `reviewReducer` (wrong answers
+re-queued at the end, repeats graded but not counted in the summary), inline
+answer input with the lemma in brackets, correct / near-miss diff / wrong
+feedback, diacritic row that keeps focus, session summary with weakest
+features, daily-limit settings (db schema v2 `settings` table). Content
+material for review: 81 draft lexemes + 40-sentence `batch_002`
+(ADR-010 lexeme gate, ADR-011 `npm run dev:drafts` preview). Checked in
+Chromium via `dev:drafts`. M3's done-when (20-card session, close, reopen)
+is covered by a close/reopen test at the data level; the real-browser check
+is yours once content is approved. Next: Session 5 (M4).
 2026-09-25 — M3 data layer: `src/engine/cards.ts` (one cloze card per
 drillable token, stable ids, content order), `src/engine/schedule.ts`
 (ts-fsrs behind our own Grade/SchedulingState types, injected clock, fuzz

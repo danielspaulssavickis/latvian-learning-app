@@ -3,8 +3,11 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 
 /**
- * Runs after `vite build` (ADR-011): fails if any draft sentence's text made
- * it into dist/ — i.e. if the dev-only draft preview leaked into production.
+ * Runs after `vite build` (ADR-011): fails if any draft sentence made it into
+ * dist/ — i.e. if the dev-only draft preview leaked into production. Matches
+ * on sentence ids rather than text, because lexeme notes may quote an
+ * example sentence verbatim. An id that is also published in
+ * content/sentences/ is skipped.
  */
 const dist = join(process.cwd(), 'dist')
 const draftsDir = join(process.cwd(), 'content', 'drafts')
@@ -16,17 +19,25 @@ function files(dir: string): string[] {
   })
 }
 
-function asciiEscaped(text: string): string {
-  return text.replace(/[^\x20-\x7e]/g, (c) => `\\u${c.charCodeAt(0).toString(16).padStart(4, '0')}`)
+/** Minifiers may emit a string with single quotes or backticks instead. */
+function singleQuoted(quoted: string): string {
+  return `'${quoted.slice(1, -1)}'`
 }
+
+const sentencesDir = join(process.cwd(), 'content', 'sentences')
+const published = new Set(
+  existsSync(sentencesDir)
+    ? readdirSync(sentencesDir).map((name) => name.replace(/\.json$/, ''))
+    : [],
+)
 
 const needles: string[] = []
 if (existsSync(draftsDir)) {
   for (const name of readdirSync(draftsDir).filter((n) => n.endsWith('.json'))) {
     const data: unknown = JSON.parse(readFileSync(join(draftsDir, name), 'utf-8'))
     for (const sentence of Array.isArray(data) ? data : [data]) {
-      const text = (sentence as { text?: unknown }).text
-      if (typeof text === 'string') needles.push(text)
+      const id = (sentence as { id?: unknown }).id
+      if (typeof id === 'string' && !published.has(id)) needles.push(`"${id}"`)
     }
   }
 }
@@ -35,8 +46,9 @@ const leaks: string[] = []
 for (const path of files(dist)) {
   const body = readFileSync(path, 'utf-8')
   for (const text of needles) {
-    if (body.includes(text) || body.toLowerCase().includes(asciiEscaped(text).toLowerCase())) {
-      leaks.push(`${path.slice(process.cwd().length + 1)}: "${text}"`)
+    // e.g. "snt_0011" or 'snt_0011'
+    if (body.includes(text) || body.includes(singleQuoted(text))) {
+      leaks.push(`${path.slice(process.cwd().length + 1)}: ${text}`)
     }
   }
 }
@@ -46,4 +58,4 @@ if (leaks.length > 0) {
   for (const leak of leaks) console.error(`  ${leak}`)
   process.exit(1)
 }
-console.log(`check-dist: no draft sentences in dist/ (${needles.length} checked).`)
+console.log(`check-dist: no draft sentences in dist/ (${needles.length} ids checked).`)

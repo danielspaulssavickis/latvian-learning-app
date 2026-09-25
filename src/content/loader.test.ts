@@ -43,6 +43,15 @@ describe('loadContent', () => {
     expect(content.lexemeById.get('lex_test_noun')?.lemma).toBe('testvārds')
   })
 
+  it('indexes sentences by id', () => {
+    const content = loadContent({
+      lexemes: { 'content/lexemes/test_noun.json': goodLexeme() },
+      sentences: { 'content/sentences/snt_0001.json': goodSentence() },
+      grammar: {},
+    })
+    expect(content.sentenceById.get('snt_0001')?.text).toBe('Testvārds testā.')
+  })
+
   it('indexes sentences by level', () => {
     const content = loadContent({
       lexemes: { 'content/lexemes/test_noun.json': goodLexeme() },

@@ -17,6 +17,7 @@ export interface ContentRecords {
 
 export interface LoadedContent {
   lexemeById: Map<string, Lexeme>
+  sentenceById: Map<string, Sentence>
   sentencesByLevel: Map<Sentence['level'], Sentence[]>
   /** Keyed like "case:loc", built only from each sentence's drillable tokens. */
   sentencesByFeature: Map<string, Sentence[]>
@@ -59,6 +60,7 @@ export function loadContent(records: ContentRecords): LoadedContent {
   const sentenceSchema = makeSentenceSchema(lexemeIds)
   const sentences = tree.sentences.map(({ data }) => sentenceSchema.parse(data))
 
+  const sentenceById = new Map(sentences.map((sentence) => [sentence.id, sentence]))
   const sentencesByLevel = new Map<Sentence['level'], Sentence[]>()
   const sentencesByFeature = new Map<string, Sentence[]>()
 
@@ -80,5 +82,5 @@ export function loadContent(records: ContentRecords): LoadedContent {
 
   const grammar = buildGrammar(tree.grammar.map(({ data }) => grammarFileSchema.parse(data)))
 
-  return { lexemeById, sentencesByLevel, sentencesByFeature, grammar }
+  return { lexemeById, sentenceById, sentencesByLevel, sentencesByFeature, grammar }
 }

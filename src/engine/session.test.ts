@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { CardSpec } from './cards'
 import { createScheduler } from './schedule'
-import { selectSession, type StoredCard } from './session'
+import { selectSession, startOfLocalDay, type StoredCard } from './session'
 
 const NOW = new Date('2026-09-25T09:00:00.000Z')
 const HOUR = 60 * 60_000
@@ -76,5 +76,13 @@ describe('selectSession', () => {
     const retired = { ...newCard('snt_0001'), retired: true }
     const session = selectSession([retired], NOW, limits, nothingDone)
     expect(session.newCards).toEqual([])
+  })
+})
+
+describe('startOfLocalDay', () => {
+  it('is local midnight of the same day', () => {
+    const noon = new Date(2026, 8, 25, 12, 30)
+    expect(startOfLocalDay(noon)).toEqual(new Date(2026, 8, 25, 0, 0))
+    expect(startOfLocalDay(new Date(2026, 8, 25, 0, 0))).toEqual(new Date(2026, 8, 25, 0, 0))
   })
 })
