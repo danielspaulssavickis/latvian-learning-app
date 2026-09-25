@@ -19,10 +19,12 @@ export interface DailyLimits {
 
 export const DEFAULT_DAILY_LIMITS: DailyLimits = { newPerDay: 10, reviewsPerDay: 100 }
 
-/** How many of each were already done today — counted from the review log by the caller. */
+/** What was already done today — counted from the review log by the caller. */
 export interface DoneToday {
   newCards: number
   reviews: number
+  /** Sentences any card was reviewed from today; their new siblings wait (see selectSession). */
+  sentenceIds?: ReadonlySet<string>
 }
 
 export interface Session {
@@ -35,6 +37,12 @@ export interface Session {
  * overdue first, and unseen cards in content order, each capped by the daily
  * limit minus what was already done today. `now` is passed in — no clock
  * reads here.
+ *
+ * New cards are *sibling-buried* (ADR-012): at most one new card per
+ * sentence per day, and none from a sentence already studied today. Without
+ * that, "Give the form: Rīga → locative" would follow right after the cloze
+ * whose answer was "Rīgā", and a produce card right after the recognize card
+ * that showed its sentence — tests of short-term memory, not learning.
  */
 export function selectSession(
   cards: readonly StoredCard[],
@@ -51,10 +59,14 @@ export function selectSession(
     .sort((a, b) => a.fsrs.due.getTime() - b.fsrs.due.getTime())
     .slice(0, reviewRoom)
 
-  const newCards = active
-    .filter((card) => isNew(card.fsrs))
-    .sort(compareContentOrder)
-    .slice(0, newRoom)
+  const busy = new Set(doneToday.sentenceIds ?? [])
+  const newCards: StoredCard[] = []
+  for (const card of active.filter((c) => isNew(c.fsrs)).sort(compareContentOrder)) {
+    if (newCards.length >= newRoom) break
+    if (busy.has(card.sentenceId)) continue
+    busy.add(card.sentenceId)
+    newCards.push(card)
+  }
 
   return { reviews, newCards }
 }

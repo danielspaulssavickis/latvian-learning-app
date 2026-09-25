@@ -8,6 +8,7 @@ const at = (seconds: number) => new Date(T0.getTime() + seconds * 1000)
 function cloze(id: string, expected: string): ClozeExercise {
   return {
     kind: 'cloze',
+    check: 'word',
     cardId: id,
     feature: 'case:loc',
     before: '',
@@ -43,6 +44,7 @@ describe('reviewReducer', () => {
     expect(state.phase).toBe('feedback')
     expect(state.lastAnswer).toEqual({
       cardId: 'a',
+      kind: 'cloze',
       feature: 'case:loc',
       expected: 'Rīgā',
       given: 'Riga',
@@ -71,8 +73,10 @@ describe('reviewReducer', () => {
     state = reviewReducer(state, { type: 'next', now: at(4) })
     expect(state.current?.cardId).toBe('b')
     state = reviewReducer(state, { type: 'submit', given: 'mājā', now: at(5) })
+    const beforeRepeat = state.shown
     state = reviewReducer(state, { type: 'next', now: at(6) })
     expect(state.current?.cardId).toBe('a')
+    expect(state.shown).toBe(beforeRepeat + 1) // a new showing, even of the same card
     state = reviewReducer(state, { type: 'submit', given: 'Rīgā', now: at(8) })
     expect(state.lastAnswer?.firstAttempt).toBe(false)
     state = reviewReducer(state, { type: 'next', now: at(9) })
@@ -89,6 +93,25 @@ describe('reviewReducer', () => {
     expect(reviewReducer(answering, { type: 'next', now: at(1) })).toBe(answering)
     const feedback = reviewReducer(answering, { type: 'submit', given: 'Rīgā', now: at(1) })
     expect(reviewReducer(feedback, { type: 'submit', given: 'x', now: at(2) })).toBe(feedback)
+  })
+
+  it('checks a produce exercise as a whole sentence, ignoring punctuation', () => {
+    let state = reviewReducer(initialReviewState, {
+      type: 'start',
+      exercises: [
+        {
+          kind: 'produce',
+          check: 'sentence',
+          cardId: 'p',
+          feature: 'skill:produce',
+          gloss: 'I live in Riga.',
+          expected: 'Es dzīvoju Rīgā.',
+        },
+      ],
+      now: T0,
+    })
+    state = reviewReducer(state, { type: 'submit', given: 'es dzīvoju Rīgā', now: at(9) })
+    expect(state.lastAnswer?.result).toBe('correct')
   })
 
   it('can be ended early, then reset to idle', () => {

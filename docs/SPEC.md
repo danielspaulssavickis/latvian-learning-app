@@ -167,13 +167,16 @@ produces two cards. Cards are generated deterministically from content and
 
 ## Exercise types
 
-| Kind | Prompt | Answer | Milestone |
-|---|---|---|---|
-| `cloze` | Sentence with one token blanked, lemma shown in brackets | typed form | M2 |
-| `recognize` | Latvian sentence | English gloss, multiple choice | M2 |
-| `produce` | English gloss | typed Latvian sentence | M3 |
-| `inflect` | Lemma + target features ("māja, locative singular") | typed form | M3 |
-| `listen` | Audio only | typed sentence | M5 |
+| Kind | Prompt | Answer | Cards | Milestone |
+|---|---|---|---|---|
+| `cloze` | Sentence with one token blanked, lemma shown in brackets | typed form | one per drillable token | M3 |
+| `recognize` | Latvian sentence | English gloss, multiple choice (4) | one per sentence | M4 |
+| `produce` | English gloss | typed Latvian sentence (punctuation ignored) | one per sentence | M4 |
+| `inflect` | Lemma + target features ("māja, locative singular") | typed form | one per (lexeme, case.number) an approved sentence vouches for | M4 |
+| `listen` | Audio only | typed sentence | one per sentence with audio | M5 |
+
+New cards are introduced in content order, easiest kind first within a
+sentence, and at most one new card per sentence per day (ADR-012).
 
 `cloze` is the primary type. It is deliberately the one that teaches endings as a
 reflex, which is the thing a declension chart cannot do.
@@ -209,7 +212,8 @@ fixed clock values — never `Date.now()` inside the engine.
 ## Progress model
 
 Per grammatical feature (`case:loc`, `tense:past`, `declension:2`), track
-retention over the last 30 reviews. The dashboard shows which features are weak.
+retention over the last 30 reviews: the share answered correctly or as a
+near miss (`src/engine/retention.ts`). The dashboard shows which features are weak.
 This is the feature that makes the app worth building rather than downloading
 something existing: the learner can see that their locative is solid and their
 genitive is not.
@@ -217,6 +221,7 @@ genitive is not.
 ## Explicit non-goals
 
 No speech recognition. No AI-generated content at runtime. No accounts or sync —
-progress lives in the browser, with JSON export/import as the backup path. No
+progress lives in the browser, with JSON export/import as the backup path
+(Settings → Backup; format `latvian-trainer-progress` v1, `src/db/backup.ts`). No
 attempt to cover C-level grammar (participles, aspect subtleties, the vocative
 beyond a fixed phrase list).

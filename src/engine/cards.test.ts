@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { FIXTURE_LEXEMES, SNT_1, SNT_10, SNT_3, SNT_5 } from './__fixtures__/sentences'
-import { generateCards, primaryFeature } from './cards'
+import { generateAllCards, generateCards, primaryFeature } from './cards'
+import { buildGrammar } from './inflect'
 
 describe('generateCards', () => {
   it('makes one cloze card per drillable token, none for the rest', () => {
@@ -58,5 +59,60 @@ describe('primaryFeature', () => {
     expect(primaryFeature({ tense: 'past', person: 1, number: 'pl' })).toBe('tense:past')
     expect(primaryFeature({ person: 2, number: 'sg' })).toBe('person:2')
     expect(primaryFeature({ number: 'pl' })).toBe('number:pl')
+  })
+})
+
+describe('generateAllCards', () => {
+  const lexemes = new Map(FIXTURE_LEXEMES)
+  // A pronoun with its paradigm, so `Man` can produce an inflect card.
+  lexemes.set('lex_es', {
+    ...FIXTURE_LEXEMES.get('lex_es')!,
+    irregular: { 'nom.sg': 'es', 'dat.sg': 'man' },
+  })
+  const grammar = buildGrammar([])
+
+  it('adds recognize + produce per sentence and inflect where the form round-trips', () => {
+    const cards = generateAllCards([SNT_1, SNT_3], lexemes, grammar)
+    expect(cards.map((c) => c.id)).toEqual([
+      'recognize:snt_0001',
+      'cloze:snt_0001#2',
+      'produce:snt_0001',
+      'recognize:snt_0003',
+      'cloze:snt_0003#0',
+      'cloze:snt_0003#3',
+      'inflect:lex_es@dat.sg',
+      'produce:snt_0003',
+    ])
+  })
+
+  it('shapes inflect and sentence-level cards', () => {
+    const cards = generateAllCards([SNT_3], lexemes, grammar)
+    expect(cards.find((c) => c.kind === 'inflect')).toEqual({
+      id: 'inflect:lex_es@dat.sg',
+      kind: 'inflect',
+      targetId: 'lex_es@dat.sg',
+      sentenceId: 'snt_0003',
+      tokenIndex: 0,
+      feature: 'case:dat',
+      features: ['case:dat', 'number:sg'],
+    })
+    expect(cards.find((c) => c.kind === 'produce')).toMatchObject({
+      tokenIndex: null,
+      feature: 'skill:produce',
+      features: ['skill:produce'],
+    })
+  })
+
+  it('makes one inflect card per form even if several sentences use it', () => {
+    const again = { ...SNT_3, id: 'snt_0099' }
+    const ids = generateAllCards([SNT_3, again], lexemes, grammar).map((c) => c.id)
+    expect(ids.filter((id) => id === 'inflect:lex_es@dat.sg')).toHaveLength(1)
+  })
+
+  it('skips an inflect card whose generated form does not match the sentence', () => {
+    const wrongTable = new Map(lexemes)
+    wrongTable.set('lex_es', { ...lexemes.get('lex_es')!, irregular: { 'dat.sg': 'mani' } })
+    const ids = generateAllCards([SNT_3], wrongTable, grammar).map((c) => c.id)
+    expect(ids.some((id) => id.startsWith('inflect:'))).toBe(false)
   })
 })

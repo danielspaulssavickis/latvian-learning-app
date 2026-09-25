@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { FIXTURE_LEXEMES, SNT_1, SNT_3 } from './__fixtures__/sentences'
-import { generateCards } from './cards'
+import { FIXTURE_LEXEMES, SNT_1, SNT_10, SNT_3, SNT_5 } from './__fixtures__/sentences'
+import { generateAllCards, generateCards } from './cards'
+import { buildGrammar } from './inflect'
 import { buildExercise, splitAroundToken } from './exercise'
 
 const sentenceById = new Map([SNT_1, SNT_3].map((s) => [s.id, s]))
@@ -36,6 +37,7 @@ describe('buildExercise — cloze', () => {
     const [card] = generateCards([SNT_1], FIXTURE_LEXEMES)
     expect(buildExercise(card, content)).toEqual({
       kind: 'cloze',
+      check: 'word',
       cardId: 'cloze:snt_0001#2',
       feature: 'case:loc',
       before: 'Es dzīvoju ',
@@ -49,5 +51,54 @@ describe('buildExercise — cloze', () => {
   it('returns null for a card whose sentence is gone', () => {
     const [card] = generateCards([SNT_1], FIXTURE_LEXEMES)
     expect(buildExercise(card, { sentenceById: new Map(), lexemeById: FIXTURE_LEXEMES })).toBeNull()
+  })
+})
+
+describe('buildExercise — other kinds', () => {
+  const lexemes = new Map(FIXTURE_LEXEMES)
+  lexemes.set('lex_es', { ...FIXTURE_LEXEMES.get('lex_es')!, irregular: { 'dat.sg': 'man' } })
+  const grammar = buildGrammar([])
+  const extra = [SNT_5, SNT_10].map((s) => [s.id, s] as const)
+  const all = { sentenceById: new Map([...sentenceById, ...extra]), lexemeById: lexemes, grammar }
+  const cards = generateAllCards([...all.sentenceById.values()], lexemes, grammar)
+  const card = (id: string) => cards.find((c) => c.id === id)!
+
+  it('recognize: the sentence, its gloss among up to three others, in a stable order', () => {
+    const exercise = buildExercise(card('recognize:snt_0001'), all)
+    expect(exercise).toMatchObject({
+      kind: 'recognize',
+      check: 'choice',
+      text: 'Es dzīvoju Rīgā.',
+      expected: 'I live in Riga.',
+    })
+    if (exercise?.kind !== 'recognize') throw new Error('not recognize')
+    expect(exercise.choices).toHaveLength(4)
+    expect(exercise.choices).toContain('I live in Riga.')
+    expect(new Set(exercise.choices).size).toBe(4)
+    expect(buildExercise(card('recognize:snt_0001'), all)).toEqual(exercise)
+  })
+
+  it('produce: gloss in, whole sentence out', () => {
+    expect(buildExercise(card('produce:snt_0003'), all)).toEqual({
+      kind: 'produce',
+      check: 'sentence',
+      cardId: 'produce:snt_0003',
+      feature: 'skill:produce',
+      gloss: 'I have two children.',
+      expected: 'Man ir divi bērni.',
+    })
+  })
+
+  it('inflect: lemma and target form in, the generated form out', () => {
+    expect(buildExercise(card('inflect:lex_es@dat.sg'), all)).toEqual({
+      kind: 'inflect',
+      check: 'word',
+      cardId: 'inflect:lex_es@dat.sg',
+      feature: 'case:dat',
+      lemma: 'es',
+      lemmaGloss: '(fixture)',
+      formLabel: 'dative singular',
+      expected: 'man',
+    })
   })
 })

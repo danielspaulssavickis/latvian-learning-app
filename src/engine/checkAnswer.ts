@@ -1,8 +1,18 @@
 export type CheckResult = 'correct' | 'nearMiss' | 'wrong'
 
+export interface CheckOptions {
+  /**
+   * For whole-sentence answers: ignore punctuation, so "Es dzīvoju Rīgā"
+   * matches "Es dzīvoju Rīgā." Never used for single words.
+   */
+  ignorePunctuation?: boolean
+}
+
 /** NFC, trimmed, internal whitespace collapsed to one space. Case is kept. */
-function tidy(text: string): string {
-  return text.normalize('NFC').trim().replace(/\s+/g, ' ')
+function tidy(text: string, options: CheckOptions = {}): string {
+  const nfc = text.normalize('NFC')
+  const bare = options.ignorePunctuation ? nfc.replace(/[\p{P}]/gu, ' ') : nfc
+  return bare.trim().replace(/\s+/g, ' ')
 }
 
 function caseFold(text: string): string {
@@ -25,9 +35,13 @@ function foldDiacritics(text: string): string {
  * `wrong` otherwise. No edit distance: a one-letter difference in Latvian is
  * usually a different case, not a typo.
  */
-export function checkAnswer(expected: string, given: string): CheckResult {
-  const want = caseFold(tidy(expected))
-  const got = caseFold(tidy(given))
+export function checkAnswer(
+  expected: string,
+  given: string,
+  options: CheckOptions = {},
+): CheckResult {
+  const want = caseFold(tidy(expected, options))
+  const got = caseFold(tidy(given, options))
   if (got === '') return 'wrong'
   if (want === got) return 'correct'
   if (foldDiacritics(want) === foldDiacritics(got)) return 'nearMiss'
@@ -45,10 +59,14 @@ export interface DiffSegment {
  * whose diacritic the learner got wrong marked — what the review screen
  * highlights. Returns null for anything that isn't a near miss.
  */
-export function diacriticDiff(expected: string, given: string): DiffSegment[] | null {
-  if (checkAnswer(expected, given) !== 'nearMiss') return null
-  const want = [...tidy(expected)]
-  const got = [...caseFold(tidy(given))]
+export function diacriticDiff(
+  expected: string,
+  given: string,
+  options: CheckOptions = {},
+): DiffSegment[] | null {
+  if (checkAnswer(expected, given, options) !== 'nearMiss') return null
+  const want = [...tidy(expected, options)]
+  const got = [...caseFold(tidy(given, options))]
   return want.map((letter, index) => ({
     text: letter,
     differs: caseFold(letter) !== got[index],

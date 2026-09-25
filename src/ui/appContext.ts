@@ -11,6 +11,8 @@ export interface AppServices {
   scheduler: Scheduler
   /** Running on draft content (ADR-011). */
   preview: boolean
+  /** Re-sync stored cards with the content, e.g. after importing a backup. */
+  resync: () => Promise<void>
 }
 
 export const AppContext = createContext<AppServices | null>(null)

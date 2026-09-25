@@ -1,17 +1,19 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { LoadedContent } from '../content/loader'
 import { syncCards } from '../db/cards'
 import type { TrainerDb } from '../db/db'
-import { generateCards } from '../engine/cards'
+import { generateAllCards } from '../engine/cards'
 import { createScheduler, type Clock } from '../engine/schedule'
 import { AppContext, type AppServices } from './appContext'
+import { ProgressScreen } from './ProgressScreen'
 import { ReviewScreen } from './ReviewScreen'
 import { SettingsScreen } from './SettingsScreen'
 
-type Tab = 'review' | 'settings'
+type Tab = 'review' | 'progress' | 'settings'
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'review', label: 'Review' },
+  { id: 'progress', label: 'Progress' },
   { id: 'settings', label: 'Settings' },
 ]
 
@@ -23,22 +25,31 @@ interface Props {
 }
 
 export function App({ content, db, clock, preview = false }: Props) {
+  const scheduler = useMemo(() => createScheduler(clock), [clock])
+  // Bring stored cards in line with the loaded content (ADR-009, ADR-012).
+  const resync = useCallback(async () => {
+    const specs = generateAllCards(
+      [...content.sentenceById.values()],
+      content.lexemeById,
+      content.grammar,
+    )
+    await syncCards(db, specs, scheduler)
+  }, [content, db, scheduler])
   const services = useMemo<AppServices>(
-    () => ({ content, db, clock, scheduler: createScheduler(clock), preview }),
-    [content, db, clock, preview],
+    () => ({ content, db, clock, scheduler, preview, resync }),
+    [content, db, clock, scheduler, preview, resync],
   )
   const [ready, setReady] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [tab, setTab] = useState<Tab>('review')
 
-  // Bring stored cards in line with the loaded content (ADR-009) before any screen reads them.
+  // Sync before any screen reads the cards.
   useEffect(() => {
-    const specs = generateCards([...content.sentenceById.values()], content.lexemeById)
-    syncCards(db, specs, services.scheduler).then(
+    resync().then(
       () => setReady(true),
       (cause: unknown) => setError(`Could not open your progress database: ${String(cause)}`),
     )
-  }, [content, db, services.scheduler])
+  }, [resync])
 
   return (
     <AppContext.Provider value={services}>
@@ -85,6 +96,8 @@ export function App({ content, db, clock, preview = false }: Props) {
             <p className="text-slate-500">Loading…</p>
           ) : tab === 'review' ? (
             <ReviewScreen />
+          ) : tab === 'progress' ? (
+            <ProgressScreen />
           ) : (
             <SettingsScreen />
           )}

@@ -1,27 +1,62 @@
 import type { Lexeme, Sentence } from '../content/schemas'
 import type { CardSpec } from './cards'
+import type { CheckOptions } from './checkAnswer'
+import { inflect, type Grammar } from './inflect'
+import { featureLabel } from './labels'
 
-/** What the review screen needs to show one card — built from content, never stored. */
-export interface ClozeExercise {
-  kind: 'cloze'
+interface ExerciseBase {
   cardId: string
   feature: string
+  /** What checkAnswer compares against. */
+  expected: string
+  /** How the answer is checked: one word, a whole sentence (punctuation ignored), or a choice. */
+  check: 'word' | 'sentence' | 'choice'
+}
+
+/** Sentence with one token blanked, lemma in brackets → typed form. */
+export interface ClozeExercise extends ExerciseBase {
+  kind: 'cloze'
   /** Sentence text before and after the blank, punctuation included. */
   before: string
   after: string
-  /** Shown in brackets after the blank. */
   lemma: string
   /** The English gloss of the whole sentence, as context. */
   gloss: string
-  /** The approved sentence's own surface form — never inflect() output (ADR-008). */
-  expected: string
 }
 
-export type Exercise = ClozeExercise
+/** Latvian sentence → pick the English gloss. */
+export interface RecognizeExercise extends ExerciseBase {
+  kind: 'recognize'
+  text: string
+  /** The correct gloss plus up to three others, in a stable shuffled order. */
+  choices: string[]
+}
+
+/** English gloss → typed Latvian sentence. */
+export interface ProduceExercise extends ExerciseBase {
+  kind: 'produce'
+  gloss: string
+}
+
+/** Lemma + target features ("māja, locative singular") → typed form. */
+export interface InflectExercise extends ExerciseBase {
+  kind: 'inflect'
+  lemma: string
+  lemmaGloss: string
+  /** e.g. "locative singular" */
+  formLabel: string
+}
+
+export type Exercise = ClozeExercise | RecognizeExercise | ProduceExercise | InflectExercise
 
 export interface ExerciseContent {
   sentenceById: ReadonlyMap<string, Sentence>
   lexemeById: ReadonlyMap<string, Lexeme>
+  grammar?: Grammar
+}
+
+export function checkOptionsFor(exercise: Exercise): CheckOptions {
+  return { ignorePunctuation: exercise.check === 'sentence' }
 }
 
 /**
@@ -50,24 +85,96 @@ export function splitAroundToken(
   throw new Error(`${sentence.id}: no token ${index}`)
 }
 
+/** FNV-1a: a small stable hash, so "random" choice order is the same every time for a card. */
+function hash(text: string): number {
+  let h = 0x811c9dc5
+  for (let i = 0; i < text.length; i++) {
+    h ^= text.charCodeAt(i)
+    h = Math.imul(h, 0x01000193)
+  }
+  return h >>> 0
+}
+
+function stableShuffle<T>(items: readonly T[], seed: string, key: (item: T) => string): T[] {
+  return [...items].sort((a, b) => hash(`${seed}|${key(a)}`) - hash(`${seed}|${key(b)}`))
+}
+
+const DISTRACTORS = 3
+
+function recognizeChoices(cardId: string, sentence: Sentence, all: Iterable<Sentence>): string[] {
+  const others = new Set<string>()
+  for (const candidate of stableShuffle([...all], cardId, (s) => s.id)) {
+    if (others.size >= DISTRACTORS) break
+    if (candidate.gloss !== sentence.gloss) others.add(candidate.gloss)
+  }
+  return stableShuffle([sentence.gloss, ...others], `${cardId}|order`, (gloss) => gloss)
+}
+
 /**
  * Builds the exercise for a card from the current content. Returns null if
- * the card's content is gone (a retired card that slipped through), so the
- * session can skip it instead of crashing.
+ * the card's content is gone or no longer supports it (a retired card that
+ * slipped through), so the session can skip it instead of crashing.
+ *
+ * Expected answers only ever come from approved sentences, or — for
+ * `inflect` — from `inflect()` output that card generation already checked
+ * against an approved sentence (ADR-012).
  */
 export function buildExercise(card: CardSpec, content: ExerciseContent): Exercise | null {
   const sentence = content.sentenceById.get(card.sentenceId)
-  const token = sentence?.tokens[card.tokenIndex]
-  const lexeme = token && content.lexemeById.get(token.lexeme)
-  if (!sentence || !token || !lexeme) return null
+  if (!sentence) return null
+  const base = { cardId: card.id, feature: card.feature }
 
-  return {
-    kind: 'cloze',
-    cardId: card.id,
-    feature: card.feature,
-    ...splitAroundToken(sentence, card.tokenIndex),
-    lemma: lexeme.lemma,
-    gloss: sentence.gloss,
-    expected: token.surface,
+  switch (card.kind) {
+    case 'cloze': {
+      const token = card.tokenIndex === null ? undefined : sentence.tokens[card.tokenIndex]
+      const lexeme = token && content.lexemeById.get(token.lexeme)
+      if (!token || !lexeme || card.tokenIndex === null) return null
+      return {
+        ...base,
+        kind: 'cloze',
+        check: 'word',
+        ...splitAroundToken(sentence, card.tokenIndex),
+        lemma: lexeme.lemma,
+        gloss: sentence.gloss,
+        expected: token.surface,
+      }
+    }
+
+    case 'recognize':
+      return {
+        ...base,
+        kind: 'recognize',
+        check: 'choice',
+        text: sentence.text,
+        choices: recognizeChoices(card.id, sentence, content.sentenceById.values()),
+        expected: sentence.gloss,
+      }
+
+    case 'produce':
+      return {
+        ...base,
+        kind: 'produce',
+        check: 'sentence',
+        gloss: sentence.gloss,
+        expected: sentence.text,
+      }
+
+    case 'inflect': {
+      const [lexemeId, formKey] = card.targetId.split('@')
+      const [grammaticalCase, number] = formKey.split('.') as ['nom', 'sg']
+      const lexeme = content.lexemeById.get(lexemeId)
+      if (!lexeme || !content.grammar) return null
+      const result = inflect(lexeme, { case: grammaticalCase, number }, content.grammar)
+      if (!result.ok) return null
+      return {
+        ...base,
+        kind: 'inflect',
+        check: 'word',
+        lemma: lexeme.lemma,
+        lemmaGloss: lexeme.gloss[0],
+        formLabel: `${featureLabel(`case:${grammaticalCase}`)} ${featureLabel(`number:${number}`)}`,
+        expected: result.form,
+      }
+    }
   }
 }

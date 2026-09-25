@@ -203,7 +203,11 @@ describe('countDoneSince / loadSession', () => {
     await review('cloze:snt_0001#2') // same card again: a review now
 
     const dayStart = new Date('2026-09-25T00:00:00.000Z')
-    expect(await countDoneSince(db, dayStart)).toEqual({ newCards: 1, reviews: 1 })
+    expect(await countDoneSince(db, dayStart)).toEqual({
+      newCards: 1,
+      reviews: 1,
+      sentenceIds: new Set(['snt_0001']),
+    })
   })
 
   it('survives closing and reopening the database (the M3 done-when, data side)', async () => {
@@ -222,11 +226,8 @@ describe('countDoneSince / loadSession', () => {
     expect(await reopened.reviews.count()).toBe(1)
 
     const session = await loadSession(reopened, T0, { newPerDay: 10, reviewsPerDay: 100 }, T0)
-    expect(session.newCards.map((c) => c.id)).toEqual([
-      'cloze:snt_0003#0',
-      'cloze:snt_0003#3',
-      'cloze:snt_0010#2',
-    ])
+    // snt_0003's second card is buried until tomorrow (one new card per sentence per day).
+    expect(session.newCards.map((c) => c.id)).toEqual(['cloze:snt_0003#0', 'cloze:snt_0010#2'])
     reopened.close()
   })
 })

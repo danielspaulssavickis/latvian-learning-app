@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { getSettings, updateSettings } from '../db/settings'
 import { useApp } from './appContext'
+import { BackupSection } from './BackupSection'
 import { useLiveQuery } from './useLiveQuery'
 
 export function SettingsScreen() {
@@ -23,6 +24,7 @@ export function SettingsScreen() {
           setSaved(true)
         }}
       />
+      <BackupSection />
     </section>
   )
 }

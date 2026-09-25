@@ -1,8 +1,9 @@
 import { checkAnswer, type CheckResult } from './checkAnswer'
-import type { Exercise } from './exercise'
+import { checkOptionsFor, type Exercise } from './exercise'
 
 export interface Answer {
   cardId: string
+  kind: Exercise['kind']
   feature: string
   expected: string
   given: string
@@ -19,6 +20,8 @@ export interface ReviewState {
   /** Card ids already attempted this session — a later attempt is a repeat. */
   attempted: string[]
   shownAt: Date | null
+  /** Increments every time a card is shown — a stable identity for one showing. */
+  shown: number
   lastAnswer: Answer | null
   answers: Answer[]
 }
@@ -36,6 +39,7 @@ export const initialReviewState: ReviewState = {
   current: null,
   attempted: [],
   shownAt: null,
+  shown: 0,
   lastAnswer: null,
   answers: [],
 }
@@ -43,7 +47,14 @@ export const initialReviewState: ReviewState = {
 function show(state: ReviewState, queue: Exercise[], now: Date): ReviewState {
   const [current, ...rest] = queue
   if (!current) return { ...state, phase: 'done', queue: [], current: null, shownAt: null }
-  return { ...state, phase: 'answering', queue: rest, current, shownAt: now }
+  return {
+    ...state,
+    phase: 'answering',
+    queue: rest,
+    current,
+    shownAt: now,
+    shown: state.shown + 1,
+  }
 }
 
 /**
@@ -63,9 +74,10 @@ export function reviewReducer(state: ReviewState, action: ReviewAction): ReviewS
       if (state.phase !== 'answering' || !state.current || !state.shownAt) return state
       if (action.given.trim() === '') return state
       const exercise = state.current
-      const result = checkAnswer(exercise.expected, action.given)
+      const result = checkAnswer(exercise.expected, action.given, checkOptionsFor(exercise))
       const answer: Answer = {
         cardId: exercise.cardId,
+        kind: exercise.kind,
         feature: exercise.feature,
         expected: exercise.expected,
         given: action.given,

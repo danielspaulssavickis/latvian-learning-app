@@ -62,11 +62,11 @@ scheduling state has survived.
 
 ## M4 — More exercise types + progress
 
-- [ ] `inflect`, `produce`, `recognize` exercise kinds (`inflect` kind: only
-      lexeme/feature pairs whose form is `confidence: "verified"`, ADR-008)
-- [ ] Per-feature retention tracking over trailing 30 reviews
-- [ ] Dashboard: weak features surfaced, sorted worst-first
-- [ ] JSON export/import of progress
+- [x] `inflect`, `produce`, `recognize` exercise kinds (`inflect` answers are
+      vouched for by an approved sentence — ADR-012 narrows ADR-008 here)
+- [x] Per-feature retention tracking over trailing 30 reviews
+- [x] Dashboard: weak features surfaced, sorted worst-first
+- [x] JSON export/import of progress (+ weekly backup reminder)
 
 **Done when:** the dashboard correctly identifies a feature I've deliberately
 failed ten times in a row.
@@ -87,6 +87,13 @@ a text-only card instead of breaking the session.
 ## Session log
 
 <!-- newest first, one line each: date — what landed — what to pick up next -->
+2026-09-25 — M4 (Session 5): `featureRetention` (pure; the "ten failures in a
+row" case is a test), recognize / produce / inflect cards and screens,
+sibling burying (one new card per sentence per day — found by driving the
+app: the inflect card was giving away the cloze answer minutes later),
+Progress tab (stat tiles + worst-first retention tables, single validated
+hue, tables double as the accessible view), Settings → Backup export/import
+with a reminder after 7 days. ADR-012. Next: M5.
 2026-09-25 — M3 UI (Session 4): `src/ui/` app shell (Review / Settings tabs),
 cloze review screen driven by the pure `reviewReducer` (wrong answers
 re-queued at the end, repeats graded but not counted in the summary), inline

@@ -1,8 +1,8 @@
-import { diacriticDiff } from '../engine/checkAnswer'
+import { diacriticDiff, type CheckOptions } from '../engine/checkAnswer'
 import type { Answer } from '../engine/reviewSession'
 
 /** The result line under an answered card: correct / near miss with the diacritic diff / wrong. */
-export function Feedback({ answer }: { answer: Answer }) {
+export function Feedback({ answer, options }: { answer: Answer; options?: CheckOptions }) {
   if (answer.result === 'correct') {
     return (
       <p role="status" className="font-medium text-emerald-700 dark:text-emerald-400">
@@ -11,11 +11,11 @@ export function Feedback({ answer }: { answer: Answer }) {
     )
   }
   if (answer.result === 'nearMiss') {
-    const diff = diacriticDiff(answer.expected, answer.given) ?? []
+    const diff = diacriticDiff(answer.expected, answer.given, options) ?? []
     return (
       <div role="status" className="space-y-1">
         <p className="font-medium text-amber-700 dark:text-amber-400">
-          Almost — right form, check the diacritics:
+          Almost — right words, check the diacritics:
         </p>
         <p className="text-2xl" aria-label={`Correct spelling: ${answer.expected}`}>
           {diff.map((segment, index) =>

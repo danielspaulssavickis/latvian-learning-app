@@ -198,6 +198,41 @@ catches problems a JSON diff doesn't (an odd blank, a confusing gloss).
 *Rules out:* a production or deployed build that can show drafts; draft
 cards entering the real review history.
 
+## ADR-012 — Exercise kinds, card order, and sibling burying
+**2026-09-25 · accepted** · extends ADR-009
+
+`generateAllCards` makes, per sentence: one `recognize` card
+(`recognize:<sentenceId>`), one `cloze` per drillable token, one `produce`
+card (`produce:<sentenceId>`); and one `inflect` card per distinct
+(lexeme, case.number) among drillable noun/pronoun tokens
+(`inflect:<lexemeId>@<case>.<number>`). Within a sentence, new cards come
+easiest first: recognize → cloze → inflect → produce.
+
+**Sibling burying.** At most one new card per sentence per day, and none
+from a sentence already studied today. So a sentence walks through its
+kinds over several days instead of giving away its own answers minutes
+apart (the cloze answer "Rīgā", then "Rīga → locative singular").
+
+**Inflect answers.** An `inflect` card exists only where `inflect()`
+reproduces an approved sentence's own surface form (case-folded), so its
+answer is vouched for by that sentence even while the grammar tables are
+drafts. This narrows ADR-008's rule, which is about forms *no* reviewed
+sentence backs — those still never become answers.
+
+**Checking.** `produce` compares the whole sentence with punctuation ignored
+and word order as authored (see the open question below); `recognize` is
+multiple choice among the sentence's gloss and three other glosses picked by
+a stable hash of the card id, so the choices don't reshuffle between visits.
+
+**Retention** (dashboard): per feature, share of the trailing 30 answers
+that were correct or a near miss; ordered worst-first, ties broken by the
+current run of wrong answers. Skills (`skill:recognize`, …) are listed
+separately; `number:sg` is hidden as noise.
+
+*Rules out:* the old "one card per sentence per kind per day" ordering where
+all of a sentence's cards could land in one session; inflect cards for forms
+no approved sentence contains.
+
 ---
 
 ## Open questions
@@ -218,5 +253,10 @@ cards entering the real review history.
 - **Definiteness.** Adjective definite/indefinite endings are a real A2 topic but
   add a dimension to every adjective card. Decide before building adjective
   support whether it is in scope for v1.
+- **Word order in `produce`.** Latvian word order is flexible; `produce`
+  only accepts the authored order ("Man šodien jāstrādā" vs "Šodien man
+  jāstrādā"). Options: accept any permutation of the same words as correct,
+  or as a near miss, or list accepted alternatives per sentence. Decide once
+  there's review data showing how often this bites.
 - **Seed corpus size.** How many sentences before the app is worth using daily?
   Guess: ~150 covering A1. Measure after M3 rather than guessing further.

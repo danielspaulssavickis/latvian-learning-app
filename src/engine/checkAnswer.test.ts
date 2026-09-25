@@ -51,6 +51,21 @@ describe('checkAnswer', () => {
   })
 })
 
+describe('checkAnswer — whole sentences', () => {
+  const sentence = { ignorePunctuation: true }
+
+  it('ignores punctuation only when asked', () => {
+    expect(checkAnswer('Es dzīvoju Rīgā.', 'es dzīvoju Rīgā', sentence)).toBe('correct')
+    expect(checkAnswer('Es dzīvoju Rīgā.', 'es dzīvoju Rīgā')).toBe('wrong')
+    expect(checkAnswer('Man nav laika.', 'Man nav laika!', sentence)).toBe('correct')
+  })
+
+  it('still grades diacritics and word forms', () => {
+    expect(checkAnswer('Es dzīvoju Rīgā.', 'Es dzivoju Riga', sentence)).toBe('nearMiss')
+    expect(checkAnswer('Es dzīvoju Rīgā.', 'Es dzīvoju Rīgu.', sentence)).toBe('wrong')
+  })
+})
+
 describe('diacriticDiff', () => {
   it('marks each position whose diacritic differs, in the expected spelling', () => {
     expect(diacriticDiff('Rīgā', 'Riga')).toEqual([

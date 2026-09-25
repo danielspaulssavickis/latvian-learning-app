@@ -119,17 +119,25 @@ export async function recordReview(
   })
 }
 
-/** New cards introduced and reviews done since `since` (the caller's local start of day). */
+/**
+ * New cards introduced and reviews done since `since` (the caller's local
+ * start of day), plus which sentences they came from (for sibling burying).
+ */
 export async function countDoneSince(db: TrainerDb, since: Date): Promise<DoneToday> {
-  const done: DoneToday = { newCards: 0, reviews: 0 }
+  let newCards = 0
+  let reviews = 0
+  const cardIds = new Set<string>()
   await db.reviews
     .where('reviewedAt')
     .aboveOrEqual(since)
     .each((review) => {
-      if (review.wasNew) done.newCards += 1
-      else done.reviews += 1
+      if (review.wasNew) newCards += 1
+      else reviews += 1
+      cardIds.add(review.cardId)
     })
-  return done
+  const cards = await db.cards.bulkGet([...cardIds])
+  const sentenceIds = new Set(cards.flatMap((card) => (card ? [card.sentenceId] : [])))
+  return { newCards, reviews, sentenceIds }
 }
 
 /** What to study right now, honoring the daily caps from `dayStart` onward. */

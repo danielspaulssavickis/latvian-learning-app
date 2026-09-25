@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react'
+import { useCallback, useEffect, useReducer, useRef, useState } from 'react'
 import { loadSession, recordReview } from '../db/cards'
 import { getSettings } from '../db/settings'
 import { buildExercise, type Exercise } from '../engine/exercise'
@@ -6,31 +6,20 @@ import { initialReviewState, reviewReducer } from '../engine/reviewSession'
 import { startOfLocalDay } from '../engine/session'
 import { summarize } from '../engine/summary'
 import { useApp } from './appContext'
-import { DiacriticRow } from './DiacriticRow'
-import { Feedback } from './Feedback'
+import { BackupReminder } from './BackupReminder'
+import { CardView } from './CardView'
 import { SessionSummary } from './SessionSummary'
 import { useLiveQuery } from './useLiveQuery'
 
-const RESULT_COLOR = {
-  correct: 'text-emerald-700 dark:text-emerald-400',
-  nearMiss: 'text-amber-600 dark:text-amber-400',
-  wrong: 'text-rose-700 dark:text-rose-400',
-} as const
-
 /**
- * The cloze review loop. Keyboard-first: type, Enter submits, Enter again
- * advances. All decisions live in src/engine (reviewReducer, checkAnswer,
- * selectSession) and src/db (loadSession, recordReview); this component
- * renders state and dispatches actions with the current time.
+ * The review loop. All decisions live in src/engine (reviewReducer,
+ * checkAnswer, selectSession) and src/db (loadSession, recordReview); this
+ * component renders state and dispatches actions with the current time.
  */
 export function ReviewScreen() {
   const { db, content, clock, scheduler } = useApp()
   const [state, dispatch] = useReducer(reviewReducer, initialReviewState)
-  const [draft, setDraft] = useState('')
   const [error, setError] = useState<string | null>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
-  const nextRef = useRef<HTMLButtonElement>(null)
-  const pendingCaret = useRef<number | null>(null)
 
   const plan = useLiveQuery(async () => {
     const now = clock()
@@ -58,35 +47,18 @@ export function ReviewScreen() {
     }
   }, [state.answers, db, scheduler])
 
-  // Focus follows the flow: the answer input while answering, Next during feedback.
-  const shownAt = state.shownAt?.getTime()
-  useEffect(() => {
-    if (state.phase === 'answering') inputRef.current?.focus()
-    if (state.phase === 'feedback') nextRef.current?.focus()
-  }, [state.phase, shownAt])
-
-  useLayoutEffect(() => {
-    if (pendingCaret.current === null) return
-    inputRef.current?.setSelectionRange(pendingCaret.current, pendingCaret.current)
-    pendingCaret.current = null
-  })
+  const submit = useCallback(
+    (given: string) => dispatch({ type: 'submit', given, now: clock() }),
+    [clock],
+  )
+  const next = useCallback(() => dispatch({ type: 'next', now: clock() }), [clock])
 
   function start() {
     if (!plan) return
     const exercises = [...plan.reviews, ...plan.newCards]
       .map((card) => buildExercise(card, content))
       .filter((exercise): exercise is Exercise => exercise !== null)
-    setDraft('')
     dispatch({ type: 'start', exercises, now: clock() })
-  }
-
-  function submit() {
-    dispatch({ type: 'submit', given: draft, now: clock() })
-  }
-
-  function next() {
-    setDraft('')
-    dispatch({ type: 'next', now: clock() })
   }
 
   if (error) {
@@ -134,11 +106,11 @@ export function ReviewScreen() {
         >
           Start session
         </button>
+        <BackupReminder />
       </section>
     )
   }
 
-  const exercise = state.current
   const answered = state.phase === 'feedback' ? state.lastAnswer : null
   const remaining = state.queue.length + (answered ? 0 : 1)
 
@@ -154,72 +126,14 @@ export function ReviewScreen() {
           End session
         </button>
       </div>
-
-      <form
-        onSubmit={(event) => {
-          event.preventDefault()
-          if (answered) next()
-          else submit()
-        }}
-      >
-        <p className="text-2xl leading-relaxed sm:text-3xl" lang="lv">
-          {exercise.before}
-          {answered ? (
-            <span className={`font-semibold ${RESULT_COLOR[answered.result]}`}>
-              {answered.expected}
-            </span>
-          ) : (
-            <input
-              ref={inputRef}
-              aria-label={`Answer: ${exercise.lemma}`}
-              value={draft}
-              onChange={(event) => setDraft(event.target.value)}
-              autoComplete="off"
-              autoCorrect="off"
-              autoCapitalize="off"
-              spellCheck={false}
-              lang="lv"
-              size={Math.max(8, draft.length + 1)}
-              className="mx-1 rounded-md border-b-2 border-emerald-600 bg-emerald-50 px-2 py-0.5 text-center text-2xl outline-none focus:bg-emerald-100 sm:text-3xl dark:bg-emerald-950 dark:focus:bg-emerald-900"
-            />
-          )}
-          {exercise.after}{' '}
-          <span className="text-lg text-slate-500 dark:text-slate-400">({exercise.lemma})</span>
-        </p>
-        <p className="mt-2 text-slate-500 dark:text-slate-400">{exercise.gloss}</p>
-
-        <div className="mt-5">
-          {answered ? (
-            <div className="space-y-4">
-              <Feedback answer={answered} />
-              <button
-                ref={nextRef}
-                type="submit"
-                className="rounded-md bg-slate-800 px-5 py-2.5 font-medium text-white hover:bg-slate-900 dark:bg-slate-200 dark:text-slate-900"
-              >
-                Next <span className="text-slate-400">(Enter)</span>
-              </button>
-            </div>
-          ) : (
-            <>
-              <button
-                type="submit"
-                className="rounded-md bg-emerald-700 px-5 py-2.5 font-medium text-white hover:bg-emerald-800"
-              >
-                Check <span className="text-emerald-200">(Enter)</span>
-              </button>
-              <DiacriticRow
-                inputRef={inputRef}
-                value={draft}
-                onChange={(value, caret) => {
-                  pendingCaret.current = caret
-                  setDraft(value)
-                }}
-              />
-            </>
-          )}
-        </div>
-      </form>
+      <CardView
+        // A fresh CardView per showing, so the typed draft never carries over.
+        key={state.shown}
+        exercise={state.current}
+        answer={answered}
+        onSubmit={submit}
+        onNext={next}
+      />
     </section>
   )
 }

@@ -35,9 +35,9 @@ const nothingDone = { newCards: 0, reviews: 0 }
 
 describe('selectSession', () => {
   it('introduces new cards in content order, capped at the daily limit', () => {
-    const cards = [newCard('snt_0003'), newCard('snt_0001', 2), newCard('snt_0001', 0)]
+    const cards = [newCard('snt_0003'), newCard('snt_0002'), newCard('snt_0001')]
     const session = selectSession(cards, NOW, limits, nothingDone)
-    expect(session.newCards.map((c) => c.id)).toEqual(['cloze:snt_0001#0', 'cloze:snt_0001#2'])
+    expect(session.newCards.map((c) => c.id)).toEqual(['cloze:snt_0001#0', 'cloze:snt_0002#0'])
   })
 
   it('takes only reviews that are due, most overdue first, capped', () => {
@@ -70,6 +70,30 @@ describe('selectSession', () => {
       reviews: 9,
     })
     expect(session).toEqual({ newCards: [], reviews: [] })
+  })
+
+  it('introduces at most one new card per sentence (siblings are buried)', () => {
+    const cards = [
+      newCard('snt_0001', 0),
+      newCard('snt_0001', 2),
+      newCard('snt_0002', 0),
+      newCard('snt_0003', 0),
+    ]
+    const session = selectSession(cards, NOW, { newPerDay: 10, reviewsPerDay: 10 }, nothingDone)
+    expect(session.newCards.map((c) => c.id)).toEqual([
+      'cloze:snt_0001#0',
+      'cloze:snt_0002#0',
+      'cloze:snt_0003#0',
+    ])
+  })
+
+  it('also buries new cards of sentences already studied today', () => {
+    const cards = [newCard('snt_0001', 0), newCard('snt_0002', 0)]
+    const session = selectSession(cards, NOW, limits, {
+      ...nothingDone,
+      sentenceIds: new Set(['snt_0001']),
+    })
+    expect(session.newCards.map((c) => c.sentenceId)).toEqual(['snt_0002'])
   })
 
   it('skips retired cards', () => {

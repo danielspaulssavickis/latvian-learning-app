@@ -5,6 +5,7 @@ import { summarize } from './summary'
 function answer(feature: string, result: Answer['result'], firstAttempt = true): Answer {
   return {
     cardId: `${feature}-${result}`,
+    kind: 'cloze',
     feature,
     expected: 'x',
     given: 'x',
