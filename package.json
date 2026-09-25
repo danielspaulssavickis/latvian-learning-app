@@ -15,8 +15,10 @@
     "content:approve": "tsx scripts/content-approve.ts"
   },
   "dependencies": {
+    "dexie": "^4.4.6",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "ts-fsrs": "^5.4.2",
     "zod": "^4.6.5"
   },
   "devDependencies": {
@@ -34,6 +36,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.7",
+    "fake-indexeddb": "^6.2.5",
     "globals": "^17.12.0",
     "jsdom": "^30.1.0",
     "prettier": "^3.9.8",

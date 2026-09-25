@@ -118,6 +118,45 @@ particular) showing an `unverified` form as an expected answer; hand-editing
 reported by `inflect()` as `reason: "gap"` and by `content:check` as a warning.
 Lexemes remain human-only (ADR-004); this ADR does not cover them.
 
+## ADR-009 — Card identity, sync, and grading
+**2026-09-25 · accepted**
+
+**One cloze card per drillable token**, id `cloze:<sentenceId>#<tokenIndex>`.
+Not one card per (token, feature) pair: every feature of a token would
+produce the same blanked sentence with the same answer, i.e. duplicate cards.
+The card's `feature` is the token's most specific feature (mood > case >
+tense > person > number > gender > definiteness), and `features` lists all of
+them plus the lexeme's `declension:N` / `conjugation:N`, so M4's per-feature
+retention can credit every feature an answer exercised. Each review log entry
+copies `features` from the card, so history stays attributable even if the
+content changes later.
+
+**Sync, never regenerate state.** `generateCards` (pure, `src/engine/cards.ts`)
+derives specs from content; `syncCards` (`src/db/cards.ts`) adds unseen cards
+as new, refreshes content-derived fields on existing ones, and never touches
+`fsrs` or the review log. A card whose content disappears is *retired*
+(kept, not scheduled) and revived with its state if the content returns.
+
+**Grading.** `gradeFor` in `src/engine/schedule.ts`: wrong → again, near miss
+→ hard (any time), correct → easy under 5 s, hard over 20 s, good otherwise.
+The thresholds are first guesses — tune them once there's a real review log.
+FSRS fuzz is off, so scheduling is deterministic for a fixed clock.
+
+*Why:* SPEC.md requires that adding content never orphans history, and that
+scheduling be testable against fixed clock values.
+
+*Rules out:* token-index-free card ids (e.g. hashing the surface) — a sentence
+id plus token index is simple and stable as long as an approved sentence's
+tokens aren't reordered. **Re-tokenizing an approved sentence moves its cards'
+history to the wrong token or retires it**; add a new sentence id instead.
+Also rules out deleting cards during sync, and calling `Date.now()` / `new
+Date()` anywhere in `src/engine/` (the one real clock is `systemClock` in
+`src/db/db.ts`).
+
+*Dependencies added:* `dexie` and `ts-fsrs` (both already in CLAUDE.md's
+stack), and dev-only `fake-indexeddb`, which replaces nothing: jsdom has no
+IndexedDB, so without it `src/db/` can't be tested under Vitest.
+
 ---
 
 ## Open questions

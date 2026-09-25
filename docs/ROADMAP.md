@@ -4,8 +4,10 @@
 lands, add a dated line under "Session log", and keep "Current focus" accurate.
 Do not rewrite finished milestones; append.
 
-**Current focus:** M2 engine done; waiting on human review of the draft grammar
-tables (ADR-008, `content/_needed.json`). Next session: M3 data layer (Session 3).
+**Current focus:** M3 data layer done. Next session: M3 UI (Session 4). Still
+waiting on human review of the draft grammar tables (ADR-008) and on real
+approved sentences — the review screen will have nothing to show until
+`content/sentences/` has some.
 
 ---
 
@@ -49,13 +51,16 @@ returns `nearMiss` while `checkAnswer("Rīgā", "Rīgu")` returns `wrong`.
 
 ## M3 — Review loop
 
-- [ ] Dexie schema for cards + review log; deterministic card generation from content
-      (expected answers must never be `unverified` `inflect()` output — ADR-008)
-- [ ] `ts-fsrs` integration in `src/engine/schedule.ts`, injectable clock
+- [x] Dexie schema for cards + review log; deterministic card generation from content
+      (expected answers must never be `unverified` `inflect()` output — ADR-008;
+      cloze answers are the sentence's own surface form, so this holds)
+- [x] `ts-fsrs` integration in `src/engine/schedule.ts`, injectable clock
 - [ ] Cloze review screen: keyboard-first, Enter to submit, Enter again to advance
 - [ ] Latvian diacritic input helper (clickable `ā ē ī ū ķ ģ ļ ņ š ž č` row + a dead-key hint)
 - [ ] Session summary screen
-- [ ] Daily new/review caps, configurable
+- [ ] Daily new/review caps, configurable — engine + db side done
+      (`selectSession`, `countDoneSince`, `loadSession`, defaults 10/100);
+      still needs a settings control and persisted limits (Session 4)
 
 **Done when:** I can do a full 20-card session, close the tab, reopen it, and the
 scheduling state has survived.
@@ -87,6 +92,19 @@ a text-only card instead of breaking the session.
 ## Session log
 
 <!-- newest first, one line each: date — what landed — what to pick up next -->
+2026-09-25 — M3 data layer: `src/engine/cards.ts` (one cloze card per
+drillable token, stable ids, content order), `src/engine/schedule.ts`
+(ts-fsrs behind our own Grade/SchedulingState types, injected clock, fuzz
+off, `gradeFor` mapping), `src/engine/session.ts` (daily caps, due-first
+selection), `src/db/db.ts` + `src/db/cards.ts` (Dexie: cards + append-only
+review log indexed by feature; `syncCards` adds/retires/revives without
+touching state; `recordReview` in one transaction). ADR-009 records the card
+identity + grading decisions. Explicit test: sync, review, add a sentence,
+regenerate, re-sync → old cards and log unchanged (mutation-checked). Also a
+close/reopen persistence test. Deps: dexie, ts-fsrs, fake-indexeddb (dev).
+600 tests passing. Next: Session 4, the cloze review screen — call
+`syncCards` on startup, `loadSession` for the queue, `recordReview` per
+answer, `systemClock` as the clock; add the caps setting there.
 2026-09-25 — M2 done (engine side): `src/engine/inflect.ts` (nouns, decl 1–6,
 sg+pl, irregular overrides, longest-match consonant alternation, gaps reported
 not guessed, `confidence` verified/unverified), `src/engine/checkAnswer.ts`

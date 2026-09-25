@@ -29,7 +29,7 @@ Run `npm run typecheck && npm run test && npm run content:check` before saying a
 - IndexedDB via Dexie for user progress — no backend, no accounts (see ADR-002)
 - `ts-fsrs` for review scheduling (see ADR-003)
 - Zod for content validation
-- Vitest + Testing Library
+- Vitest + Testing Library; `fake-indexeddb` for `src/db/` tests
 
 ## Layout
 

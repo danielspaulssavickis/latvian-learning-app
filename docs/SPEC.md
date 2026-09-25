@@ -139,16 +139,29 @@ resolved (see `content/_needed.json`).
 ### Card / review state — IndexedDB, not in `content/`
 
 ```ts
+// db.cards — src/engine/session.ts StoredCard
 {
-  id, kind, targetId,           // e.g. kind: "cloze", targetId: "snt_0142#2"
-  feature: "case:loc",          // what this card actually drills
-  fsrs: { stability, difficulty, due, reps, lapses, state }
+  id: "cloze:snt_0142#2",       // `${kind}:${targetId}`, stable (ADR-009)
+  kind: "cloze",
+  targetId: "snt_0142#2",       // `${sentenceId}#${tokenIndex}`
+  sentenceId, tokenIndex,
+  feature: "case:loc",          // what this card primarily drills
+  features: ["case:loc", "number:sg", "declension:4"],
+  fsrs: { due, stability, difficulty, reps, lapses, state, ... },  // ts-fsrs Card
+  retired: false                // content gone; kept for history, never scheduled
+}
+
+// db.reviews — append-only, src/db/db.ts ReviewRecord
+{
+  id, cardId, feature, features, reviewedAt,
+  result: "correct" | "nearMiss" | "wrong", given, responseMs,
+  grade: "again" | "hard" | "good" | "easy", wasNew, fsrsLog
 }
 ```
 
-One card per *drillable feature instance*, not per sentence. The same sentence can
-produce several cards. Cards are generated deterministically from content so that
-adding content never orphans a user's history.
+One card per drillable token (ADR-009) — a sentence with two drillable tokens
+produces two cards. Cards are generated deterministically from content and
+*synced* into the database, so adding content never orphans a user's history.
 
 ## Exercise types
 
@@ -185,7 +198,8 @@ usually a different case, not a typo, and forgiving it defeats the purpose.
 ## Scheduling
 
 FSRS via `ts-fsrs`, four grades (again / hard / good / easy) mapped from the
-check result plus response time. New cards are introduced in content order,
+check result plus response time (`gradeFor`; the table is in ADR-009 and in
+`src/engine/schedule.ts`). New cards are introduced in content order,
 capped at a configurable daily limit (default 10 new, 100 reviews). All
 scheduling logic stays in `src/engine/schedule.ts` and is unit tested against
 fixed clock values — never `Date.now()` inside the engine.
