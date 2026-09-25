@@ -5,20 +5,20 @@ import { inflect, type Grammar } from './inflect'
  * What a card *is*, derived from content alone. Scheduling state is added on
  * top in src/db/ — this part must be reproducible from content at any time.
  */
-export type CardKind = 'recognize' | 'cloze' | 'inflect' | 'produce'
+export type CardKind = 'recognize' | 'cloze' | 'inflect' | 'produce' | 'listen'
 
 export interface CardSpec {
   /** `${kind}:${targetId}` — stable across regenerations (ADR-009, ADR-012). */
   id: string
   kind: CardKind
   /**
-   * cloze: `${sentenceId}#${tokenIndex}`; recognize/produce: the sentence id;
+   * cloze: `${sentenceId}#${tokenIndex}`; recognize/produce/listen: the sentence id;
    * inflect: `${lexemeId}@${formKey}`, e.g. "lex_maja@loc.sg".
    */
   targetId: string
   /** The sentence this card comes from (for inflect: the first one using that form). */
   sentenceId: string
-  /** The token drilled; null for whole-sentence cards (recognize, produce). */
+  /** The token drilled; null for whole-sentence cards (recognize, produce, listen). */
   tokenIndex: number | null
   /** The feature this card drills, e.g. "case:loc" — see `primaryFeature`. */
   feature: string
@@ -63,7 +63,13 @@ function featureList(features: Features, lexeme: Lexeme): string[] {
  * (recognize), fill one form in context (cloze), produce the form bare
  * (inflect), then write the whole sentence (produce).
  */
-const KIND_ORDER: Record<CardKind, number> = { recognize: 0, cloze: 1, inflect: 2, produce: 3 }
+const KIND_ORDER: Record<CardKind, number> = {
+  recognize: 0,
+  cloze: 1,
+  inflect: 2,
+  produce: 3,
+  listen: 4,
+}
 
 /**
  * Content order: by sentence id, then kind (KIND_ORDER), then token position.
@@ -122,6 +128,7 @@ function fold(text: string): string {
  *
  * - `cloze` — one per drillable token (see `generateCards`);
  * - `recognize` and `produce` — one each per sentence;
+ * - `listen` — one per sentence that has an `audio` file (M5);
  * - `inflect` — one per distinct (lexeme, case.number) among drillable noun
  *   and pronoun tokens, and only where `inflect()` reproduces the sentence's
  *   own surface form. The answer is therefore vouched for by an approved
@@ -137,7 +144,10 @@ export function generateAllCards(
   const inflectIds = new Set<string>()
 
   for (const sentence of [...sentences].sort((a, b) => (a.id < b.id ? -1 : 1))) {
-    for (const kind of ['recognize', 'produce'] as const) {
+    const sentenceKinds = sentence.audio
+      ? (['recognize', 'produce', 'listen'] as const)
+      : (['recognize', 'produce'] as const)
+    for (const kind of sentenceKinds) {
       cards.push({
         id: `${kind}:${sentence.id}`,
         kind,

@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 // Dexie's liveQuery only observes a *global* IndexedDB, so UI tests install
 // fake-indexeddb globally and isolate tests by database name instead.
@@ -8,6 +8,7 @@ import { recordReview, syncCards } from '../db/cards'
 import { openDb, type TrainerDb } from '../db/db'
 import { generateAllCards } from '../engine/cards'
 import { createScheduler } from '../engine/schedule'
+import { SNT_1, SNT_3 } from '../engine/__fixtures__/sentences'
 import { fixtureContent } from './__fixtures__/content'
 import { App } from './App'
 
@@ -27,10 +28,9 @@ beforeEach(() => {
  * before `now`, so today's session reaches the next sibling of each sentence
  * (new cards are one per sentence per day — sibling burying).
  */
-async function studiedYesterday(cardIds: string[]) {
+async function studiedYesterday(cardIds: string[], content = fixtureContent()) {
   const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000)
   const scheduler = createScheduler(() => yesterday)
-  const content = fixtureContent()
   const specs = generateAllCards(
     [...content.sentenceById.values()],
     content.lexemeById,
@@ -128,6 +128,29 @@ describe('App', () => {
     const grammar = screen.getByRole('table', { name: /Grammar, weakest first/ })
     expect(grammar).toHaveTextContent('locative')
     expect(grammar).not.toHaveTextContent('singular')
+  })
+
+  it('degrades a listen card with a missing audio file to a text-only card (M5 done-when)', async () => {
+    const content = fixtureContent([{ ...SNT_1, audio: 'audio/missing.mp3' }, SNT_3])
+    await studiedYesterday(
+      ['recognize:snt_0001', 'cloze:snt_0001#2', 'produce:snt_0001', 'recognize:snt_0003'],
+      content,
+    )
+    const user = userEvent.setup()
+    const { container } = render(<App content={content} db={db} clock={clock} />)
+    await startSession(user)
+
+    expect(await screen.findByText('Type what you hear')).toBeInTheDocument()
+    const audio = container.querySelector('audio')!
+    expect(audio.getAttribute('src')).toBe('/audio/missing.mp3')
+    fireEvent.error(audio) // what the browser fires for a 404
+
+    expect(await screen.findByText(/Audio unavailable/)).toBeInTheDocument()
+    await screen.findByRole('textbox', { name: 'Latvian for: I live in Riga.' })
+    await user.keyboard('Es dzīvoju Rīgā.{Enter}')
+    expect(await screen.findByText('Correct.')).toBeInTheDocument()
+    await user.keyboard('{Enter}')
+    expect(await screen.findByText('Fill in the right form')).toBeInTheDocument() // session goes on
   })
 
   it('inserts a diacritic at the caret without losing focus', async () => {

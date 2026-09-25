@@ -45,10 +45,17 @@ const tree = {
 
 const result = checkContent(tree)
 
+// Audio is optional and the app degrades without it (M5), so a sentence that
+// names a file that isn't in public/ is a warning, not an error.
+for (const { path, data } of tree.sentences) {
+  const audio = (data as { audio?: unknown } | null)?.audio
+  if (typeof audio === 'string' && !existsSync(join(process.cwd(), 'public', audio))) {
+    result.warnings.push({ file: path, message: `audio file public/${audio} does not exist` })
+  }
+}
+
 if (result.warnings.length > 0) {
-  console.warn(
-    `content:check: ${result.warnings.length} warning(s) — gaps in the ending tables, not failures:\n`,
-  )
+  console.warn(`content:check: ${result.warnings.length} warning(s) — reported, not failures:\n`)
   for (const warning of result.warnings) {
     console.warn(`  ${warning.file}\n    ${warning.message}`)
   }

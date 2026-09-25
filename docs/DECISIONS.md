@@ -233,14 +233,60 @@ separately; `number:sg` is hidden as noise.
 all of a sentence's cards could land in one session; inflect cards for forms
 no approved sentence contains.
 
+## ADR-005 — Audio source: human recordings; no TTS until its licence is checked
+**2026-09-25 · accepted (provisional — revisit before recording at scale)**
+
+The app supports audio now (M5): a sentence's optional `audio` field names a
+file under `public/` (convention: `public/audio/<sentenceId>.mp3`), played
+after answering and used by the `listen` exercise. A missing file never
+breaks anything — `content:check` warns, and the card falls back to text.
+
+**Source for v1: human recordings** — yours, or a native speaker's with
+their explicit permission to publish them. That needs no licence review.
+**No generated (TTS) audio ships** until someone has read the provider's
+terms for *redistributing* generated audio in a public web app; candidates
+to check are cloud neural voices with a Latvian (lv-LV) voice and Latvian
+vendors such as Tilde. A zero-licence alternative worth trying later is the
+browser's own speech synthesis at runtime (no files shipped), if the
+learner's device has a Latvian voice — quality and availability vary, and
+iOS may have none.
+
+*Rules out:* committing TTS output without a licence check; making audio a
+requirement for any card other than `listen`.
+
+## ADR-013 — Installable PWA, web only; IndexedDB eviction is a known risk
+**2026-09-25 · accepted** · consequence of ADR-002
+
+The app stays a website — no native iOS/Android app — but is built to be
+installed to the home screen as a PWA: web manifest, icons (incl.
+`apple-touch-icon`), iOS standalone meta tags, safe-area padding, and a
+service worker (`scripts/build-sw.ts`, generated at build time, no plugin
+dependency) that precaches the whole build so a session works offline.
+The build uses relative URLs (`base: './'`) so it can be served from any
+path, e.g. a GitHub Pages project page.
+
+**The risk, documented rather than solved:** ADR-002 keeps all progress in
+the browser. iOS Safari can evict a site's storage after a period of
+inactivity, and has had version-specific IndexedDB bugs; for a
+spaced-repetition app that means lost review history.
+
+**Mitigation, in order:**
+1. *Built:* `navigator.storage.persist()` is requested on start (honoured
+   by some browsers, a no-op elsewhere).
+2. *Built:* JSON export/import (M4) plus a reminder on the Review screen
+   when there is history and no export in the last 7 days.
+3. *Plan, not built:* if eviction bites in practice, a minimal
+   single-blob sync — one signed-URL object holding the export JSON —
+   per ADR-002's "revisit if". Not a backend with accounts.
+
+*Rules out:* a native app; a push-notification or background-sync
+dependency; treating the IndexedDB copy as the only copy.
+
 ---
 
 ## Open questions
 
-- **ADR-005 — audio source.** Options: record it myself, use a Latvian TTS
-  service, or ship without audio until M5. Needs investigation into what Latvian
-  TTS is available and under what licence before committing. Do not pick a
-  provider without checking terms for redistributing generated audio.
+- ~~**ADR-005 — audio source.**~~ *Decided provisionally, see ADR-005 below.*
 - ~~**Declension class coverage.**~~ *Resolved 2026-09-25:* M2 covers all six,
   as draft tables (ADR-008). Masculine nouns of declensions 4 and 5 (puika,
   bende) are not covered yet — see `content/_needed.json`.

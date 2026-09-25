@@ -5,6 +5,7 @@ import type { TrainerDb } from '../db/db'
 import { generateAllCards } from '../engine/cards'
 import { createScheduler, type Clock } from '../engine/schedule'
 import { AppContext, type AppServices } from './appContext'
+import { ErrorBoundary } from './ErrorBoundary'
 import { ProgressScreen } from './ProgressScreen'
 import { ReviewScreen } from './ReviewScreen'
 import { SettingsScreen } from './SettingsScreen'
@@ -88,19 +89,21 @@ export function App({ content, db, clock, preview = false }: Props) {
           </div>
         </header>
         <main className="mx-auto max-w-2xl px-4 py-8">
-          {error ? (
-            <p role="alert" className="rounded-md bg-rose-50 p-4 text-rose-800">
-              {error}
-            </p>
-          ) : !ready ? (
-            <p className="text-slate-500">Loading…</p>
-          ) : tab === 'review' ? (
-            <ReviewScreen />
-          ) : tab === 'progress' ? (
-            <ProgressScreen />
-          ) : (
-            <SettingsScreen />
-          )}
+          <ErrorBoundary>
+            {error ? (
+              <p role="alert" className="rounded-md bg-rose-50 p-4 text-rose-800">
+                {error}
+              </p>
+            ) : !ready ? (
+              <p className="text-slate-500">Loading…</p>
+            ) : tab === 'review' ? (
+              <ReviewScreen />
+            ) : tab === 'progress' ? (
+              <ProgressScreen />
+            ) : (
+              <SettingsScreen />
+            )}
+          </ErrorBoundary>
         </main>
       </div>
     </AppContext.Provider>

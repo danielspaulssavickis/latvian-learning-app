@@ -14,6 +14,11 @@ const TENSES: Record<string, string> = {
   fut: 'future tense',
 }
 const ORDINALS = ['', '1st', '2nd', '3rd', '4th', '5th', '6th']
+const SKILLS: Record<string, string> = {
+  recognize: 'understanding (recognize)',
+  produce: 'writing sentences (produce)',
+  listen: 'listening',
+}
 
 /**
  * A feature key ("case:loc", "declension:4") as learner-facing English, using
@@ -37,7 +42,7 @@ export function featureLabel(feature: string): string {
     case 'conjugation':
       return `${ORDINALS[Number(value)] ?? value} conjugation`
     case 'skill':
-      return value
+      return SKILLS[value] ?? value
     default:
       return feature
   }

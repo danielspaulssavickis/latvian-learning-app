@@ -11,6 +11,8 @@ interface ExerciseBase {
   expected: string
   /** How the answer is checked: one word, a whole sentence (punctuation ignored), or a choice. */
   check: 'word' | 'sentence' | 'choice'
+  /** The sentence's recording, if it has one — playable after answering. */
+  audio?: string
 }
 
 /** Sentence with one token blanked, lemma in brackets → typed form. */
@@ -38,6 +40,17 @@ export interface ProduceExercise extends ExerciseBase {
   gloss: string
 }
 
+/**
+ * Audio only → typed sentence. If the audio can't be played, the screen
+ * falls back to `gloss` as a text prompt, so a missing file degrades to a
+ * text-only card instead of breaking the session (M5).
+ */
+export interface ListenExercise extends ExerciseBase {
+  kind: 'listen'
+  audio: string
+  gloss: string
+}
+
 /** Lemma + target features ("māja, locative singular") → typed form. */
 export interface InflectExercise extends ExerciseBase {
   kind: 'inflect'
@@ -47,7 +60,8 @@ export interface InflectExercise extends ExerciseBase {
   formLabel: string
 }
 
-export type Exercise = ClozeExercise | RecognizeExercise | ProduceExercise | InflectExercise
+export type Exercise =
+  ClozeExercise | RecognizeExercise | ProduceExercise | ListenExercise | InflectExercise
 
 export interface ExerciseContent {
   sentenceById: ReadonlyMap<string, Sentence>
@@ -122,7 +136,11 @@ function recognizeChoices(cardId: string, sentence: Sentence, all: Iterable<Sent
 export function buildExercise(card: CardSpec, content: ExerciseContent): Exercise | null {
   const sentence = content.sentenceById.get(card.sentenceId)
   if (!sentence) return null
-  const base = { cardId: card.id, feature: card.feature }
+  const base = {
+    cardId: card.id,
+    feature: card.feature,
+    ...(sentence.audio && card.kind !== 'inflect' ? { audio: sentence.audio } : {}),
+  }
 
   switch (card.kind) {
     case 'cloze': {
@@ -155,6 +173,17 @@ export function buildExercise(card: CardSpec, content: ExerciseContent): Exercis
         ...base,
         kind: 'produce',
         check: 'sentence',
+        gloss: sentence.gloss,
+        expected: sentence.text,
+      }
+
+    case 'listen':
+      if (!sentence.audio) return null
+      return {
+        ...base,
+        kind: 'listen',
+        check: 'sentence',
+        audio: sentence.audio,
         gloss: sentence.gloss,
         expected: sentence.text,
       }

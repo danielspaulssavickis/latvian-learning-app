@@ -89,6 +89,24 @@ describe('buildExercise — other kinds', () => {
     })
   })
 
+  it('listen: the audio file and the sentence as the answer; null once the audio is gone', () => {
+    const withAudio = { ...SNT_1, audio: 'audio/snt_0001.mp3' }
+    const content = { ...all, sentenceById: new Map([[withAudio.id, withAudio]]) }
+    const [listen] = generateAllCards([withAudio], lexemes, grammar).filter(
+      (c) => c.kind === 'listen',
+    )
+    expect(buildExercise(listen, content)).toEqual({
+      kind: 'listen',
+      check: 'sentence',
+      cardId: 'listen:snt_0001',
+      feature: 'skill:listen',
+      audio: 'audio/snt_0001.mp3',
+      gloss: 'I live in Riga.',
+      expected: 'Es dzīvoju Rīgā.',
+    })
+    expect(buildExercise(listen, all)).toBeNull()
+  })
+
   it('inflect: lemma and target form in, the generated form out', () => {
     expect(buildExercise(card('inflect:lex_es@dat.sg'), all)).toEqual({
       kind: 'inflect',

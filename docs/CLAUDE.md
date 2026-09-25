@@ -104,6 +104,6 @@ tested directly. If a piece of logic needs a component to test, it is in the wro
 
 ## Out of scope (do not build these unprompted)
 
-Accounts, sync, a backend, a mobile app, social features, gamified streaks,
-AI-generated content at runtime, or a paid tier. If you think one is needed,
+Accounts, sync, a backend, a native mobile app (it's an installable PWA — ADR-013),
+social features, gamified streaks, AI-generated content at runtime, or a paid tier. If you think one is needed,
 say so and wait.

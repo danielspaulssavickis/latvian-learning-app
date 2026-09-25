@@ -11,6 +11,7 @@ describe('featureLabel', () => {
     ['mood:debitive', 'debitive (must / have to)'],
     ['declension:4', '4th declension'],
     ['conjugation:2', '2nd conjugation'],
+    ['skill:produce', 'writing sentences (produce)'],
     ['something:else', 'something:else'],
   ])('%s → %s', (feature, label) => {
     expect(featureLabel(feature)).toBe(label)

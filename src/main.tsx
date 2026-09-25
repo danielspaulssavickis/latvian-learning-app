@@ -33,4 +33,22 @@ async function main() {
   }
 }
 
+/**
+ * Production only (ADR-013): the service worker makes the installed app work
+ * offline, and persistent storage asks the browser not to evict IndexedDB
+ * (review history) under storage pressure. Neither is fatal if refused.
+ */
+function registerOfflineSupport() {
+  if (!import.meta.env.PROD) return
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch((error: unknown) => {
+        console.warn('Service worker registration failed:', error)
+      })
+    })
+  }
+  void navigator.storage?.persist?.().catch(() => false)
+}
+
+registerOfflineSupport()
 void main()

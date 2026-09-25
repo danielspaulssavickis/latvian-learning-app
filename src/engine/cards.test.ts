@@ -109,6 +109,18 @@ describe('generateAllCards', () => {
     expect(ids.filter((id) => id === 'inflect:lex_es@dat.sg')).toHaveLength(1)
   })
 
+  it('adds a listen card only for sentences with audio, last in the sentence', () => {
+    const withAudio = { ...SNT_1, audio: 'audio/snt_0001.mp3' }
+    const ids = generateAllCards([withAudio, SNT_3], lexemes, grammar).map((c) => c.id)
+    expect(ids.slice(0, 4)).toEqual([
+      'recognize:snt_0001',
+      'cloze:snt_0001#2',
+      'produce:snt_0001',
+      'listen:snt_0001',
+    ])
+    expect(ids).not.toContain('listen:snt_0003')
+  })
+
   it('skips an inflect card whose generated form does not match the sentence', () => {
     const wrongTable = new Map(lexemes)
     wrongTable.set('lex_es', { ...lexemes.get('lex_es')!, irregular: { 'dat.sg': 'mani' } })

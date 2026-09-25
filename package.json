@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && tsx scripts/check-dist.ts",
+    "build": "tsc -b && vite build && tsx scripts/build-sw.ts && tsx scripts/check-dist.ts",
     "preview": "vite preview",
     "test": "vitest run",
     "typecheck": "tsc -b",

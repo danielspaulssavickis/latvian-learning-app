@@ -73,11 +73,21 @@ failed ten times in a row.
 
 ## M5 — Audio + polish
 
-- [ ] Audio playback for sentences that have a file; graceful absence otherwise
-- [ ] `listen` exercise kind
-- [ ] Responsive layout, works on a phone
-- [ ] Deploy (static host), basic error boundary
-- [ ] Decide and document the audio source (see ADR-005 open question)
+- [x] Audio playback for sentences that have a file; graceful absence otherwise
+- [x] `listen` exercise kind (falls back to a text prompt if the file is missing)
+- [x] Responsive layout, works on a phone (mobile-first, 16px inputs, safe areas)
+- [x] Installable PWA (ADR-013): manifest + icons, iOS meta tags, service worker
+      precaching the build — offline reload verified in Chromium
+- [ ] Install test on an actual iPhone (add to home screen, fullscreen, offline
+      session) — **yours**; needs a deployed HTTPS URL
+- [x] IndexedDB eviction risk on iOS documented with a mitigation path
+      (ADR-013): persistent-storage request + weekly export reminder built
+- [x] Deploy (static host): `.github/workflows/deploy.yml` → GitHub Pages,
+      manual trigger only; basic error boundary
+- [ ] First actual deploy — **yours**: enable Pages (Source: GitHub Actions),
+      then run the workflow
+- [x] Decide and document the audio source (ADR-005: human recordings; no TTS
+      until its licence is checked)
 
 **Done when:** deployed, usable on my phone, and a missing audio file degrades to
 a text-only card instead of breaking the session.
@@ -87,6 +97,13 @@ a text-only card instead of breaking the session.
 ## Session log
 
 <!-- newest first, one line each: date — what landed — what to pick up next -->
+2026-09-25 — M5: audio (AudioPlayer; missing file → hidden button / text
+fallback, `content:check` warns), `listen` cards for sentences with audio,
+PWA (manifest, icons, iOS meta, generated service worker; offline reload
+checked against `vite preview`), error boundary, CI workflow on every push /
+PR, manual GitHub Pages deploy workflow, ADR-005 (audio source) and ADR-013
+(PWA + iOS storage risk — applies the "Ready to paste" prompt in
+docs/PROMPTS.md). Left for you: iPhone install test, first deploy.
 2026-09-25 — M4 (Session 5): `featureRetention` (pure; the "ten failures in a
 row" case is a test), recognize / produce / inflect cards and screens,
 sibling burying (one new card per sentence per day — found by driving the

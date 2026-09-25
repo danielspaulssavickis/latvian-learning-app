@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { checkOptionsFor, type Exercise } from '../engine/exercise'
 import type { Answer } from '../engine/reviewSession'
 import { AnswerInput } from './AnswerInput'
+import { AudioPlayer } from './AudioPlayer'
 import { DiacriticRow } from './DiacriticRow'
 import { Feedback } from './Feedback'
 
@@ -77,6 +78,9 @@ export function CardView({ exercise, answer, onSubmit, onNext }: Props) {
 
       {answer ? (
         <div className="space-y-4">
+          {exercise.audio && exercise.kind !== 'listen' && (
+            <AudioPlayer src={exercise.audio} label="Hear the sentence" />
+          )}
           {exercise.kind !== 'recognize' && (
             <Feedback answer={answer} options={checkOptionsFor(exercise)} />
           )}
@@ -193,6 +197,9 @@ function Prompt({ exercise, answer, input, onChoose }: PromptProps) {
         </div>
       )
 
+    case 'listen':
+      return <ListenPrompt exercise={exercise} answer={answer} input={input} />
+
     case 'recognize':
       return (
         <div>
@@ -229,6 +236,47 @@ function Prompt({ exercise, answer, input, onChoose }: PromptProps) {
         </div>
       )
   }
+}
+
+function ListenPrompt({
+  exercise,
+  answer,
+  input,
+}: {
+  exercise: Extract<Exercise, { kind: 'listen' }>
+  answer: Answer | null
+  input: PromptProps['input']
+}) {
+  const [unavailable, setUnavailable] = useState(false)
+  return (
+    <div>
+      <Instruction>{unavailable ? 'Say it in Latvian' : 'Type what you hear'}</Instruction>
+      {unavailable ? (
+        <>
+          <p role="status" className="mb-2 text-sm text-slate-500 dark:text-slate-400">
+            Audio unavailable — answer from the translation instead.
+          </p>
+          <p className="text-2xl">{exercise.gloss}</p>
+        </>
+      ) : (
+        <AudioPlayer
+          src={exercise.audio}
+          autoPlay={!answer}
+          label={answer ? 'Hear it again' : 'Play'}
+          onUnavailable={() => setUnavailable(true)}
+        />
+      )}
+      <div className="mt-4">
+        {answer ? (
+          <p className={`text-2xl font-semibold ${RESULT_COLOR[answer.result]}`} lang="lv">
+            {exercise.expected}
+          </p>
+        ) : (
+          input('block', unavailable ? `Latvian for: ${exercise.gloss}` : 'What you heard')
+        )}
+      </div>
+    </div>
+  )
 }
 
 function Instruction({ children }: { children: React.ReactNode }) {
