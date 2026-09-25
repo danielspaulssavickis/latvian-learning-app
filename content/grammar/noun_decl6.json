@@ -1,0 +1,32 @@
+{
+  "kind": "noun-endings",
+  "id": "noun_decl6",
+  "declension": 6,
+  "gender": "f",
+  "lemmaEndings": ["s"],
+  "endings": {
+    "sg": {
+      "nom": "s",
+      "gen": "s",
+      "dat": "ij",
+      "acc": "i",
+      "ins": "i",
+      "loc": "ī"
+    },
+    "pl": {
+      "nom": "is",
+      "gen": "u",
+      "dat": "īm",
+      "acc": "is",
+      "ins": "īm",
+      "loc": "īs",
+      "voc": "is"
+    }
+  },
+  "notes": [
+    "Feminine, lemma in -s (sirds, zivs). gen.pl alternates the stem consonant (siržu, zivju). Known exceptions without alternation (acs → acu, auss → ausu) go in the lexeme's irregular map.",
+    "voc.sg is deliberately absent (a gap): the singular vocative has competing forms and is mostly out of scope (SPEC.md non-goals); see content/_needed.json."
+  ],
+  "review": "draft",
+  "source": "generated"
+}

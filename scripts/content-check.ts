@@ -30,6 +30,16 @@ const tree = {
 
 const result = checkContent(tree)
 
+if (result.warnings.length > 0) {
+  console.warn(
+    `content:check: ${result.warnings.length} warning(s) — gaps in the ending tables, not failures:\n`,
+  )
+  for (const warning of result.warnings) {
+    console.warn(`  ${warning.file}\n    ${warning.message}`)
+  }
+  console.warn('')
+}
+
 if (result.ok) {
   const fileCount = tree.lexemes.length + tree.sentences.length + tree.grammar.length
   console.log(`content:check: ${fileCount} file(s) valid.`)

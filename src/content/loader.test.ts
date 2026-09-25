@@ -89,6 +89,31 @@ describe('loadContent', () => {
     expect(content.sentencesByFeature.get('case:loc')?.map((s) => s.id)).toEqual(['snt_0001'])
   })
 
+  it('builds the grammar from content/grammar files', () => {
+    const content = loadContent({
+      lexemes: {},
+      sentences: {},
+      grammar: {
+        'content/grammar/noun_decl4.json': {
+          kind: 'noun-endings',
+          id: 'noun_decl4',
+          declension: 4,
+          gender: 'f',
+          lemmaEndings: ['a'],
+          endings: { sg: { gen: 'as' }, pl: {} },
+        },
+        'content/grammar/alternations.json': {
+          kind: 'alternations',
+          id: 'alternations',
+          appliesTo: [],
+          rules: [{ from: 'l', to: 'ļ' }],
+        },
+      },
+    })
+    expect(content.grammar.nounTables.map((t) => t.id)).toEqual(['noun_decl4'])
+    expect(content.grammar.alternations?.id).toBe('alternations')
+  })
+
   it('throws one aggregated, descriptive error when content is invalid', () => {
     expect(() =>
       loadContent({

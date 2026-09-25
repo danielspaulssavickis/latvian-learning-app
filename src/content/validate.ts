@@ -1,4 +1,13 @@
-import { grammarTableSchema, lexemeSchema, makeSentenceSchema, type Sentence } from './schemas.js'
+import { buildGrammar } from '../engine/inflect.js'
+import { checkRoundTrip } from './roundTrip.js'
+import {
+  grammarFileSchema,
+  lexemeSchema,
+  makeSentenceSchema,
+  type GrammarFile,
+  type Lexeme,
+  type Sentence,
+} from './schemas.js'
 
 export interface ContentFile {
   path: string
@@ -19,9 +28,14 @@ export interface ContentError {
 export interface CheckResult {
   ok: boolean
   errors: ContentError[]
+  /** Reported but not failing: round-trip gaps where the engine can't produce a form yet. */
+  warnings: ContentError[]
 }
 
-function formatIssues(file: string, issues: { path: PropertyKey[]; message: string }[]): ContentError[] {
+function formatIssues(
+  file: string,
+  issues: { path: PropertyKey[]; message: string }[],
+): ContentError[] {
   return issues.map((issue) => ({
     file,
     message: issue.path.length > 0 ? `${issue.path.join('.')}: ${issue.message}` : issue.message,
@@ -37,39 +51,95 @@ function collectLexemeIds(lexemes: ContentFile[]): Set<string> {
   return ids
 }
 
+/** Cross-file grammar rules a single file's schema can't express. */
+function checkGrammarFiles(files: { path: string; file: GrammarFile }[]): ContentError[] {
+  const errors: ContentError[] = []
+  const tableOwner = new Map<string, string>()
+  const alternationFiles: string[] = []
+
+  for (const { path, file } of files) {
+    if (file.kind === 'alternations') {
+      alternationFiles.push(path)
+      continue
+    }
+    const slot = `declension ${file.declension}, gender ${file.gender ?? 'any'}`
+    const owner = tableOwner.get(slot)
+    if (owner) {
+      errors.push({ file: path, message: `duplicate ending table for ${slot} (also in ${owner})` })
+    } else {
+      tableOwner.set(slot, path)
+    }
+  }
+  for (const path of alternationFiles.slice(1)) {
+    errors.push({
+      file: path,
+      message: `only one alternations file is allowed (already have ${alternationFiles[0]})`,
+    })
+  }
+  return errors
+}
+
 /**
  * Validates a whole content tree (already-parsed JSON, keyed by file path)
  * against the Zod schemas, including the cross-file lexeme-reference check
  * that a single file's schema can't express on its own. Shared by
  * `scripts/content-check.ts` and `scripts/content-approve.ts` so both tools
  * report the same errors the same way.
+ *
+ * Once every file is individually valid, it also runs the round-trip
+ * annotation check (CLAUDE.md rule 6): a mismatch is an error, a gap in the
+ * ending tables is a warning.
  */
 export function checkContent(tree: ContentTree): CheckResult {
   const errors: ContentError[] = []
+  const warnings: ContentError[] = []
   const lexemeIds = collectLexemeIds(tree.lexemes)
   const sentenceSchema = makeSentenceSchema(lexemeIds)
 
+  const lexemeById = new Map<string, Lexeme>()
   for (const { path, data } of tree.lexemes) {
     const result = lexemeSchema.safeParse(data)
     if (!result.success) errors.push(...formatIssues(path, result.error.issues))
+    else lexemeById.set(result.data.id, result.data)
   }
 
+  const grammarFiles: { path: string; file: GrammarFile }[] = []
   for (const { path, data } of tree.grammar) {
-    const result = grammarTableSchema.safeParse(data)
+    const result = grammarFileSchema.safeParse(data)
     if (!result.success) errors.push(...formatIssues(path, result.error.issues))
+    else grammarFiles.push({ path, file: result.data })
   }
+  errors.push(...checkGrammarFiles(grammarFiles))
 
+  const sentences: { path: string; sentence: Sentence }[] = []
   for (const { path, data } of tree.sentences) {
     const result = sentenceSchema.safeParse(data)
     if (!result.success) errors.push(...formatIssues(path, result.error.issues))
+    else sentences.push({ path, sentence: result.data })
   }
 
-  return { ok: errors.length === 0, errors }
+  if (errors.length === 0) {
+    const pathById = new Map(sentences.map(({ path, sentence }) => [sentence.id, path]))
+    const grammar = buildGrammar(grammarFiles.map(({ file }) => file))
+    const findings = checkRoundTrip(
+      sentences.map(({ sentence }) => sentence),
+      lexemeById,
+      grammar,
+    )
+    for (const finding of findings) {
+      const entry = {
+        file: pathById.get(finding.sentenceId) ?? finding.sentenceId,
+        message: finding.message,
+      }
+      if (finding.kind === 'mismatch') errors.push(entry)
+      else warnings.push(entry)
+    }
+  }
+
+  return { ok: errors.length === 0, errors, warnings }
 }
 
-export type ApproveResult =
-  | { ok: true; sentence: Sentence }
-  | { ok: false; errors: ContentError[] }
+export type ApproveResult = { ok: true; sentence: Sentence } | { ok: false; errors: ContentError[] }
 
 /**
  * The pure core of `npm run content:approve` (ADR-006): validates a draft
@@ -120,4 +190,22 @@ export function buildApprovedSentences(
     if (result.ok) return { id, ok: true, sentence: result.sentence }
     return { id, ok: false, errors: result.errors, raw }
   })
+}
+
+export type ApproveGrammarResult =
+  { ok: true; file: GrammarFile } | { ok: false; errors: ContentError[] }
+
+/**
+ * The grammar-file form of `content:approve` (ADR-008): validates a grammar
+ * file (ending table or alternation rules) and, only if it passes, returns it
+ * with `review: "approved"` and `reviewedAt` set. Unlike sentences, grammar
+ * files are approved in place — the `review` field, not the directory, is
+ * the gate `inflect()` honors.
+ */
+export function buildApprovedGrammarFile(raw: unknown, now: Date): ApproveGrammarResult {
+  const result = grammarFileSchema.safeParse(raw)
+  if (!result.success) {
+    return { ok: false, errors: formatIssues('<grammar>', result.error.issues) }
+  }
+  return { ok: true, file: { ...result.data, review: 'approved', reviewedAt: now.toISOString() } }
 }

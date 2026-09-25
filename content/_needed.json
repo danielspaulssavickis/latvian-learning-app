@@ -164,5 +164,41 @@
     "type": "grammar",
     "description": "The schema now accepts `mood: \"debitive\"` as a token feature (added 2026-09-19 to unblock batch_001 snt_0005's \"jāstrādā\"), but how mood combines with tense (e.g. present debitive \"jāstrādā\" vs. past debitive \"bija jāstrādā\") isn't designed yet. Needs a decision before src/engine/inflect.ts handles verbs.",
     "reason": "Provisional schema addition, not a verified linguistic model — flagged in docs/SPEC.md and src/content/schemas.ts."
+  },
+  {
+    "type": "grammar",
+    "id": "review:content/grammar",
+    "description": "All seven files in content/grammar/ (noun_decl1..6.json, alternations.json) are Claude drafts (review: \"draft\", source: \"generated\"). Please check each cell, delete any you're unsure of (a gap is fine), then run `npm run content:approve -- content/grammar/<file>.json` per file. The expected paradigms in src/engine/__fixtures__/nouns.ts (5-6 nouns per declension) are the quickest way to review: if a fixture paradigm is right, the table cells it exercises are right.",
+    "reason": "ADR-008: until approved, inflect() marks every form from these files confidence: \"unverified\"."
+  },
+  {
+    "type": "grammar",
+    "id": "voc.sg",
+    "description": "Singular vocative is a gap in every noun table. Declension 1 has competing forms (draugs! / draug!), personal names often drop the ending (Pēter!, Ann!), and SPEC.md puts the vocative mostly out of scope. Decide: leave as gaps, fill with one canonical ending per declension, or handle only via irregular maps on the few lexemes that need it.",
+    "reason": "Deliberately not guessed in M2."
+  },
+  {
+    "type": "grammar",
+    "id": "noun_decl4_m, noun_decl5_m",
+    "description": "Masculine nouns of declension 4 (puika) and declension 5 (bende, and male surnames in -e like Zīle) need their own tables: at least dat.sg differs (-am / -em instead of -ai / -ei). Until they exist, such lexemes report no-table rather than a wrong form. Please supply the full masculine paradigms.",
+    "reason": "The existing declension 4/5 tables are gender: \"f\" on purpose."
+  },
+  {
+    "type": "grammar",
+    "id": "alternations:st",
+    "description": "alternations.json has an identity rule st → st (so valsts → valstu, not valsšu). Confirmed for declension 6; please confirm whether declension 2 (-stis nouns) and declension 5 (-ste nouns, e.g. kaste) also keep st unchanged in their alternation slots, or alternate (st → š?).",
+    "reason": "Applied to all declensions today because it is a single rule list."
+  },
+  {
+    "type": "grammar",
+    "id": "alternations:f,ll,nn",
+    "description": "No rules exist for f → fj, ll → ļļ, nn → ņņ — stems ending in these are left unchanged. Please confirm whether they alternate and add the rules if so.",
+    "reason": "Left out rather than guessed."
+  },
+  {
+    "type": "grammar",
+    "id": "exceptions-need-irregular",
+    "description": "Known words that skip or change the regular pattern must carry an `irregular` map on their lexeme once they're authored: declension 2 nouns in -ns/-ss with gen.sg in -s (akmens, ūdens, rudens, mēness, zibens), declension 2 nouns without alternation (tētis → tēta, viesis → viesa), declension 6 nouns without alternation in gen.pl (acs → acu, auss → ausu, zoss → zosu, balss → balsu). This list is a reminder, not complete.",
+    "reason": "The round-trip check will flag these as mismatches if the irregular map is missing — that's the intended signal."
   }
 ]

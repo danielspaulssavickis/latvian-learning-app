@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { buildApprovedSentence, buildApprovedSentences, checkContent } from './validate'
+import {
+  buildApprovedGrammarFile,
+  buildApprovedSentence,
+  buildApprovedSentences,
+  checkContent,
+} from './validate'
 
 function goodLexeme() {
   return {
@@ -45,12 +50,16 @@ function goodSentence(overrides: { id?: string } = {}): {
   }
 }
 
-function goodGrammarTable() {
+function goodGrammarTable(overrides: Record<string, unknown> = {}) {
   return {
-    id: 'gram_test_decl4',
-    pos: 'noun' as const,
-    class: 4,
-    endings: { sg: { nom: '-s', gen: '-a' } },
+    kind: 'noun-endings' as const,
+    id: 'noun_test_decl4',
+    declension: 4 as const,
+    gender: 'f' as const,
+    lemmaEndings: ['vārds'],
+    endings: { sg: { gen: 'vārda', loc: 'vārdā' }, pl: {} },
+    review: 'draft' as const,
+    ...overrides,
   }
 }
 
@@ -61,7 +70,7 @@ describe('checkContent', () => {
       sentences: [{ path: 'content/sentences/snt_0001.json', data: goodSentence() }],
       grammar: [{ path: 'content/grammar/decl4.json', data: goodGrammarTable() }],
     })
-    expect(result).toEqual({ ok: true, errors: [] })
+    expect(result).toEqual({ ok: true, errors: [], warnings: [] })
   })
 
   it('reports the file path and message for a sentence referencing an unknown lexeme', () => {
@@ -119,6 +128,94 @@ describe('checkContent', () => {
     expect(result.errors).toContainEqual(
       expect.objectContaining({ file: 'content/lexemes/bad.json' }),
     )
+  })
+})
+
+describe('checkContent — grammar files', () => {
+  it('rejects two ending tables for the same declension and gender', () => {
+    const result = checkContent({
+      lexemes: [],
+      sentences: [],
+      grammar: [
+        { path: 'content/grammar/a.json', data: goodGrammarTable() },
+        { path: 'content/grammar/b.json', data: goodGrammarTable({ id: 'noun_other' }) },
+      ],
+    })
+    expect(result.ok).toBe(false)
+    expect(result.errors).toContainEqual({
+      file: 'content/grammar/b.json',
+      message: expect.stringContaining('duplicate ending table'),
+    })
+  })
+
+  it('rejects a grammar file with an unknown kind', () => {
+    const result = checkContent({
+      lexemes: [],
+      sentences: [],
+      grammar: [{ path: 'content/grammar/x.json', data: { kind: 'verb-endings', id: 'x' } }],
+    })
+    expect(result.ok).toBe(false)
+    expect(result.errors[0].file).toBe('content/grammar/x.json')
+  })
+})
+
+describe('checkContent — round-trip annotation check', () => {
+  function tree(features: Record<string, unknown>, surface: string) {
+    const sentence = goodSentence()
+    sentence.tokens[0] = { ...sentence.tokens[0], surface, features }
+    return {
+      lexemes: [{ path: 'content/lexemes/test_noun.json', data: goodLexeme() }],
+      sentences: [{ path: 'content/sentences/snt_0001.json', data: sentence }],
+      grammar: [{ path: 'content/grammar/decl4.json', data: goodGrammarTable() }],
+    }
+  }
+
+  it('passes a token that round-trips', () => {
+    const result = checkContent(tree({ case: 'loc', number: 'sg' }, 'Testvārdā'))
+    expect(result).toEqual({ ok: true, errors: [], warnings: [] })
+  })
+
+  it('fails with the sentence file, id, token index, expected and actual on a mismatch', () => {
+    const result = checkContent(tree({ case: 'loc', number: 'sg' }, 'Testvārda'))
+    expect(result.ok).toBe(false)
+    expect(result.errors).toEqual([
+      {
+        file: 'content/sentences/snt_0001.json',
+        message: expect.stringMatching(/snt_0001 token 0 .*expected "Testvārda", got "testvārdā"/),
+      },
+    ])
+  })
+
+  it('warns, but does not fail, on a gap in the ending table', () => {
+    const result = checkContent(tree({ case: 'dat', number: 'sg' }, 'Testvārdai'))
+    expect(result.ok).toBe(true)
+    expect(result.warnings).toEqual([
+      { file: 'content/sentences/snt_0001.json', message: expect.stringContaining('dat.sg') },
+    ])
+  })
+
+  it('does not run until every file is individually valid', () => {
+    const broken = tree({ case: 'loc', number: 'sg' }, 'Testvārda')
+    broken.lexemes.push({ path: 'content/lexemes/bad.json', data: { id: 'lex_bad' } as never })
+    const result = checkContent(broken)
+    expect(result.errors.every((e) => e.file === 'content/lexemes/bad.json')).toBe(true)
+  })
+})
+
+describe('buildApprovedGrammarFile', () => {
+  const now = new Date('2026-09-25T00:00:00.000Z')
+
+  it('sets review and reviewedAt on a valid grammar file', () => {
+    const result = buildApprovedGrammarFile(goodGrammarTable(), now)
+    expect(result).toMatchObject({
+      ok: true,
+      file: { review: 'approved', reviewedAt: now.toISOString(), id: 'noun_test_decl4' },
+    })
+  })
+
+  it('refuses an invalid grammar file', () => {
+    const result = buildApprovedGrammarFile({ ...goodGrammarTable(), declension: 9 }, now)
+    expect(result.ok).toBe(false)
   })
 })
 

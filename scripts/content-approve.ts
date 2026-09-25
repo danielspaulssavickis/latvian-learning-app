@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 import { existsSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
-import { join } from 'node:path'
-import { buildApprovedSentence, buildApprovedSentences } from '../src/content/validate.js'
+import { join, relative, sep } from 'node:path'
+import {
+  buildApprovedGrammarFile,
+  buildApprovedSentence,
+  buildApprovedSentences,
+} from '../src/content/validate.js'
 import type { Sentence } from '../src/content/schemas.js'
 
 const CONTENT_ROOT = join(process.cwd(), 'content')
@@ -9,6 +13,7 @@ const draftPath = process.argv[2]
 
 if (!draftPath) {
   console.error('Usage: npm run content:approve -- content/drafts/<file>.json')
+  console.error('       npm run content:approve -- content/grammar/<file>.json')
   process.exit(1)
 }
 
@@ -16,6 +21,24 @@ const absoluteDraftPath = join(process.cwd(), draftPath)
 if (!existsSync(absoluteDraftPath)) {
   console.error(`content:approve: no such file: ${draftPath}`)
   process.exit(1)
+}
+
+// Grammar files (ADR-008) are approved in place: the `review` field, not the
+// directory, is what inflect() honors. Sentences move out of drafts/ instead.
+const grammarDir = join(CONTENT_ROOT, 'grammar')
+if (relative(grammarDir, absoluteDraftPath).split(sep)[0] !== '..') {
+  const result = buildApprovedGrammarFile(
+    JSON.parse(readFileSync(absoluteDraftPath, 'utf-8')),
+    new Date(),
+  )
+  if (!result.ok) {
+    console.error(`content:approve: ${draftPath} failed validation, no files changed.\n`)
+    for (const error of result.errors) console.error(`    ${error.message}`)
+    process.exit(1)
+  }
+  writeFileSync(absoluteDraftPath, `${JSON.stringify(result.file, null, 2)}\n`)
+  console.log(`content:approve: approved grammar file ${result.file.id} in place (${draftPath}).`)
+  process.exit(0)
 }
 
 function loadLexemeIds(): Set<string> {
@@ -40,7 +63,9 @@ function writeApproved(sentence: Sentence): { ok: true } | { ok: false; message:
     }
   }
   writeFileSync(destination, `${JSON.stringify(sentence, null, 2)}\n`)
-  console.log(`content:approve: approved ${sentence.id} -> ${destination.slice(process.cwd().length + 1)}`)
+  console.log(
+    `content:approve: approved ${sentence.id} -> ${destination.slice(process.cwd().length + 1)}`,
+  )
   return { ok: true }
 }
 

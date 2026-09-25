@@ -1,0 +1,100 @@
+{
+  "kind": "alternations",
+  "id": "alternations",
+  "appliesTo": [
+    {
+      "declension": 2,
+      "forms": ["gen.sg", "nom.pl", "gen.pl", "dat.pl", "acc.pl", "ins.pl", "loc.pl", "voc.pl"]
+    },
+    {
+      "declension": 5,
+      "forms": ["gen.pl"]
+    },
+    {
+      "declension": 6,
+      "forms": ["gen.pl"]
+    }
+  ],
+  "rules": [
+    {
+      "from": "b",
+      "to": "bj"
+    },
+    {
+      "from": "m",
+      "to": "mj"
+    },
+    {
+      "from": "p",
+      "to": "pj"
+    },
+    {
+      "from": "v",
+      "to": "vj"
+    },
+    {
+      "from": "t",
+      "to": "š"
+    },
+    {
+      "from": "d",
+      "to": "ž"
+    },
+    {
+      "from": "s",
+      "to": "š"
+    },
+    {
+      "from": "z",
+      "to": "ž"
+    },
+    {
+      "from": "c",
+      "to": "č"
+    },
+    {
+      "from": "dz",
+      "to": "dž"
+    },
+    {
+      "from": "n",
+      "to": "ņ"
+    },
+    {
+      "from": "l",
+      "to": "ļ"
+    },
+    {
+      "from": "sn",
+      "to": "šņ"
+    },
+    {
+      "from": "zn",
+      "to": "žņ"
+    },
+    {
+      "from": "sl",
+      "to": "šļ"
+    },
+    {
+      "from": "zl",
+      "to": "žļ"
+    },
+    {
+      "from": "ln",
+      "to": "ļņ"
+    },
+    {
+      "from": "st",
+      "to": "st"
+    }
+  ],
+  "notes": [
+    "Rules rewrite the end of the stem, longest 'from' first; stems ending in any other letter (k, g, ķ, ģ, r, j, a vowel) are left unchanged.",
+    "'st' → 'st' is an identity rule: it blocks 't' → 'š' so that valsts → valstu. Confirmed for declension 6; unconfirmed for declensions 2 and 5 — see content/_needed.json.",
+    "Deliberately missing (unsure): f → fj, ll → ļļ, nn → ņņ. See content/_needed.json.",
+    "Per-word exceptions (tētis → tēta, acs → acu, viesis → viesa) belong in the lexeme's irregular map, not here."
+  ],
+  "review": "draft",
+  "source": "generated"
+}

@@ -8,6 +8,12 @@ describe('content (real app adapter)', () => {
     expect(content.sentencesByLevel.size).toBe(0)
   })
 
+  it('loads the ending table for every declension class, plus the alternation rules', () => {
+    const declensions = content.grammar.nounTables.map((t) => t.declension).sort()
+    expect(declensions).toEqual([1, 2, 3, 4, 5, 6])
+    expect(content.grammar.alternations).not.toBeNull()
+  })
+
   it('never globs content/drafts (ADR-006: drafts must not reach the loader)', () => {
     expect(indexSource).toContain("'../../content/sentences/*.json'")
     expect(indexSource).not.toContain("'../../content/drafts/")

@@ -1,4 +1,11 @@
-import { lexemeSchema, makeSentenceSchema, type Lexeme, type Sentence } from './schemas.js'
+import { buildGrammar, type Grammar } from '../engine/inflect.js'
+import {
+  grammarFileSchema,
+  lexemeSchema,
+  makeSentenceSchema,
+  type Lexeme,
+  type Sentence,
+} from './schemas.js'
 import { checkContent, type ContentFile } from './validate.js'
 
 export interface ContentRecords {
@@ -13,6 +20,8 @@ export interface LoadedContent {
   sentencesByLevel: Map<Sentence['level'], Sentence[]>
   /** Keyed like "case:loc", built only from each sentence's drillable tokens. */
   sentencesByFeature: Map<string, Sentence[]>
+  /** Ending tables + alternation rules from content/grammar/, ready for `inflect()`. */
+  grammar: Grammar
 }
 
 function toContentFiles(records: Record<string, unknown>): ContentFile[] {
@@ -69,5 +78,7 @@ export function loadContent(records: ContentRecords): LoadedContent {
     }
   }
 
-  return { lexemeById, sentencesByLevel, sentencesByFeature }
+  const grammar = buildGrammar(tree.grammar.map(({ data }) => grammarFileSchema.parse(data)))
+
+  return { lexemeById, sentencesByLevel, sentencesByFeature, grammar }
 }

@@ -88,6 +88,36 @@ blanket authorship ban, is what protects the learner from wrong content.
 skipping `content:approve`; treating this as license to author lexemes or
 grammar-table endings, which have no review gate yet.
 
+*Amended by ADR-008:* grammar tables now have a review gate, so the
+grammar-table part of this "rules out" no longer applies. Lexemes still do.
+
+## ADR-008 — Grammar tables get a review gate; Claude may draft them
+**2026-09-25 · accepted**
+
+Files in `content/grammar/` (noun ending tables, `alternations.json`) carry the
+same `review`/`reviewedAt`/`source` fields as sentences. Claude may write them
+with `review: "draft"`. `npm run content:approve -- content/grammar/<file>.json`
+validates the file and sets `review: "approved"` + `reviewedAt` **in place** —
+grammar files don't move directories, because `inflect()` needs draft tables
+to run at all (tests, the round-trip check). The gate is the field instead:
+`inflect()` returns `confidence: "unverified"` for any form built from a table
+or alternation rule file that isn't approved, and `"verified"` only when every
+piece of data behind the form was human-reviewed (an `irregular` override, the
+lemma itself, or approved grammar files).
+
+*Why:* M2 needs ending tables to exist before the engine can be tested, and
+the Session 2 prompt asked Claude to populate the cells it's confident about
+and list the rest as gaps. Without a gate that contradicted ADR-007. A draft
+cell can't reach a learner today — cloze answers are the approved sentence's
+own surface form, not generated — and the `confidence` flag is the hook that
+keeps it that way once generated forms are used.
+
+*Rules out:* exercise generation (M3/M4 — the `inflect` exercise kind in
+particular) showing an `unverified` form as an expected answer; hand-editing
+`review` to `"approved"`; a missing cell being filled by a guess — a gap is
+reported by `inflect()` as `reason: "gap"` and by `content:check` as a warning.
+Lexemes remain human-only (ADR-004); this ADR does not cover them.
+
 ---
 
 ## Open questions
@@ -96,8 +126,15 @@ grammar-table endings, which have no review gate yet.
   service, or ship without audio until M5. Needs investigation into what Latvian
   TTS is available and under what licence before committing. Do not pick a
   provider without checking terms for redistributing generated audio.
-- **Declension class coverage.** Classes 5 and 6 are lower frequency. Decide
-  whether M2 must cover all six or can ship 1–4 and follow up.
+- ~~**Declension class coverage.**~~ *Resolved 2026-09-25:* M2 covers all six,
+  as draft tables (ADR-008). Masculine nouns of declensions 4 and 5 (puika,
+  bende) are not covered yet — see `content/_needed.json`.
+- **Diacritic-only differences that are a different form.** SPEC.md makes any
+  diacritic-only difference a near miss, but in Latvian some of those are a
+  different case: `galda` (gen.sg) vs `galdā` (loc.sg), `māja` vs `mājā`.
+  `checkAnswer` follows SPEC.md today (tested). Option for M3: when the given
+  answer is itself another form of the same lexeme, call it `wrong`. Decide
+  before the review screen goes live.
 - **Definiteness.** Adjective definite/indefinite endings are a real A2 topic but
   add a dimension to every adjective card. Decide before building adjective
   support whether it is in scope for v1.

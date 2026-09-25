@@ -16,7 +16,8 @@ npm run build        # production build
 npm run test         # Vitest, watch off in CI
 npm run typecheck    # tsc --noEmit
 npm run lint         # eslint
-npm run content:check # validate every file in content/ against the Zod schemas
+npm run content:check # validate every file in content/ against the Zod schemas + round-trip check
+npm run content:approve -- <path>  # human-only: approve a draft sentence file or a grammar file
 ```
 
 Run `npm run typecheck && npm run test && npm run content:check` before saying a task is done.
@@ -50,8 +51,11 @@ tested directly. If a piece of logic needs a component to test, it is in the wro
 1. **Draft sentences, never publish them yourself.** You may write candidate
    sentences into `content/drafts/*.json` — never directly into
    `content/sentences/`. A draft ships only after I run
-   `npm run content:approve` and it passes (ADR-006/ADR-007). Lexemes,
-   glosses, and inflected forms are still off-limits to author (ADR-004):
+   `npm run content:approve` and it passes (ADR-006/ADR-007). Grammar files
+   in `content/grammar/` may be drafted too, always with `review: "draft"`
+   (ADR-008) — list every cell you're unsure of in `content/_needed.json`
+   instead of filling it. Lexemes, glosses, and `irregular` forms are still
+   off-limits to author (ADR-004):
    case usage and verb government are exactly where a model produces
    plausible-looking errors, and wrong content teaches the user wrong
    Latvian. If one of those is missing, add a `TODO` entry to
@@ -73,7 +77,15 @@ tested directly. If a piece of logic needs a component to test, it is in the wro
 
 5. **Exercise generation is data-driven.** Inflected forms come from the tables in
    `content/grammar/`, applied by `src/engine/inflect.ts`. Never hardcode a form
-   inside a component.
+   inside a component. Never show a learner a form `inflect()` marks
+   `confidence: "unverified"` as the expected answer (ADR-008).
+
+6. **Annotations must round-trip.** Every annotated token whose part of speech
+   `inflect()` supports must be reproducible from its lexeme and features;
+   `content:check` fails otherwise, with sentence id, token index, expected and
+   actual. When `inflect()` gains a part of speech, the check covers it
+   automatically — expect new mismatches and sort tagging errors from table
+   errors rather than loosening the check.
 
 ## Working style
 

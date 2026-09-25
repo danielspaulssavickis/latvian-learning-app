@@ -1,0 +1,34 @@
+{
+  "kind": "noun-endings",
+  "id": "noun_decl2",
+  "declension": 2,
+  "gender": "m",
+  "lemmaEndings": ["is", "s"],
+  "endings": {
+    "sg": {
+      "nom": "is",
+      "gen": "a",
+      "dat": "im",
+      "acc": "i",
+      "ins": "i",
+      "loc": "ī"
+    },
+    "pl": {
+      "nom": "i",
+      "gen": "u",
+      "dat": "iem",
+      "acc": "us",
+      "ins": "iem",
+      "loc": "os",
+      "voc": "i"
+    }
+  },
+  "notes": [
+    "Masculine, lemma in -is (brālis) or -s (suns, akmens, ūdens). gen.sg and every plural form alternate the stem consonant (content/grammar/alternations.json).",
+    "Nouns in -ns/-ss like akmens, ūdens, rudens, mēness have gen.sg in -s: that goes in the lexeme's irregular map, not here.",
+    "Exceptions with no alternation (e.g. tētis → tēta) also go in irregular.",
+    "voc.sg is deliberately absent (a gap): the singular vocative has competing forms and is mostly out of scope (SPEC.md non-goals); see content/_needed.json."
+  ],
+  "review": "draft",
+  "source": "generated"
+}

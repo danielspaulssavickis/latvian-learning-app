@@ -1,0 +1,32 @@
+{
+  "kind": "noun-endings",
+  "id": "noun_decl5",
+  "declension": 5,
+  "gender": "f",
+  "lemmaEndings": ["e"],
+  "endings": {
+    "sg": {
+      "nom": "e",
+      "gen": "es",
+      "dat": "ei",
+      "acc": "i",
+      "ins": "i",
+      "loc": "ē"
+    },
+    "pl": {
+      "nom": "es",
+      "gen": "u",
+      "dat": "ēm",
+      "acc": "es",
+      "ins": "ēm",
+      "loc": "ēs",
+      "voc": "es"
+    }
+  },
+  "notes": [
+    "Lemma in -e. Written for feminine nouns (egle). gen.pl alternates the stem consonant (egļu, upju). Masculine declension-5 nouns (bende) are not covered and report no-table until they get their own table; see content/_needed.json.",
+    "voc.sg is deliberately absent (a gap): the singular vocative has competing forms and is mostly out of scope (SPEC.md non-goals); see content/_needed.json."
+  ],
+  "review": "draft",
+  "source": "generated"
+}

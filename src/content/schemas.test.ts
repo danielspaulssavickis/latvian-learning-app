@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { lexemeSchema, makeSentenceSchema, sentenceBaseSchema } from './schemas'
+import { grammarFileSchema, lexemeSchema, makeSentenceSchema, sentenceBaseSchema } from './schemas'
 
 const validLexemeIds = new Set(['lex_test_noun', 'lex_test_verb'])
 
@@ -69,6 +69,60 @@ describe('lexemeSchema', () => {
       tags: [],
     })
     expect(result.success).toBe(false)
+  })
+
+  const noun = {
+    id: 'lex_test_noun',
+    lemma: 'testvārds',
+    pos: 'noun',
+    gender: 'm',
+    declension: 1,
+    conjugation: null,
+    gloss: ['test word'],
+    tags: [],
+  }
+
+  it('accepts noun irregular overrides keyed by form key', () => {
+    const result = lexemeSchema.safeParse({ ...noun, irregular: { 'gen.sg': 'testvārds' } })
+    expect(result.success).toBe(true)
+  })
+
+  it('rejects a noun irregular key that is not a form key', () => {
+    const result = lexemeSchema.safeParse({ ...noun, irregular: { genitive: 'testvārds' } })
+    expect(result.success).toBe(false)
+    expect(result.error?.issues[0].message).toMatch(/"genitive" is not a noun form key/)
+  })
+})
+
+describe('grammarFileSchema', () => {
+  const table = {
+    kind: 'noun-endings',
+    id: 'noun_test',
+    declension: 1,
+    gender: 'm',
+    lemmaEndings: ['s'],
+    endings: { sg: { gen: 'a', voc: '' }, pl: { nom: 'i' } },
+  }
+
+  it('accepts a noun ending table, including a zero ending', () => {
+    expect(grammarFileSchema.safeParse(table).success).toBe(true)
+  })
+
+  it('rejects an ending table keyed by an unknown case', () => {
+    const bad = { ...table, endings: { sg: { genitive: 'a' }, pl: {} } }
+    expect(grammarFileSchema.safeParse(bad).success).toBe(false)
+  })
+
+  it('accepts an alternations file and rejects a bad form key in it', () => {
+    const alternations = {
+      kind: 'alternations',
+      id: 'alternations',
+      appliesTo: [{ declension: 2, forms: ['gen.sg', 'nom.pl'] }],
+      rules: [{ from: 'l', to: 'ļ' }],
+    }
+    expect(grammarFileSchema.safeParse(alternations).success).toBe(true)
+    const bad = { ...alternations, appliesTo: [{ declension: 2, forms: ['gen'] }] }
+    expect(grammarFileSchema.safeParse(bad).success).toBe(false)
   })
 })
 

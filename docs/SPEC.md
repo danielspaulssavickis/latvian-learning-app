@@ -32,16 +32,74 @@ All content lives in `content/` as JSON, validated by Zod schemas in
   gloss: ["house", "home"],
   tags: ["a1", "living"],
   irregular?: { [formKey: string]: string }   // overrides the generated form
+                                              // (nouns: formKey is "case.number", e.g. "gen.sg")
 }
 ```
 
 ### Grammar table — `content/grammar/*.json`
 
-Ending tables, keyed by class and form. `inflect(lexeme, features)` in
-`src/engine/inflect.ts` applies these, checks `irregular` first, and returns
-`{ form, confidence }`. Consonant alternation in the genitive (the
-palatalization that hits declensions 2 and 5) is handled by an explicit rule
-list in `content/grammar/alternations.json`, not by regex guessing.
+Two kinds of file, told apart by `kind`. One ending table per declension (and
+gender, where a declension splits by gender):
+
+```ts
+{
+  kind: "noun-endings",
+  id: "noun_decl4",
+  declension: 4,
+  gender: "f",                // or null: covers every gender in the declension
+  lemmaEndings: ["a"],        // stripped from the lemma to get the stem, longest first
+  endings: {
+    sg: { nom: "a", gen: "as", dat: "ai", acc: "u", ins: "u", loc: "ā" },
+    pl: { nom: "as", gen: "u", /* ... */ voc: "as" }
+  },
+  notes?: string[],
+  review?: "draft" | "approved", reviewedAt?, source?   // ADR-008, set by content:approve
+}
+```
+
+A missing cell is a **gap**: `inflect()` reports it, never guesses. The
+singular vocative is a gap in every table today (see `content/_needed.json`).
+
+Consonant alternation in the genitive (the palatalization that hits
+declension 2 in gen.sg and the whole plural, and declensions 5 and 6 in
+gen.pl) is an explicit rule list in `content/grammar/alternations.json`, not
+regex guessing:
+
+```ts
+{
+  kind: "alternations",
+  id: "alternations",
+  appliesTo: [{ declension: 5, forms: ["gen.pl"] }, /* ... */],
+  rules: [{ from: "l", to: "ļ" }, { from: "ln", to: "ļņ" }, { from: "st", to: "st" }, /* ... */],
+  review?, reviewedAt?, source?
+}
+```
+
+Rules rewrite the end of the stem, longest `from` first; an identity rule
+(`st` → `st`) blocks a shorter one (`t` → `š`). Per-word exceptions
+(`akmens` gen.sg `akmens`, `acs` gen.pl `acu`) go in the lexeme's `irregular`
+map, keyed by form key (`"gen.sg"`).
+
+### `inflect(lexeme, features, grammar)` — `src/engine/inflect.ts`
+
+Nouns only in M2. Returns either
+`{ ok: true, form, confidence: "verified" | "unverified", source }` or
+`{ ok: false, reason, message }` with `reason` one of `unsupported-pos`,
+`missing-features`, `no-declension`, `no-table`, `lemma-mismatch`, `gap`.
+Precedence: `irregular[formKey]` → nom.sg is the lemma → stem (alternated if
+listed) + table ending. `confidence` is `verified` only when every piece of
+data behind the form was human-reviewed (ADR-008); an `unverified` form must
+never be shown to a learner as the expected answer.
+
+### Round-trip annotation check (`content:check`)
+
+Every annotated token whose part of speech `inflect()` supports must be
+reproducible from its lexeme and features (capitalization ignored). A
+mismatch fails `content:check` with sentence id, token index, expected and
+actual, and says whether the generated form came from reviewed data (so the
+tagging is likely wrong) or from a draft table (so the table may be). A gap
+in the tables is a warning, not a failure. Tokens the engine can't inflect
+yet (non-nouns) are skipped.
 
 ### Sentence — `content/sentences/*.json`
 
@@ -115,6 +173,11 @@ reflex, which is the thing a declension chart cannot do.
   highlighting the missing macron or softened consonant. Feed `nearMiss` to FSRS
   as a "hard" grade, not as a failure.
 - Everything else → `wrong`.
+
+`diacriticDiff(expected, given)` returns the expected spelling split per
+letter with the wrong-diacritic letters marked, for the review screen; `null`
+unless the answer is a near miss. (Open question in DECISIONS.md: a
+diacritic-only difference that is itself another case, like `galda`/`galdā`.)
 
 Do not use edit distance for anything else. A one-letter difference in Latvian is
 usually a different case, not a typo, and forgiving it defeats the purpose.
