@@ -15,6 +15,10 @@ describe('renderServiceWorker', () => {
     expect(sw).toContain('caches.delete(key)')
   })
 
+  it('only refreshes the cached shell from an OK response for the app root', () => {
+    expect(sw).toContain('response.ok && (path === root')
+  })
+
   it('is valid JavaScript', () => {
     expect(() => new Function(sw)).not.toThrow()
   })

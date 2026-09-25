@@ -21,11 +21,20 @@ export function ReviewScreen() {
   const [state, dispatch] = useReducer(reviewReducer, initialReviewState)
   const [error, setError] = useState<string | null>(null)
 
+  // Re-plan once a minute while idle, so cards that fall due show up
+  // without a reload (the live query itself only reruns on database writes).
+  const [minute, setMinute] = useState(0)
+  useEffect(() => {
+    if (state.phase !== 'idle') return
+    const timer = window.setInterval(() => setMinute((m) => m + 1), 60_000)
+    return () => window.clearInterval(timer)
+  }, [state.phase])
+
   const plan = useLiveQuery(async () => {
     const now = clock()
     const settings = await getSettings(db)
     return loadSession(db, now, settings.dailyLimits, startOfLocalDay(now))
-  }, [db, clock])
+  }, [db, clock, minute])
 
   // Persist each new answer, in order. The ref survives re-renders (and
   // StrictMode's double effects) so no answer is recorded twice.
@@ -87,6 +96,11 @@ export function ReviewScreen() {
         <h2 className="text-2xl font-semibold">Review</h2>
         {plan === undefined ? (
           <p className="text-slate-500">Loading…</p>
+        ) : content.sentenceById.size === 0 ? (
+          <p className="text-slate-600 dark:text-slate-300">
+            No study material yet. Sentences appear here once they are approved — see{' '}
+            <code>content/README.md</code> for the review workflow.
+          </p>
         ) : empty ? (
           <p className="text-slate-600 dark:text-slate-300">
             Nothing due right now. Come back later — or raise the daily new-card limit in Settings.

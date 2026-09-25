@@ -60,6 +60,12 @@ describe('App', () => {
     expect(await screen.findByText(/new cards/)).toHaveTextContent('2 new cards')
   })
 
+  it('says so when there is no approved content at all', async () => {
+    render(<App content={fixtureContent([])} db={db} clock={clock} />)
+    expect(await screen.findByText(/No study material yet/)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Start session' })).toBeDisabled()
+  })
+
   it('shows the draft banner only in preview mode', async () => {
     renderApp(true)
     expect(screen.getByRole('note')).toHaveTextContent(/Draft preview/)

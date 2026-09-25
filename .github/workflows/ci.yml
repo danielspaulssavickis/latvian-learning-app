@@ -1,7 +1,10 @@
 name: CI
 
+# Pull requests get checked; pushes to main too. (A plain `push:` would run
+# every PR commit twice.)
 on:
   push:
+    branches: [main]
   pull_request:
 
 permissions:

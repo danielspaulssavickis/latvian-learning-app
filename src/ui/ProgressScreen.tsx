@@ -49,11 +49,17 @@ export function ProgressScreen() {
         </p>
       ) : (
         <>
-          <RetentionTable
-            caption="Grammar, weakest first"
-            rows={grammar}
-            note={`Share of the last ${RETENTION_WINDOW} answers per feature that were right or a near miss.`}
-          />
+          {grammar.length > 0 ? (
+            <RetentionTable
+              caption="Grammar, weakest first"
+              rows={grammar}
+              note={`Share of the last ${RETENTION_WINDOW} answers per feature that were right or a near miss.`}
+            />
+          ) : (
+            <p className="text-slate-600 dark:text-slate-300">
+              No grammar answers yet — fill-in and form cards feed this list.
+            </p>
+          )}
           {skills.length > 0 && <RetentionTable caption="Exercise types" rows={skills} />}
         </>
       )}

@@ -38,8 +38,14 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       fetch(request)
         .then((response) => {
-          const copy = response.clone()
-          caches.open(CACHE).then((cache) => cache.put('./', copy))
+          // Refresh the cached app shell only from a good response for the app
+          // root itself — never let a 404 page replace it.
+          const root = new URL('./', self.location).pathname
+          const path = new URL(request.url).pathname
+          if (response.ok && (path === root || path === root + 'index.html')) {
+            const copy = response.clone()
+            caches.open(CACHE).then((cache) => cache.put('./', copy))
+          }
           return response
         })
         .catch(() => caches.match('./')),

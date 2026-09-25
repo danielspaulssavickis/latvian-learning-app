@@ -26,7 +26,9 @@ commands pass on a clean clone.
 - [x] Loader that builds an in-memory index: lexeme by id, sentences by level, sentences by feature
 - [x] `content/_needed.json` convention for missing content
 - [ ] 20 hand-authored A1 sentences as the seed set (I write these, not you) —
-      **still open**, blocks nothing Claude needs to do next
+      **still open**, blocks nothing Claude needs to do next. *2026-09-25:* at
+      your request Claude drafted 40 more (`content/drafts/batch_002.json`)
+      plus every lexeme both batches need — all pending your review.
 
 **Done when:** `content:check` catches a deliberately broken fixture, and the
 loader has tests covering a missing lexeme reference and a token with no features.
@@ -58,7 +60,9 @@ returns `nearMiss` while `checkAnswer("Rīgā", "Rīgu")` returns `wrong`.
 - [x] Daily new/review caps, configurable (Settings tab, stored in IndexedDB)
 
 **Done when:** I can do a full 20-card session, close the tab, reopen it, and the
-scheduling state has survived.
+scheduling state has survived. *(2026-09-25: verified by Claude in Chromium on the
+draft preview — 20 new cards answered, tab closed, reopened, identical counts.
+Yours to repeat on approved content.)*
 
 ## M4 — More exercise types + progress
 
@@ -97,6 +101,16 @@ a text-only card instead of breaking the session.
 ## Session log
 
 <!-- newest first, one line each: date — what landed — what to pick up next -->
+2026-09-25 — Final pass: drove the app end to end in Chromium (draft
+preview, production build offline, 390px + desktop, light + dark). Fixes:
+service worker could cache a 404 as the app shell; header wrapped at 390px;
+empty grammar table; misleading "nothing due" with no content (now says no
+approved material yet); start screen re-plans every minute; CI no longer runs
+twice per PR commit. README rewritten with run / review / deploy steps.
+**What's left is yours:** review + approve the drafts (`content/_needed.json`
+lists everything), record audio if wanted (ADR-005), first deploy, iPhone
+install test. Open questions in DECISIONS.md: produce word order, and
+diacritic-only differences that are a different case.
 2026-09-25 — M5: audio (AudioPlayer; missing file → hidden button / text
 fallback, `content:check` warns), `listen` cards for sentences with audio,
 PWA (manifest, icons, iOS meta, generated service worker; offline reload

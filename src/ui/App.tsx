@@ -64,8 +64,10 @@ export function App({ content, db, clock, preview = false }: Props) {
           </div>
         )}
         <header className="border-b border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
-          <div className="mx-auto flex max-w-2xl items-center justify-between gap-4 px-4 py-3">
-            <h1 className="text-lg font-semibold">Latvian Trainer</h1>
+          <div className="mx-auto flex max-w-2xl items-center justify-between gap-2 px-4 py-3">
+            <h1 className="text-base font-semibold whitespace-nowrap sm:text-lg">
+              Latvian Trainer
+            </h1>
             <nav aria-label="Main">
               <ul className="flex gap-1">
                 {TABS.map(({ id, label }) => (
@@ -74,7 +76,7 @@ export function App({ content, db, clock, preview = false }: Props) {
                       type="button"
                       aria-current={tab === id ? 'page' : undefined}
                       onClick={() => setTab(id)}
-                      className={`rounded-md px-3 py-1.5 text-sm font-medium ${
+                      className={`rounded-md px-2.5 py-1.5 text-sm font-medium sm:px-3 ${
                         tab === id
                           ? 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900'
                           : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700'
