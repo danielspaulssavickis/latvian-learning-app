@@ -18,7 +18,7 @@ npm run typecheck    # tsc --noEmit
 npm run lint         # eslint
 npm run content:check # validate every file in content/ against the Zod schemas + round-trip check
 npm run content:check:drafts  # same, also checking content/drafts/ as if published
-npm run content:approve -- <path>...  # human-only: approve lexemes, grammar files, draft sentences
+npm run content:approve -- <files or folders>  # human-only: approve lexemes, grammar, draft sentences
 npm run dev:drafts    # dev server with drafts visible (ADR-011); never in a build
 ```
 

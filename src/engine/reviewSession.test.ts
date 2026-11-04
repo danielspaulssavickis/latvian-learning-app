@@ -54,6 +54,21 @@ describe('reviewReducer', () => {
     })
   })
 
+  it('marks another real form of the word wrong and says which form it is (ADR-014)', () => {
+    let state = reviewReducer(initialReviewState, {
+      type: 'start',
+      exercises: [
+        {
+          ...cloze('g', 'galdā'),
+          confusables: [{ form: 'galda', label: 'genitive singular' }],
+        },
+      ],
+      now: T0,
+    })
+    state = reviewReducer(state, { type: 'submit', given: 'galda', now: at(2) })
+    expect(state.lastAnswer).toMatchObject({ result: 'wrong', confusedWith: 'genitive singular' })
+  })
+
   it('ignores an empty submission', () => {
     const state = reviewReducer(started(), { type: 'submit', given: '   ', now: at(1) })
     expect(state.phase).toBe('answering')

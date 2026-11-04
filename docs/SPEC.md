@@ -187,15 +187,16 @@ reflex, which is the thing a declension chart cannot do.
 
 - Normalize both to NFC, trim, collapse internal whitespace, case-fold.
 - Exact match → `correct`.
-- Match after folding diacritics on **both** sides → `nearMiss`. Show a diff
+- Match after folding diacritics on **both** sides → `nearMiss` — unless the
+  answer is exactly another real form of the same word (`galda` for `galdā`):
+  then `wrong`, and the feedback names that form (ADR-014; verified forms only). Show a diff
   highlighting the missing macron or softened consonant. Feed `nearMiss` to FSRS
   as a "hard" grade, not as a failure.
 - Everything else → `wrong`.
 
 `diacriticDiff(expected, given)` returns the expected spelling split per
 letter with the wrong-diacritic letters marked, for the review screen; `null`
-unless the answer is a near miss. (Open question in DECISIONS.md: a
-diacritic-only difference that is itself another case, like `galda`/`galdā`.)
+unless the answer is a near miss.
 
 Do not use edit distance for anything else. A one-letter difference in Latvian is
 usually a different case, not a typo, and forgiving it defeats the purpose.

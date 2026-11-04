@@ -10,9 +10,11 @@ import {
   type ContentFile,
 } from '../src/content/validate.js'
 import type { Sentence } from '../src/content/schemas.js'
+import { expandPaths } from './expandPaths.js'
 
 /**
- * Human-only (ADR-006, ADR-008, ADR-010). Accepts any number of paths:
+ * Human-only (ADR-006, ADR-008, ADR-010). Accepts any number of files or
+ * folders (and `*.json` patterns, even in shells that don't expand them):
  *
  *   content/lexemes/<id>.json   approved in place
  *   content/grammar/<file>.json approved in place
@@ -23,11 +25,11 @@ import type { Sentence } from '../src/content/schemas.js'
  */
 
 const CONTENT_ROOT = join(process.cwd(), 'content')
-const paths = process.argv.slice(2)
+const paths = expandPaths(process.argv.slice(2), process.cwd())
 
 if (paths.length === 0) {
-  console.error('Usage: npm run content:approve -- <path> [<path> ...]')
-  console.error('  paths under content/lexemes/, content/grammar/ or content/drafts/')
+  console.error('Usage: npm run content:approve -- <file or folder> [...]')
+  console.error('  e.g. npm run content:approve -- content/lexemes content/grammar content/drafts')
   process.exit(1)
 }
 

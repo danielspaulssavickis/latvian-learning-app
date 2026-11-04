@@ -10,5 +10,4 @@ with `review: "draft"` and are approved in place by the same command (ADR-008). 
 content is tracked as an entry in `content/_needed.json` instead of being invented.
 
 Review workflow: `npm run dev:drafts` to try drafts in the app, `npm run content:check:drafts`
-to validate them, then `npm run content:approve -- content/lexemes/*.json content/grammar/*.json
-content/drafts/batch_001.json` (lexemes and grammar are approved first, then sentences).
+to validate them, then `npm run content:approve -- content/lexemes content/grammar content/drafts` (lexemes and grammar are approved first, then sentences).

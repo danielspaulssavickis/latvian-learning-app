@@ -101,6 +101,13 @@ a text-only card instead of breaking the session.
 ## Session log
 
 <!-- newest first, one line each: date — what landed — what to pick up next -->
+2026-11-04 — Follow-ups after the M2–M5 merge: `content:approve` takes
+folders and unexpanded `*.json` patterns (the documented approve command
+failed in PowerShell/cmd); dry-run approved all 50 drafts + 81 lexemes + 7
+grammar files on a scratch copy — content:check and the production build
+pass and the app serves them. ADR-014 closes the `galda`/`galdā` open
+question: another real form of the word is wrong, with the form named.
+Still yours: review + approve, deploy, iPhone test, `produce` word order.
 2026-09-25 — Final pass: drove the app end to end in Chromium (draft
 preview, production build offline, 390px + desktop, light + dark). Fixes:
 service worker could cache a 404 as the app shell; header wrapped at 390px;
