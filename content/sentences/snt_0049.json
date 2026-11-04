@@ -1,0 +1,42 @@
+{
+  "id": "snt_0049",
+  "text": "Mēs sēžam pie galda.",
+  "gloss": "We are sitting at the table.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Mēs",
+      "lexeme": "lex_mes",
+      "features": {
+        "case": "nom",
+        "number": "pl"
+      }
+    },
+    {
+      "surface": "sēžam",
+      "lexeme": "lex_sedet",
+      "features": {
+        "number": "pl",
+        "tense": "pres",
+        "person": 1
+      }
+    },
+    {
+      "surface": "pie",
+      "lexeme": "lex_pie",
+      "features": {}
+    },
+    {
+      "surface": "galda",
+      "lexeme": "lex_galds",
+      "features": {
+        "case": "gen",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

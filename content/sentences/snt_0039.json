@@ -1,0 +1,37 @@
+{
+  "id": "snt_0039",
+  "text": "Sievai patīk rozes.",
+  "gloss": "My wife likes roses.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Sievai",
+      "lexeme": "lex_sieva",
+      "features": {
+        "case": "dat",
+        "number": "sg"
+      },
+      "drillable": true
+    },
+    {
+      "surface": "patīk",
+      "lexeme": "lex_patikt",
+      "features": {
+        "tense": "pres",
+        "person": 3
+      }
+    },
+    {
+      "surface": "rozes",
+      "lexeme": "lex_roze",
+      "features": {
+        "case": "nom",
+        "number": "pl"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

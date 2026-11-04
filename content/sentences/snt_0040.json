@@ -1,0 +1,36 @@
+{
+  "id": "snt_0040",
+  "text": "Bērniem patīk medus.",
+  "gloss": "Children like honey.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Bērniem",
+      "lexeme": "lex_berns",
+      "features": {
+        "case": "dat",
+        "number": "pl"
+      },
+      "drillable": true
+    },
+    {
+      "surface": "patīk",
+      "lexeme": "lex_patikt",
+      "features": {
+        "tense": "pres",
+        "person": 3
+      }
+    },
+    {
+      "surface": "medus",
+      "lexeme": "lex_medus",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

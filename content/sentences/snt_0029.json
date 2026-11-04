@@ -1,0 +1,42 @@
+{
+  "id": "snt_0029",
+  "text": "Mēs dzīvojam pie upes.",
+  "gloss": "We live by the river.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Mēs",
+      "lexeme": "lex_mes",
+      "features": {
+        "case": "nom",
+        "number": "pl"
+      }
+    },
+    {
+      "surface": "dzīvojam",
+      "lexeme": "lex_dzivot",
+      "features": {
+        "number": "pl",
+        "tense": "pres",
+        "person": 1
+      }
+    },
+    {
+      "surface": "pie",
+      "lexeme": "lex_pie",
+      "features": {}
+    },
+    {
+      "surface": "upes",
+      "lexeme": "lex_upe",
+      "features": {
+        "case": "gen",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

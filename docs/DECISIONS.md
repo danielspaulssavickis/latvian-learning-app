@@ -309,6 +309,25 @@ feedback that no human has reviewed. *Revisit if:* learners on keyboards
 without easy diacritics find it too harsh — the diacritic row is the first
 answer to that.
 
+## ADR-015 — First content batch approved by Claude at the owner's request
+**2026-11-04 · accepted** · one-time exception to ADR-006/ADR-008/ADR-010's "human runs content:approve"
+
+The owner asked Claude to run `content:approve` on everything drafted so far
+(all 81 lexemes, the 7 grammar files, `batch_001` and `batch_002`) because
+they couldn't do it themselves yet. Claude re-read every sentence, lexeme
+and pronoun paradigm first and changed nothing; every noun and pronoun form
+round-trips, and the 212 cards it produces were audited. But Claude wrote
+this material, so **this was a self-check, not the independent human review
+the gate exists for.** `source: "generated"` stays on every file as the
+audit trail.
+
+*Consequences:* the app now teaches this material, and ADR-014's other-form
+check is live (it only uses verified forms). Correcting a file later is
+fine: edit it in place and `content:check` re-validates it.
+
+*Rules out:* treating this as standing permission — future drafts go back
+through the normal human gate unless the owner asks again.
+
 ---
 
 ## Open questions

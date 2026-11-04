@@ -1,0 +1,37 @@
+{
+  "id": "snt_0001",
+  "text": "Es dzīvoju Rīgā.",
+  "gloss": "I live in Riga.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Es",
+      "lexeme": "lex_es",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "dzīvoju",
+      "lexeme": "lex_dzivot",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 1
+      }
+    },
+    {
+      "surface": "Rīgā",
+      "lexeme": "lex_riga",
+      "features": {
+        "case": "loc",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

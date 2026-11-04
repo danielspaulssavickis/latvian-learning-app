@@ -1,0 +1,37 @@
+{
+  "id": "snt_0013",
+  "text": "Viņa strādā skolā.",
+  "gloss": "She works at a school.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Viņa",
+      "lexeme": "lex_vina",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "strādā",
+      "lexeme": "lex_stradat",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 3
+      }
+    },
+    {
+      "surface": "skolā",
+      "lexeme": "lex_skola",
+      "features": {
+        "case": "loc",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

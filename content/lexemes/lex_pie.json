@@ -8,6 +8,7 @@
   "gloss": ["at", "by", "near"],
   "tags": ["a1"],
   "notes": ["Takes the genitive."],
-  "review": "draft",
-  "source": "generated"
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
 }

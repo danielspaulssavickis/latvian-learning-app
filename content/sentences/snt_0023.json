@@ -1,0 +1,42 @@
+{
+  "id": "snt_0023",
+  "text": "Mēs ejam uz tirgu.",
+  "gloss": "We are going to the market.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Mēs",
+      "lexeme": "lex_mes",
+      "features": {
+        "case": "nom",
+        "number": "pl"
+      }
+    },
+    {
+      "surface": "ejam",
+      "lexeme": "lex_iet",
+      "features": {
+        "number": "pl",
+        "tense": "pres",
+        "person": 1
+      }
+    },
+    {
+      "surface": "uz",
+      "lexeme": "lex_uz",
+      "features": {}
+    },
+    {
+      "surface": "tirgu",
+      "lexeme": "lex_tirgus",
+      "features": {
+        "case": "acc",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

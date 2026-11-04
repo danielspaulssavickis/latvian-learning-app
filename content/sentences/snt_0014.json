@@ -1,0 +1,51 @@
+{
+  "id": "snt_0014",
+  "text": "Es dzeru kafiju bez cukura.",
+  "gloss": "I drink coffee without sugar.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Es",
+      "lexeme": "lex_es",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "dzeru",
+      "lexeme": "lex_dzert",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 1
+      }
+    },
+    {
+      "surface": "kafiju",
+      "lexeme": "lex_kafija",
+      "features": {
+        "case": "acc",
+        "number": "sg"
+      },
+      "drillable": true
+    },
+    {
+      "surface": "bez",
+      "lexeme": "lex_bez",
+      "features": {}
+    },
+    {
+      "surface": "cukura",
+      "lexeme": "lex_cukurs",
+      "features": {
+        "case": "gen",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

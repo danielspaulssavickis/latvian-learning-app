@@ -1,0 +1,42 @@
+{
+  "id": "snt_0019",
+  "text": "Mēs runājam par darbu.",
+  "gloss": "We are talking about work.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Mēs",
+      "lexeme": "lex_mes",
+      "features": {
+        "case": "nom",
+        "number": "pl"
+      }
+    },
+    {
+      "surface": "runājam",
+      "lexeme": "lex_runat",
+      "features": {
+        "number": "pl",
+        "tense": "pres",
+        "person": 1
+      }
+    },
+    {
+      "surface": "par",
+      "lexeme": "lex_par",
+      "features": {}
+    },
+    {
+      "surface": "darbu",
+      "lexeme": "lex_darbs",
+      "features": {
+        "case": "acc",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

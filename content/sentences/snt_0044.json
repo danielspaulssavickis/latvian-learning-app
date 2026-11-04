@@ -1,0 +1,37 @@
+{
+  "id": "snt_0044",
+  "text": "Man nav brāļa.",
+  "gloss": "I don't have a brother.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Man",
+      "lexeme": "lex_es",
+      "features": {
+        "case": "dat",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "nav",
+      "lexeme": "lex_but",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 3
+      }
+    },
+    {
+      "surface": "brāļa",
+      "lexeme": "lex_bralis",
+      "features": {
+        "case": "gen",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

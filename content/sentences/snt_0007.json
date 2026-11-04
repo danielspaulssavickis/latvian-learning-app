@@ -1,0 +1,42 @@
+{
+  "id": "snt_0007",
+  "text": "Mēs braucam uz Rīgu.",
+  "gloss": "We are going to Riga.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Mēs",
+      "lexeme": "lex_mes",
+      "features": {
+        "case": "nom",
+        "number": "pl"
+      }
+    },
+    {
+      "surface": "braucam",
+      "lexeme": "lex_braukt",
+      "features": {
+        "number": "pl",
+        "tense": "pres",
+        "person": 1
+      }
+    },
+    {
+      "surface": "uz",
+      "lexeme": "lex_uz",
+      "features": {}
+    },
+    {
+      "surface": "Rīgu",
+      "lexeme": "lex_riga",
+      "features": {
+        "case": "acc",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

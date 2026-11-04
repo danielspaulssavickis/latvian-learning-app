@@ -1,0 +1,37 @@
+{
+  "id": "snt_0010",
+  "text": "Bērni spēlējas dārzā.",
+  "gloss": "The children are playing in the garden.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Bērni",
+      "lexeme": "lex_berns",
+      "features": {
+        "case": "nom",
+        "number": "pl"
+      }
+    },
+    {
+      "surface": "spēlējas",
+      "lexeme": "lex_spelet",
+      "features": {
+        "number": "pl",
+        "tense": "pres",
+        "person": 3
+      }
+    },
+    {
+      "surface": "dārzā",
+      "lexeme": "lex_darzs",
+      "features": {
+        "case": "loc",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

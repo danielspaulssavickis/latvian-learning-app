@@ -150,8 +150,25 @@ describe('confusablesFor (ADR-014)', () => {
     ])
   })
 
+  it('names every form a shared spelling stands for', () => {
+    const maja = {
+      ...galds,
+      id: 'lex_maja',
+      lemma: 'māja',
+      gender: 'f' as const,
+      declension: 4 as const,
+    }
+    expect(confusablesFor(maja, 'mājās', approved)).toEqual([
+      {
+        form: 'mājas',
+        label: 'genitive singular / nominative plural / accusative plural / vocative plural',
+      },
+    ])
+  })
+
   it('uses only verified forms — none while the tables or the lexeme are drafts', () => {
-    expect(confusablesFor(galds, 'galdā', buildGrammar(files))).toEqual([])
+    const drafts = buildGrammar(files.map((f) => ({ ...f, review: 'draft' as const })))
+    expect(confusablesFor(galds, 'galdā', drafts)).toEqual([])
     expect(confusablesFor({ ...galds, review: 'draft' }, 'galdā', approved)).toEqual([])
   })
 })

@@ -27,6 +27,7 @@
     "Masculine, lemma in -us (tirgus). Small, closed class.",
     "voc.sg is deliberately absent (a gap): the singular vocative has competing forms and is mostly out of scope (SPEC.md non-goals); see content/_needed.json."
   ],
-  "review": "draft",
-  "source": "generated"
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
 }

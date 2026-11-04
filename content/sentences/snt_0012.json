@@ -1,0 +1,37 @@
+{
+  "id": "snt_0012",
+  "text": "Mēs dzīvojam Latvijā.",
+  "gloss": "We live in Latvia.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Mēs",
+      "lexeme": "lex_mes",
+      "features": {
+        "case": "nom",
+        "number": "pl"
+      }
+    },
+    {
+      "surface": "dzīvojam",
+      "lexeme": "lex_dzivot",
+      "features": {
+        "number": "pl",
+        "tense": "pres",
+        "person": 1
+      }
+    },
+    {
+      "surface": "Latvijā",
+      "lexeme": "lex_latvija",
+      "features": {
+        "case": "loc",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

@@ -97,11 +97,11 @@ export function confusablesFor(
       if (!result.ok || result.confidence !== 'verified') continue
       if (result.form.toLocaleLowerCase('lv') === expected.toLocaleLowerCase('lv')) continue
       if (!sameLettersIgnoringDiacritics(result.form, expected)) continue
-      if (found.some((c) => c.form === result.form)) continue
-      found.push({
-        form: result.form,
-        label: `${featureLabel(`case:${grammaticalCase}`)} ${featureLabel(`number:${number}`)}`,
-      })
+      const label = `${featureLabel(`case:${grammaticalCase}`)} ${featureLabel(`number:${number}`)}`
+      // One spelling can be several forms (mājas: genitive singular, nominative plural, …).
+      const existing = found.find((c) => c.form === result.form)
+      if (existing) existing.label += ` / ${label}`
+      else found.push({ form: result.form, label })
     }
   }
   return found

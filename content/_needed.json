@@ -2,14 +2,14 @@
   {
     "type": "review",
     "id": "review:content/lexemes",
-    "description": "All 81 files in content/lexemes/ are Claude drafts (review: \"draft\", source: \"generated\") covering every lexeme used by content/drafts/batch_001.json and batch_002.json. Check lemma, gender, declension/conjugation, gloss and — for the five pronouns — the full irregular paradigm, then approve: `npm run content:approve -- content/lexemes/*.json`. Sentences can't be approved before their lexemes (ADR-010).",
-    "reason": "ADR-010: draft lexemes make every form built from them `unverified`, and block sentence approval."
+    "description": "APPROVED 2026-11-04 by Claude at the owner's request, after a self-review (ADR-015) — not an independent human review. Still worth a human pass; fix anything in place and run `npm run content:check`. Original note: All 81 files in content/lexemes/ are Claude drafts (review: \"draft\", source: \"generated\") covering every lexeme used by content/drafts/batch_001.json and batch_002.json. Check lemma, gender, declension/conjugation, gloss and — for the five pronouns — the full irregular paradigm, then approve: `npm run content:approve -- content/lexemes/*.json`. Sentences can't be approved before their lexemes (ADR-010).",
+    "reason": "ADR-015: the human review gate was waived once, on request."
   },
   {
     "type": "review",
     "id": "review:content/drafts/batch_002.json",
-    "description": "40 A1 sentences drafted by Claude (snt_0011–snt_0050), 50 drillable tokens, aimed at noun cases across all six declensions plus common preposition government (uz + acc/gen, no/pie/bez/zem + gen, par + acc, ar + ins). Check each text, gloss and tagging; `npm run content:check:drafts` shows they validate and round-trip. Approve with `npm run content:approve -- content/drafts/batch_002.json` once the lexemes are approved. Try them first in the app with `npm run dev:drafts` (ADR-011).",
-    "reason": "ADR-007: drafts only ship after human approval."
+    "description": "APPROVED 2026-11-04 by Claude at the owner's request, after a self-review (ADR-015) — not an independent human review. Still worth a human pass; fix anything in place and run `npm run content:check`. Original note: 40 A1 sentences drafted by Claude (snt_0011–snt_0050), 50 drillable tokens, aimed at noun cases across all six declensions plus common preposition government (uz + acc/gen, no/pie/bez/zem + gen, par + acc, ar + ins). Check each text, gloss and tagging; `npm run content:check:drafts` shows they validate and round-trip. Approve with `npm run content:approve -- content/drafts/batch_002.json` once the lexemes are approved. Try them first in the app with `npm run dev:drafts` (ADR-011).",
+    "reason": "ADR-015: the human review gate was waived once, on request."
   },
   {
     "type": "grammar",
@@ -24,8 +24,8 @@
   {
     "type": "grammar",
     "id": "review:content/grammar",
-    "description": "All seven files in content/grammar/ (noun_decl1..6.json, alternations.json) are Claude drafts (review: \"draft\", source: \"generated\"). Please check each cell, delete any you're unsure of (a gap is fine), then run `npm run content:approve -- content/grammar/<file>.json` per file. The expected paradigms in src/engine/__fixtures__/nouns.ts (5-6 nouns per declension) are the quickest way to review: if a fixture paradigm is right, the table cells it exercises are right.",
-    "reason": "ADR-008: until approved, inflect() marks every form from these files confidence: \"unverified\"."
+    "description": "APPROVED 2026-11-04 by Claude at the owner's request, after a self-review (ADR-015) — not an independent human review. Still worth a human pass; fix anything in place and run `npm run content:check`. Original note: All seven files in content/grammar/ (noun_decl1..6.json, alternations.json) are Claude drafts (review: \"draft\", source: \"generated\"). Please check each cell, delete any you're unsure of (a gap is fine), then run `npm run content:approve -- content/grammar/<file>.json` per file. The expected paradigms in src/engine/__fixtures__/nouns.ts (5-6 nouns per declension) are the quickest way to review: if a fixture paradigm is right, the table cells it exercises are right.",
+    "reason": "ADR-015: the human review gate was waived once, on request."
   },
   {
     "type": "grammar",

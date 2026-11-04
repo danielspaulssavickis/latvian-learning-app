@@ -1,0 +1,38 @@
+{
+  "id": "snt_0047",
+  "text": "Govis ēd zāli.",
+  "gloss": "The cows are eating grass.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Govis",
+      "lexeme": "lex_govs",
+      "features": {
+        "case": "nom",
+        "number": "pl"
+      },
+      "drillable": true
+    },
+    {
+      "surface": "ēd",
+      "lexeme": "lex_est",
+      "features": {
+        "number": "pl",
+        "tense": "pres",
+        "person": 3
+      }
+    },
+    {
+      "surface": "zāli",
+      "lexeme": "lex_zale",
+      "features": {
+        "case": "acc",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

@@ -42,8 +42,9 @@ loader has tests covering a missing lexeme reference and a token with no feature
 - [x] Table-driven tests: at least 5 nouns per declension class, full paradigm
 - [x] `checkAnswer` with the correct / nearMiss / wrong contract from SPEC.md
 - [x] Round-trip annotation check in `content:check` (CLAUDE.md rule 6)
-- [ ] Human review + `content:approve` of the seven draft grammar files (ADR-008) —
-      **yours, not Claude's**; until then every generated form is `unverified`
+- [x] Human review + `content:approve` of the seven draft grammar files (ADR-008) —
+      *2026-11-04: approved by Claude at your request after a self-review
+      (ADR-015); an independent human check is still worth doing*
 
 **Done when:** the full paradigm tests pass and `checkAnswer("Rīgā", "Riga")`
 returns `nearMiss` while `checkAnswer("Rīgā", "Rīgu")` returns `wrong`.
@@ -101,6 +102,14 @@ a text-only card instead of breaking the session.
 ## Session log
 
 <!-- newest first, one line each: date — what landed — what to pick up next -->
+2026-11-04 — At your request Claude reviewed and approved all drafted content
+(ADR-015): 50 sentences, 81 lexemes, 7 grammar files → 212 cards (50
+recognize, 60 cloze, 52 inflect, 50 produce). Audited the other-form
+feedback (ADR-014) across every card; a spelling that is several forms now
+names all of them. Left for you: enable GitHub Pages (Settings → Pages →
+Source: GitHub Actions — the API for it is blocked from Claude's session),
+run the deploy workflow, iPhone install test, a human pass over the
+Latvian, and the `produce` word-order question.
 2026-11-04 — Follow-ups after the M2–M5 merge: `content:approve` takes
 folders and unexpanded `*.json` patterns (the documented approve command
 failed in PowerShell/cmd); dry-run approved all 50 drafts + 81 lexemes + 7

@@ -1,0 +1,42 @@
+{
+  "id": "snt_0032",
+  "text": "Es nāku no Rīgas.",
+  "gloss": "I come from Riga.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Es",
+      "lexeme": "lex_es",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "nāku",
+      "lexeme": "lex_nakt",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 1
+      }
+    },
+    {
+      "surface": "no",
+      "lexeme": "lex_no",
+      "features": {}
+    },
+    {
+      "surface": "Rīgas",
+      "lexeme": "lex_riga",
+      "features": {
+        "case": "gen",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

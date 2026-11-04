@@ -95,6 +95,7 @@
     "Deliberately missing (unsure): f → fj, ll → ļļ, nn → ņņ. See content/_needed.json.",
     "Per-word exceptions (tētis → tēta, acs → acu, viesis → viesa) belong in the lexeme's irregular map, not here."
   ],
-  "review": "draft",
-  "source": "generated"
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
 }

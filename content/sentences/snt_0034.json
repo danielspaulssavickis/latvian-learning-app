@@ -1,0 +1,51 @@
+{
+  "id": "snt_0034",
+  "text": "Vasarā mēs esam pie jūras.",
+  "gloss": "In summer we are at the seaside.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Vasarā",
+      "lexeme": "lex_vasara",
+      "features": {
+        "case": "loc",
+        "number": "sg"
+      },
+      "drillable": true
+    },
+    {
+      "surface": "mēs",
+      "lexeme": "lex_mes",
+      "features": {
+        "case": "nom",
+        "number": "pl"
+      }
+    },
+    {
+      "surface": "esam",
+      "lexeme": "lex_but",
+      "features": {
+        "number": "pl",
+        "tense": "pres",
+        "person": 1
+      }
+    },
+    {
+      "surface": "pie",
+      "lexeme": "lex_pie",
+      "features": {}
+    },
+    {
+      "surface": "jūras",
+      "lexeme": "lex_jura",
+      "features": {
+        "case": "gen",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

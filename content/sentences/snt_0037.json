@@ -1,0 +1,42 @@
+{
+  "id": "snt_0037",
+  "text": "Es runāju ar tēvu.",
+  "gloss": "I am talking with my father.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Es",
+      "lexeme": "lex_es",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "runāju",
+      "lexeme": "lex_runat",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 1
+      }
+    },
+    {
+      "surface": "ar",
+      "lexeme": "lex_ar",
+      "features": {}
+    },
+    {
+      "surface": "tēvu",
+      "lexeme": "lex_tevs",
+      "features": {
+        "case": "ins",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

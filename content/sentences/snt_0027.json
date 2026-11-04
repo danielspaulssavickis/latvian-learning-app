@@ -1,0 +1,43 @@
+{
+  "id": "snt_0027",
+  "text": "Mežā ir daudz egļu.",
+  "gloss": "There are a lot of spruces in the forest.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Mežā",
+      "lexeme": "lex_mezs",
+      "features": {
+        "case": "loc",
+        "number": "sg"
+      },
+      "drillable": true
+    },
+    {
+      "surface": "ir",
+      "lexeme": "lex_but",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 3
+      }
+    },
+    {
+      "surface": "daudz",
+      "lexeme": "lex_daudz",
+      "features": {}
+    },
+    {
+      "surface": "egļu",
+      "lexeme": "lex_egle",
+      "features": {
+        "case": "gen",
+        "number": "pl"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}
