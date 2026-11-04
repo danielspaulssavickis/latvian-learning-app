@@ -18,7 +18,7 @@ npm run typecheck    # tsc --noEmit
 npm run lint         # eslint
 npm run content:check # validate every file in content/ against the Zod schemas + round-trip check
 npm run content:check:drafts  # same, also checking content/drafts/ as if published
-npm run content:approve -- <path>...  # human-only: approve lexemes, grammar files, draft sentences
+npm run content:approve -- <files or folders>  # human-only: approve lexemes, grammar, draft sentences
 npm run dev:drafts    # dev server with drafts visible (ADR-011); never in a build
 ```
 
@@ -58,7 +58,8 @@ tested directly. If a piece of logic needs a component to test, it is in the wro
    (ADR-008) — list every cell you're unsure of in `content/_needed.json`
    instead of filling it. Lexemes may be drafted in `content/lexemes/` with
    `review: "draft"` (ADR-010); never set `review: "approved"` yourself —
-   only `content:approve` does, and only the human runs it. Be most careful
+   only `content:approve` does, and only the human runs it (unless they
+   explicitly ask you to, for a named batch — ADR-015). Be most careful
    with case usage and verb government: that's exactly where a model
    produces plausible-looking errors, and wrong content teaches the user
    wrong Latvian. When unsure, add an entry to `content/_needed.json`

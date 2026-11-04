@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { FIXTURE_LEXEMES, SNT_1, SNT_10, SNT_3, SNT_5 } from './__fixtures__/sentences'
 import { generateAllCards, generateCards } from './cards'
 import { buildGrammar } from './inflect'
-import { buildExercise, splitAroundToken } from './exercise'
+import { grammarFileSchema } from '../content/schemas'
+import { buildExercise, confusablesFor, splitAroundToken } from './exercise'
 
 const sentenceById = new Map([SNT_1, SNT_3].map((s) => [s.id, s]))
 const content = { sentenceById, lexemeById: FIXTURE_LEXEMES }
@@ -118,5 +119,56 @@ describe('buildExercise — other kinds', () => {
       formLabel: 'dative singular',
       expected: 'man',
     })
+  })
+})
+
+describe('confusablesFor (ADR-014)', () => {
+  const modules = import.meta.glob('../../content/grammar/*.json', { eager: true })
+  const files = Object.values(modules).map((m) =>
+    grammarFileSchema.parse((m as { default: unknown }).default),
+  )
+  const approved = buildGrammar(files.map((f) => ({ ...f, review: 'approved' as const })))
+  const galds = {
+    id: 'lex_galds',
+    lemma: 'galds',
+    pos: 'noun' as const,
+    gender: 'm' as const,
+    declension: 1 as const,
+    conjugation: null,
+    gloss: ['table'],
+    tags: [],
+    review: 'approved' as const,
+  }
+
+  it('finds the forms spelled like the answer apart from diacritics', () => {
+    // galdā (loc.sg) vs galda (gen.sg); galdu (acc/ins sg, gen pl) has other letters.
+    expect(confusablesFor(galds, 'galdā', approved)).toEqual([
+      { form: 'galda', label: 'genitive singular' },
+    ])
+    expect(confusablesFor(galds, 'galda', approved)).toEqual([
+      { form: 'galdā', label: 'locative singular' },
+    ])
+  })
+
+  it('names every form a shared spelling stands for', () => {
+    const maja = {
+      ...galds,
+      id: 'lex_maja',
+      lemma: 'māja',
+      gender: 'f' as const,
+      declension: 4 as const,
+    }
+    expect(confusablesFor(maja, 'mājās', approved)).toEqual([
+      {
+        form: 'mājas',
+        label: 'genitive singular / nominative plural / accusative plural / vocative plural',
+      },
+    ])
+  })
+
+  it('uses only verified forms — none while the tables or the lexeme are drafts', () => {
+    const drafts = buildGrammar(files.map((f) => ({ ...f, review: 'draft' as const })))
+    expect(confusablesFor(galds, 'galdā', drafts)).toEqual([])
+    expect(confusablesFor({ ...galds, review: 'draft' }, 'galdā', approved)).toEqual([])
   })
 })

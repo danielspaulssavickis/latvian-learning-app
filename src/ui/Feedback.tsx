@@ -40,6 +40,12 @@ export function Feedback({ answer, options }: { answer: Answer; options?: CheckO
       <p className="font-medium text-rose-700 dark:text-rose-400">
         Not quite. The answer is <strong className="text-xl">{answer.expected}</strong>.
       </p>
+      {answer.confusedWith && (
+        <p className="text-slate-700 dark:text-slate-200">
+          <strong lang="lv">{answer.given}</strong> is a real form of this word — the{' '}
+          {answer.confusedWith} — but not the form asked for here.
+        </p>
+      )}
       <p className="text-sm text-slate-500 dark:text-slate-400">
         You typed: {answer.given} · this card comes back at the end of the session.
       </p>

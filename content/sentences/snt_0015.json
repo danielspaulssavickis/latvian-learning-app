@@ -1,0 +1,42 @@
+{
+  "id": "snt_0015",
+  "text": "Viņš nāk no darba.",
+  "gloss": "He is coming from work.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Viņš",
+      "lexeme": "lex_vins",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "nāk",
+      "lexeme": "lex_nakt",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 3
+      }
+    },
+    {
+      "surface": "no",
+      "lexeme": "lex_no",
+      "features": {}
+    },
+    {
+      "surface": "darba",
+      "lexeme": "lex_darbs",
+      "features": {
+        "case": "gen",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

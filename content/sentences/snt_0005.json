@@ -1,0 +1,34 @@
+{
+  "id": "snt_0005",
+  "text": "Man šodien jāstrādā.",
+  "gloss": "I have to work today.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Man",
+      "lexeme": "lex_es",
+      "features": {
+        "case": "dat",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "šodien",
+      "lexeme": "lex_sodien",
+      "features": {}
+    },
+    {
+      "surface": "jāstrādā",
+      "lexeme": "lex_stradat",
+      "features": {
+        "number": "sg",
+        "person": 3,
+        "mood": "debitive"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

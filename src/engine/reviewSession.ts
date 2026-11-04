@@ -1,4 +1,4 @@
-import { checkAnswer, type CheckResult } from './checkAnswer'
+import { checkAnswer, matchConfusable, type CheckResult } from './checkAnswer'
 import { checkOptionsFor, type Exercise } from './exercise'
 
 export interface Answer {
@@ -11,6 +11,8 @@ export interface Answer {
   responseMs: number
   /** False for a re-queued repeat of a card answered wrong earlier this session. */
   firstAttempt: boolean
+  /** When the answer was another real form of the word: which one (ADR-014). */
+  confusedWith?: string
 }
 
 export interface ReviewState {
@@ -74,7 +76,9 @@ export function reviewReducer(state: ReviewState, action: ReviewAction): ReviewS
       if (state.phase !== 'answering' || !state.current || !state.shownAt) return state
       if (action.given.trim() === '') return state
       const exercise = state.current
-      const result = checkAnswer(exercise.expected, action.given, checkOptionsFor(exercise))
+      const options = checkOptionsFor(exercise)
+      const result = checkAnswer(exercise.expected, action.given, options)
+      const confused = result === 'wrong' ? matchConfusable(action.given, options) : null
       const answer: Answer = {
         cardId: exercise.cardId,
         kind: exercise.kind,
@@ -84,6 +88,7 @@ export function reviewReducer(state: ReviewState, action: ReviewAction): ReviewS
         result,
         responseMs: action.now.getTime() - state.shownAt.getTime(),
         firstAttempt: !state.attempted.includes(exercise.cardId),
+        ...(confused ? { confusedWith: confused.label } : {}),
       }
       return {
         ...state,

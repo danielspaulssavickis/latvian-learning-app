@@ -1,0 +1,42 @@
+{
+  "id": "snt_0031",
+  "text": "Grāmata ir uz galda.",
+  "gloss": "The book is on the table.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Grāmata",
+      "lexeme": "lex_gramata",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "ir",
+      "lexeme": "lex_but",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 3
+      }
+    },
+    {
+      "surface": "uz",
+      "lexeme": "lex_uz",
+      "features": {}
+    },
+    {
+      "surface": "galda",
+      "lexeme": "lex_galds",
+      "features": {
+        "case": "gen",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

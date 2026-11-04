@@ -1,7 +1,7 @@
 # latvian-learning-app
 
 A small web app for learning Latvian built around **inflectional morphology**:
-the core exercise is producing the right *form* of a word in context, scheduled
+the core exercise is producing the right _form_ of a word in context, scheduled
 by spaced repetition (FSRS), with progress tracked per case, number and
 declension. Local-first — progress stays in your browser, with JSON
 export/import as the backup — and installable to a phone's home screen.
@@ -37,8 +37,11 @@ Claude (or anyone) sit in `content/drafts/`, `content/lexemes/` and
    in that order):
 
    ```bash
-   npm run content:approve -- content/lexemes/*.json content/grammar/*.json content/drafts/batch_001.json
+   npm run content:approve -- content/lexemes content/grammar content/drafts
    ```
+
+   Folder names work in every terminal, including PowerShell and cmd; single
+   files and `*.json` patterns work too.
 
 ## Deploy
 

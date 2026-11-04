@@ -1,6 +1,6 @@
 import type { Lexeme, Sentence } from '../content/schemas'
 import type { CardSpec } from './cards'
-import type { CheckOptions } from './checkAnswer'
+import { sameLettersIgnoringDiacritics, type CheckOptions, type Confusable } from './checkAnswer'
 import { inflect, type Grammar } from './inflect'
 import { featureLabel } from './labels'
 
@@ -13,6 +13,8 @@ interface ExerciseBase {
   check: 'word' | 'sentence' | 'choice'
   /** The sentence's recording, if it has one — playable after answering. */
   audio?: string
+  /** Other real forms of the word that differ only by diacritics (ADR-014). */
+  confusables?: Confusable[]
 }
 
 /** Sentence with one token blanked, lemma in brackets → typed form. */
@@ -70,7 +72,43 @@ export interface ExerciseContent {
 }
 
 export function checkOptionsFor(exercise: Exercise): CheckOptions {
-  return { ignorePunctuation: exercise.check === 'sentence' }
+  return { ignorePunctuation: exercise.check === 'sentence', confusables: exercise.confusables }
+}
+
+const CASES = ['nom', 'gen', 'dat', 'acc', 'ins', 'loc', 'voc'] as const
+const NUMBERS = ['sg', 'pl'] as const
+
+/**
+ * The word's other forms that are spelled like `expected` apart from
+ * diacritics (ADR-014). Only `verified` forms count: the feedback names the
+ * form ("that's the genitive singular"), and that claim must come from
+ * reviewed data (ADR-008, ADR-010).
+ */
+export function confusablesFor(
+  lexeme: Lexeme,
+  expected: string,
+  grammar: Grammar | undefined,
+): Confusable[] {
+  if (!grammar) return []
+  const found: Confusable[] = []
+  for (const number of NUMBERS) {
+    for (const grammaticalCase of CASES) {
+      const result = inflect(lexeme, { case: grammaticalCase, number }, grammar)
+      if (!result.ok || result.confidence !== 'verified') continue
+      if (result.form.toLocaleLowerCase('lv') === expected.toLocaleLowerCase('lv')) continue
+      if (!sameLettersIgnoringDiacritics(result.form, expected)) continue
+      const label = `${featureLabel(`case:${grammaticalCase}`)} ${featureLabel(`number:${number}`)}`
+      // One spelling can be several forms (mājas: genitive singular, nominative plural, …).
+      const existing = found.find((c) => c.form === result.form)
+      if (existing) existing.label += ` / ${label}`
+      else found.push({ form: result.form, label })
+    }
+  }
+  return found
+}
+
+function withConfusables(confusables: Confusable[]): { confusables?: Confusable[] } {
+  return confusables.length > 0 ? { confusables } : {}
 }
 
 /**
@@ -155,6 +193,7 @@ export function buildExercise(card: CardSpec, content: ExerciseContent): Exercis
         lemma: lexeme.lemma,
         gloss: sentence.gloss,
         expected: token.surface,
+        ...withConfusables(confusablesFor(lexeme, token.surface, content.grammar)),
       }
     }
 
@@ -203,6 +242,7 @@ export function buildExercise(card: CardSpec, content: ExerciseContent): Exercis
         lemmaGloss: lexeme.gloss[0],
         formLabel: `${featureLabel(`case:${grammaticalCase}`)} ${featureLabel(`number:${number}`)}`,
         expected: result.form,
+        ...withConfusables(confusablesFor(lexeme, result.form, content.grammar)),
       }
     }
   }

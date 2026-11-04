@@ -1,0 +1,37 @@
+{
+  "id": "snt_0043",
+  "text": "Man nav laika.",
+  "gloss": "I don't have time.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Man",
+      "lexeme": "lex_es",
+      "features": {
+        "case": "dat",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "nav",
+      "lexeme": "lex_but",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 3
+      }
+    },
+    {
+      "surface": "laika",
+      "lexeme": "lex_laiks",
+      "features": {
+        "case": "gen",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

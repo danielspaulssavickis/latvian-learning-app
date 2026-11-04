@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { checkAnswer, diacriticDiff } from './checkAnswer'
+import { checkAnswer, diacriticDiff, matchConfusable } from './checkAnswer'
 
 describe('checkAnswer', () => {
   it('Rīgā vs Riga is a near miss (missing macrons only)', () => {
@@ -88,5 +88,26 @@ describe('diacriticDiff', () => {
   it('returns null when the answer is not a near miss', () => {
     expect(diacriticDiff('Rīgā', 'Rīgu')).toBeNull()
     expect(diacriticDiff('Rīgā', 'Rīgā')).toBeNull()
+  })
+})
+
+describe('checkAnswer — real forms of the same word (ADR-014)', () => {
+  const confusables = [{ form: 'galda', label: 'genitive singular' }]
+
+  it('marks another real form of the word wrong, not a near miss', () => {
+    expect(checkAnswer('galdā', 'galda', { confusables })).toBe('wrong')
+    expect(checkAnswer('galdā', 'GALDA', { confusables })).toBe('wrong')
+    expect(matchConfusable('galda', { confusables })).toEqual(confusables[0])
+  })
+
+  it('keeps a spelling that is no real form a near miss', () => {
+    const rigaForms = [{ form: 'Rīga', label: 'nominative singular' }]
+    expect(checkAnswer('Rīgā', 'Riga', { confusables: rigaForms })).toBe('nearMiss')
+    expect(checkAnswer('Rīgā', 'Rīga', { confusables: rigaForms })).toBe('wrong')
+  })
+
+  it('changes nothing for correct answers or without confusables', () => {
+    expect(checkAnswer('galdā', 'galdā', { confusables })).toBe('correct')
+    expect(checkAnswer('galdā', 'galda')).toBe('nearMiss')
   })
 })

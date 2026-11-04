@@ -1,0 +1,42 @@
+{
+  "id": "snt_0048",
+  "text": "Es dzīvoju pie brāļa.",
+  "gloss": "I live at my brother's.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Es",
+      "lexeme": "lex_es",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "dzīvoju",
+      "lexeme": "lex_dzivot",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 1
+      }
+    },
+    {
+      "surface": "pie",
+      "lexeme": "lex_pie",
+      "features": {}
+    },
+    {
+      "surface": "brāļa",
+      "lexeme": "lex_bralis",
+      "features": {
+        "case": "gen",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

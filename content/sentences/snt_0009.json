@@ -1,0 +1,45 @@
+{
+  "id": "snt_0009",
+  "text": "Tas ir mājas numurs.",
+  "gloss": "That is the house number.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Tas",
+      "lexeme": "lex_tas",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "ir",
+      "lexeme": "lex_but",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 3
+      }
+    },
+    {
+      "surface": "mājas",
+      "lexeme": "lex_maja",
+      "features": {
+        "case": "gen",
+        "number": "sg"
+      },
+      "drillable": true
+    },
+    {
+      "surface": "numurs",
+      "lexeme": "lex_numurs",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

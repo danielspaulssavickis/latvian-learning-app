@@ -1,0 +1,37 @@
+{
+  "id": "snt_0025",
+  "text": "Viņam sāp sirds.",
+  "gloss": "His heart hurts.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Viņam",
+      "lexeme": "lex_vins",
+      "features": {
+        "case": "dat",
+        "number": "sg"
+      },
+      "drillable": true
+    },
+    {
+      "surface": "sāp",
+      "lexeme": "lex_sapet",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 3
+      }
+    },
+    {
+      "surface": "sirds",
+      "lexeme": "lex_sirds",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    }
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-04T15:45:02.210Z"
+}

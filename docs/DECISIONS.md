@@ -282,6 +282,52 @@ spaced-repetition app that means lost review history.
 *Rules out:* a native app; a push-notification or background-sync
 dependency; treating the IndexedDB copy as the only copy.
 
+## ADR-014 — Another real form of the word is wrong, not a near miss
+**2026-11-04 · accepted (reversible)** · narrows SPEC.md's near-miss rule
+
+For `cloze` and `inflect` cards, an answer that differs from the expected
+form only by diacritics **and is exactly another real form of the same
+word** is `wrong`, and the feedback names that form: "galda is a real form
+of this word — the genitive singular — but not the form asked for here".
+A diacritic-folded spelling that is no real form ("Riga" for "Rīgā") stays
+a `nearMiss`, so the M2 done-when (`checkAnswer("Rīgā", "Riga")` →
+`nearMiss`) still holds.
+
+The other forms come from `confusablesFor` (`src/engine/exercise.ts`), and
+only `verified` ones count: the feedback makes a claim about Latvian, so it
+must come from approved lexemes and grammar files (ADR-008, ADR-010). While
+the tables are drafts, behaviour is exactly as before.
+
+*Why:* the open question flagged that `galda`/`galdā` and `māja`/`mājā` are
+different cases, and the app exists to teach exactly that difference (ADR-001).
+Grading it "hard" instead of "again" would let FSRS treat a case error as
+nearly learned. It had to be decided before the review screen went live,
+which it now is.
+
+*Rules out:* grading a real wrong case as a near miss; naming a form in
+feedback that no human has reviewed. *Revisit if:* learners on keyboards
+without easy diacritics find it too harsh — the diacritic row is the first
+answer to that.
+
+## ADR-015 — First content batch approved by Claude at the owner's request
+**2026-11-04 · accepted** · one-time exception to ADR-006/ADR-008/ADR-010's "human runs content:approve"
+
+The owner asked Claude to run `content:approve` on everything drafted so far
+(all 81 lexemes, the 7 grammar files, `batch_001` and `batch_002`) because
+they couldn't do it themselves yet. Claude re-read every sentence, lexeme
+and pronoun paradigm first and changed nothing; every noun and pronoun form
+round-trips, and the 212 cards it produces were audited. But Claude wrote
+this material, so **this was a self-check, not the independent human review
+the gate exists for.** `source: "generated"` stays on every file as the
+audit trail.
+
+*Consequences:* the app now teaches this material, and ADR-014's other-form
+check is live (it only uses verified forms). Correcting a file later is
+fine: edit it in place and `content:check` re-validates it.
+
+*Rules out:* treating this as standing permission — future drafts go back
+through the normal human gate unless the owner asks again.
+
 ---
 
 ## Open questions
@@ -290,15 +336,8 @@ dependency; treating the IndexedDB copy as the only copy.
 - ~~**Declension class coverage.**~~ *Resolved 2026-09-25:* M2 covers all six,
   as draft tables (ADR-008). Masculine nouns of declensions 4 and 5 (puika,
   bende) are not covered yet — see `content/_needed.json`.
-- **Diacritic-only differences that are a different form.** SPEC.md makes any
-  diacritic-only difference a near miss, but in Latvian some of those are a
-  different case: `galda` (gen.sg) vs `galdā` (loc.sg), `māja` vs `mājā`.
-  `checkAnswer` follows SPEC.md today (tested). Option for M3: when the given
-  answer is itself another form of the same lexeme, call it `wrong`. Decide
-  before the review screen goes live.
-- **Definiteness.** Adjective definite/indefinite endings are a real A2 topic but
-  add a dimension to every adjective card. Decide before building adjective
-  support whether it is in scope for v1.
+- ~~**Diacritic-only differences that are a different form.**~~ *Decided
+  2026-11-04 — see ADR-014.*
 - **Word order in `produce`.** Latvian word order is flexible; `produce`
   only accepts the authored order ("Man šodien jāstrādā" vs "Šodien man
   jāstrādā"). Options: accept any permutation of the same words as correct,
