@@ -102,6 +102,12 @@ a text-only card instead of breaking the session.
 ## Session log
 
 <!-- newest first, one line each: date — what landed — what to pick up next -->
+2026-11-05 — Live-site fixes from first real use: the site showed a blank
+page because Pages was set to "Deploy from a branch" (raw source); redeployed
+via the deploy workflow — switch Settings → Pages → Source to GitHub Actions
+so it sticks. After a session the Start button just greyed out; the Review
+screen now says "Done for now", when the next review is due, and offers
+"Learn 10 more new cards today" (a today-only extra, `settings.extraNew`).
 2026-11-04 — At your request Claude reviewed and approved all drafted content
 (ADR-015): 50 sentences, 81 lexemes, 7 grammar files → 212 cards (50
 recognize, 60 cloze, 52 inflect, 50 produce). Audited the other-form

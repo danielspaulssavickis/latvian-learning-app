@@ -1,7 +1,13 @@
 import { IDBFactory, IDBKeyRange } from 'fake-indexeddb'
 import { describe, expect, it } from 'vitest'
 import { openDb } from './db'
-import { DEFAULT_SETTINGS, getSettings, updateSettings } from './settings'
+import {
+  addExtraNewToday,
+  DEFAULT_SETTINGS,
+  getSettings,
+  limitsFor,
+  updateSettings,
+} from './settings'
 
 function freshDb() {
   return openDb('test', { indexedDB: new IDBFactory(), IDBKeyRange })
@@ -20,6 +26,20 @@ describe('settings', () => {
     expect(await getSettings(db)).toEqual({
       dailyLimits: { newPerDay: 5, reviewsPerDay: 50 },
       lastExportAt: when,
+      extraNew: null,
     })
+  })
+})
+
+describe('extra new cards for today', () => {
+  it("adds to today's new-card limit only, and stacks", async () => {
+    const db = freshDb()
+    const today = new Date(2026, 10, 5, 18, 0)
+    const tomorrow = new Date(2026, 10, 6, 8, 0)
+    await addExtraNewToday(db, today, 10)
+    await addExtraNewToday(db, today, 10)
+    const settings = await getSettings(db)
+    expect(limitsFor(settings, today)).toEqual({ newPerDay: 30, reviewsPerDay: 100 })
+    expect(limitsFor(settings, tomorrow)).toEqual({ newPerDay: 10, reviewsPerDay: 100 })
   })
 })

@@ -6,6 +6,7 @@ import 'fake-indexeddb/auto'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { recordReview, syncCards } from '../db/cards'
 import { openDb, type TrainerDb } from '../db/db'
+import { updateSettings } from '../db/settings'
 import { generateAllCards } from '../engine/cards'
 import { createScheduler } from '../engine/schedule'
 import { SNT_1, SNT_3 } from '../engine/__fixtures__/sentences'
@@ -63,7 +64,28 @@ describe('App', () => {
   it('says so when there is no approved content at all', async () => {
     render(<App content={fixtureContent([])} db={db} clock={clock} />)
     expect(await screen.findByText(/No study material yet/)).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Start session' })).toBeDisabled()
+    expect(screen.queryByRole('button', { name: 'Start session' })).not.toBeInTheDocument()
+  })
+
+  it("after the day's new cards, says when the next review is and offers more new cards", async () => {
+    const user = userEvent.setup()
+    await updateSettings(db, { dailyLimits: { newPerDay: 1, reviewsPerDay: 100 } })
+    renderApp()
+    await startSession(user)
+    await screen.findByText('What does it mean?')
+    await user.keyboard('1')
+    await user.click(await screen.findByRole('button', { name: 'End session' }))
+    await user.click(await screen.findByRole('button', { name: 'Back to start' }))
+
+    expect(await screen.findByText(/Done for now/)).toBeInTheDocument()
+    expect(screen.getByText(/next review is due in/)).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Start session' })).not.toBeInTheDocument()
+
+    // One other sentence still has a new card for today.
+    await user.click(screen.getByRole('button', { name: 'Learn 1 more new card today' }))
+    expect(await screen.findByText(/reviews? due/)).toHaveTextContent('1 new card')
+    await startSession(user)
+    expect(await screen.findByText('What does it mean?')).toBeInTheDocument()
   })
 
   it('shows the draft banner only in preview mode', async () => {

@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useReducer, useRef, useState } from 'react'
 import { loadSession, recordReview } from '../db/cards'
-import { getSettings } from '../db/settings'
+import { addExtraNewToday, getSettings, limitsFor } from '../db/settings'
 import { buildExercise, type Exercise } from '../engine/exercise'
+import { formatDueIn } from '../engine/labels'
 import { initialReviewState, reviewReducer } from '../engine/reviewSession'
 import { startOfLocalDay } from '../engine/session'
 import { summarize } from '../engine/summary'
@@ -10,6 +11,9 @@ import { BackupReminder } from './BackupReminder'
 import { CardView } from './CardView'
 import { SessionSummary } from './SessionSummary'
 import { useLiveQuery } from './useLiveQuery'
+
+/** How many extra new cards one "Learn more" press adds for today. */
+const EXTRA_NEW = 10
 
 /**
  * The review loop. All decisions live in src/engine (reviewReducer,
@@ -33,7 +37,7 @@ export function ReviewScreen() {
   const plan = useLiveQuery(async () => {
     const now = clock()
     const settings = await getSettings(db)
-    return loadSession(db, now, settings.dailyLimits, startOfLocalDay(now))
+    return loadSession(db, now, limitsFor(settings, now), startOfLocalDay(now))
   }, [db, clock, minute])
 
   // Persist each new answer, in order. The ref survives re-renders (and
@@ -102,24 +106,47 @@ export function ReviewScreen() {
             <code>content/README.md</code> for the review workflow.
           </p>
         ) : empty ? (
-          <p className="text-slate-600 dark:text-slate-300">
-            Nothing due right now. Come back later — or raise the daily new-card limit in Settings.
-          </p>
+          <div className="space-y-3 text-slate-600 dark:text-slate-300">
+            <p>
+              <strong className="text-slate-800 dark:text-slate-100">Done for now.</strong>{' '}
+              {plan.nextDueAt
+                ? `Your next review is due ${formatDueIn(plan.nextDueAt, clock())}.`
+                : 'Nothing is scheduled yet.'}
+            </p>
+            {plan.moreNewAvailable > 0 ? (
+              <button
+                type="button"
+                onClick={() =>
+                  void addExtraNewToday(db, clock(), Math.min(EXTRA_NEW, plan.moreNewAvailable))
+                }
+                className="rounded-md border border-emerald-700 px-4 py-2 font-medium text-emerald-800 hover:bg-emerald-50 dark:border-emerald-500 dark:text-emerald-300 dark:hover:bg-emerald-950"
+              >
+                Learn {Math.min(EXTRA_NEW, plan.moreNewAvailable)} more new card
+                {Math.min(EXTRA_NEW, plan.moreNewAvailable) === 1 ? '' : 's'} today
+              </button>
+            ) : (
+              <p className="text-sm">
+                Every sentence has had its new card for today — more unlock tomorrow.
+              </p>
+            )}
+          </div>
         ) : (
           <p className="text-slate-700 dark:text-slate-200">
             <strong>{reviews}</strong> review{reviews === 1 ? '' : 's'} due ·{' '}
             <strong>{fresh}</strong> new card{fresh === 1 ? '' : 's'}
           </p>
         )}
-        <button
-          type="button"
-          autoFocus
-          disabled={plan === undefined || empty}
-          onClick={start}
-          className="rounded-md bg-emerald-700 px-5 py-2.5 font-medium text-white hover:bg-emerald-800 disabled:bg-slate-300 dark:disabled:bg-slate-700"
-        >
-          Start session
-        </button>
+        {!empty && (
+          <button
+            type="button"
+            autoFocus
+            disabled={plan === undefined}
+            onClick={start}
+            className="rounded-md bg-emerald-700 px-5 py-2.5 font-medium text-white hover:bg-emerald-800 disabled:bg-slate-300 dark:disabled:bg-slate-700"
+          >
+            Start session
+          </button>
+        )}
         <BackupReminder />
       </section>
     )

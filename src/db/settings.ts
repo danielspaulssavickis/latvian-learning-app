@@ -1,13 +1,19 @@
-import { DEFAULT_DAILY_LIMITS, type DailyLimits } from '../engine/session'
+import { DEFAULT_DAILY_LIMITS, localDayKey, type DailyLimits } from '../engine/session'
 import type { TrainerDb } from './db'
 
 export interface Settings {
   dailyLimits: DailyLimits
   /** When progress was last exported — drives the backup reminder (ADR-012). */
   lastExportAt: Date | null
+  /** Extra new cards allowed on one day only ("Learn more" on the Review screen). */
+  extraNew: { day: string; count: number } | null
 }
 
-export const DEFAULT_SETTINGS: Settings = { dailyLimits: DEFAULT_DAILY_LIMITS, lastExportAt: null }
+export const DEFAULT_SETTINGS: Settings = {
+  dailyLimits: DEFAULT_DAILY_LIMITS,
+  lastExportAt: null,
+  extraNew: null,
+}
 
 const KEY = 'settings'
 
@@ -27,5 +33,21 @@ export async function updateSettings(db: TrainerDb, patch: Partial<Settings>): P
     const next = { ...(await getSettings(db)), ...patch }
     await db.settings.put({ key: KEY, value: next })
     return next
+  })
+}
+
+/** Today's limits: the daily limits plus any extra new cards granted for today. */
+export function limitsFor(settings: Settings, now: Date): DailyLimits {
+  const extra = settings.extraNew?.day === localDayKey(now) ? settings.extraNew.count : 0
+  return { ...settings.dailyLimits, newPerDay: settings.dailyLimits.newPerDay + extra }
+}
+
+/** Allows `count` more new cards today only; resets by itself tomorrow. */
+export async function addExtraNewToday(db: TrainerDb, now: Date, count: number): Promise<Settings> {
+  return db.transaction('rw', db.settings, async () => {
+    const settings = await getSettings(db)
+    const day = localDayKey(now)
+    const already = settings.extraNew?.day === day ? settings.extraNew.count : 0
+    return updateSettings(db, { extraNew: { day, count: already + count } })
   })
 }

@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import type { CardSpec } from './cards'
 import { createScheduler } from './schedule'
-import { selectSession, startOfLocalDay, type StoredCard } from './session'
+import {
+  localDayKey,
+  newCardsAvailable,
+  nextDueAt,
+  selectSession,
+  startOfLocalDay,
+  type StoredCard,
+} from './session'
 
 const NOW = new Date('2026-09-25T09:00:00.000Z')
 const HOUR = 60 * 60_000
@@ -108,5 +115,41 @@ describe('startOfLocalDay', () => {
     const noon = new Date(2026, 8, 25, 12, 30)
     expect(startOfLocalDay(noon)).toEqual(new Date(2026, 8, 25, 0, 0))
     expect(startOfLocalDay(new Date(2026, 8, 25, 0, 0))).toEqual(new Date(2026, 8, 25, 0, 0))
+  })
+})
+
+describe('localDayKey', () => {
+  it('formats the local date', () => {
+    expect(localDayKey(new Date(2026, 10, 5, 23, 59))).toBe('2026-11-05')
+  })
+})
+
+describe('nextDueAt', () => {
+  it('finds the earliest future due date among seen, active cards', () => {
+    const soon = new Date(NOW.getTime() + 10 * 60_000)
+    const later = new Date(NOW.getTime() + 2 * HOUR)
+    const cards = [
+      newCard('snt_0001'),
+      reviewCard('snt_a', later),
+      reviewCard('snt_b', soon),
+      reviewCard('snt_c', new Date(NOW.getTime() - HOUR)), // already due: not "next"
+      { ...reviewCard('snt_d', new Date(NOW.getTime() + 60_000)), retired: true },
+    ]
+    expect(nextDueAt(cards, NOW)).toEqual(soon)
+    expect(nextDueAt([newCard('snt_0001')], NOW)).toBeNull()
+  })
+})
+
+describe('newCardsAvailable', () => {
+  it('counts new cards beyond the cap, still one per sentence', () => {
+    const cards = [newCard('snt_0001', 0), newCard('snt_0001', 2), newCard('snt_0002', 0)]
+    expect(newCardsAvailable(cards, NOW, { newCards: 10, reviews: 0 })).toBe(2)
+    expect(
+      newCardsAvailable(cards, NOW, {
+        newCards: 10,
+        reviews: 0,
+        sentenceIds: new Set(['snt_0001']),
+      }),
+    ).toBe(1)
   })
 })
