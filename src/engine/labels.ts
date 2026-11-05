@@ -47,3 +47,20 @@ export function featureLabel(feature: string): string {
       return feature
   }
 }
+
+/** "in 8 minutes", "at 14:05", "tomorrow at 09:30", "on 12 Nov" — when the next review is due. */
+export function formatDueIn(due: Date, now: Date): string {
+  const minutes = Math.ceil((due.getTime() - now.getTime()) / 60_000)
+  if (minutes <= 1) return 'in a minute'
+  if (minutes < 60) return `in ${minutes} minutes`
+  const time = `${String(due.getHours()).padStart(2, '0')}:${String(due.getMinutes()).padStart(2, '0')}`
+  const days = Math.round(
+    (new Date(due.getFullYear(), due.getMonth(), due.getDate()).getTime() -
+      new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime()) /
+      86_400_000,
+  )
+  if (days === 0) return `at ${time}`
+  if (days === 1) return `tomorrow at ${time}`
+  const month = due.toLocaleString('en-GB', { month: 'short' })
+  return `on ${due.getDate()} ${month}`
+}

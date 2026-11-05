@@ -8,6 +8,8 @@ import {
   type Scheduler,
 } from '../engine/schedule'
 import {
+  newCardsAvailable,
+  nextDueAt,
   selectSession,
   type DailyLimits,
   type DoneToday,
@@ -140,13 +142,26 @@ export async function countDoneSince(db: TrainerDb, since: Date): Promise<DoneTo
   return { newCards, reviews, sentenceIds }
 }
 
+export interface SessionPlan extends Session {
+  /** When the next seen card falls due, if nothing is due now. */
+  nextDueAt: Date | null
+  /** New cards that exist beyond today's cap (one per sentence) — what "learn more" can add. */
+  moreNewAvailable: number
+}
+
 /** What to study right now, honoring the daily caps from `dayStart` onward. */
 export async function loadSession(
   db: TrainerDb,
   now: Date,
   limits: DailyLimits,
   dayStart: Date,
-): Promise<Session> {
+): Promise<SessionPlan> {
   const [cards, doneToday] = await Promise.all([db.cards.toArray(), countDoneSince(db, dayStart)])
-  return selectSession(cards, now, limits, doneToday)
+  const session = selectSession(cards, now, limits, doneToday)
+  const available = newCardsAvailable(cards, now, doneToday)
+  return {
+    ...session,
+    nextDueAt: nextDueAt(cards, now),
+    moreNewAvailable: Math.max(0, available - session.newCards.length),
+  }
 }

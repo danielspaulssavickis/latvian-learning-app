@@ -78,3 +78,33 @@ export function selectSession(
 export function startOfLocalDay(now: Date): Date {
   return new Date(now.getFullYear(), now.getMonth(), now.getDate())
 }
+
+/** A local calendar day as "YYYY-MM-DD" — the key for today-only settings. */
+export function localDayKey(now: Date): string {
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`
+}
+
+/** When the next already-seen card falls due after `now`, or null if none will. */
+export function nextDueAt(cards: readonly StoredCard[], now: Date): Date | null {
+  let next: Date | null = null
+  for (const card of cards) {
+    if (card.retired || isNew(card.fsrs)) continue
+    const due = card.fsrs.due
+    if (due.getTime() > now.getTime() && (next === null || due < next)) next = due
+  }
+  return next
+}
+
+/**
+ * How many more new cards could be introduced today if the daily cap
+ * allowed it (sibling burying still applies) — what "learn more" can offer.
+ */
+export function newCardsAvailable(
+  cards: readonly StoredCard[],
+  now: Date,
+  doneToday: DoneToday,
+): number {
+  const uncapped = { newPerDay: Number.MAX_SAFE_INTEGER, reviewsPerDay: 0 }
+  return selectSession(cards, now, uncapped, { ...doneToday, newCards: 0 }).newCards.length
+}
