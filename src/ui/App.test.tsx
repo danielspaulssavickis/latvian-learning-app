@@ -43,6 +43,14 @@ async function studiedYesterday(cardIds: string[], content = fixtureContent()) {
   }
 }
 
+/** Both sentences' recognize and translate cards: the next new card of each is its cloze. */
+const TRANSLATED = [
+  'recognize:snt_0001',
+  'translate:snt_0001',
+  'recognize:snt_0003',
+  'translate:snt_0003',
+]
+
 async function startSession(user: ReturnType<typeof userEvent.setup>) {
   const start = await screen.findByRole('button', { name: 'Start session' })
   await waitFor(() => expect(start).toBeEnabled())
@@ -106,7 +114,7 @@ describe('App', () => {
   })
 
   it('runs a keyboard-only cloze session, re-queues a miss, and persists every answer', async () => {
-    await studiedYesterday(['recognize:snt_0001', 'recognize:snt_0003'])
+    await studiedYesterday(TRANSLATED)
     const user = userEvent.setup()
     renderApp()
     await startSession(user)
@@ -133,13 +141,33 @@ describe('App', () => {
     expect(await screen.findByRole('heading', { name: 'Session done' })).toBeInTheDocument()
     expect(screen.getByText('50%')).toBeInTheDocument() // 1 of 2 first attempts accepted
 
-    await waitFor(async () => expect(await db.reviews.count()).toBe(5))
-    const today = (await db.reviews.orderBy('id').toArray()).slice(2).map((r) => r.result)
+    await waitFor(async () => expect(await db.reviews.count()).toBe(7))
+    const today = (await db.reviews.orderBy('id').toArray()).slice(4).map((r) => r.result)
     expect(today).toEqual(['nearMiss', 'wrong', 'correct'])
   })
 
+  it('checks a translate card as English, accepting a listed alternative', async () => {
+    await studiedYesterday(['recognize:snt_0001', 'recognize:snt_0003'])
+    const user = userEvent.setup()
+    renderApp()
+    await startSession(user)
+
+    expect(await screen.findByText('Say it in English')).toBeInTheDocument()
+    const input = await screen.findByRole('textbox', { name: 'English for: Es dzīvoju Rīgā.' })
+    expect(input).toHaveAttribute('lang', 'en')
+    expect(screen.queryByRole('group', { name: 'Latvian letters' })).not.toBeInTheDocument()
+    await user.keyboard("i'm living in riga{Enter}") // a glossAlternative, contracted, no full stop
+    expect(await screen.findByText('Correct.')).toBeInTheDocument()
+    expect(screen.getByText(/Another way to say it/)).toHaveTextContent('I live in Riga.')
+
+    await user.keyboard('{Enter}')
+    await screen.findByRole('textbox', { name: 'English for: Man ir divi bērni.' })
+    await user.keyboard('I have two cats{Enter}')
+    expect(await screen.findByText(/The answer is/)).toHaveTextContent('I have two children.')
+  })
+
   it('checks a produce card as a whole sentence and shows it on the dashboard', async () => {
-    await studiedYesterday(['recognize:snt_0001', 'cloze:snt_0001#2', 'recognize:snt_0003'])
+    await studiedYesterday([...TRANSLATED, 'cloze:snt_0001#2'])
     const user = userEvent.setup()
     renderApp()
     await startSession(user)
@@ -160,10 +188,7 @@ describe('App', () => {
 
   it('degrades a listen card with a missing audio file to a text-only card (M5 done-when)', async () => {
     const content = fixtureContent([{ ...SNT_1, audio: 'audio/missing.mp3' }, SNT_3])
-    await studiedYesterday(
-      ['recognize:snt_0001', 'cloze:snt_0001#2', 'produce:snt_0001', 'recognize:snt_0003'],
-      content,
-    )
+    await studiedYesterday([...TRANSLATED, 'cloze:snt_0001#2', 'produce:snt_0001'], content)
     const user = userEvent.setup()
     const { container } = render(<App content={content} db={db} clock={clock} />)
     await startSession(user)
@@ -182,7 +207,7 @@ describe('App', () => {
   })
 
   it('inserts a diacritic at the caret without losing focus', async () => {
-    await studiedYesterday(['recognize:snt_0001', 'recognize:snt_0003'])
+    await studiedYesterday(TRANSLATED)
     const user = userEvent.setup()
     renderApp()
     await startSession(user)
@@ -229,7 +254,7 @@ describe('App', () => {
       window.confirm = () => true
       const file = new File([exported], 'backup.json', { type: 'application/json' })
       await user.upload(screen.getByLabelText('Progress backup file'), file)
-      expect(await screen.findByText(/Imported 7 cards and 0 reviews/)).toBeInTheDocument()
+      expect(await screen.findByText(/Imported 9 cards and 0 reviews/)).toBeInTheDocument()
     } finally {
       URL.createObjectURL = createObjectURL
     }

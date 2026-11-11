@@ -2,6 +2,16 @@
   "id": "snt_0005",
   "text": "Man šodien jāstrādā.",
   "gloss": "I have to work today.",
+  "alternatives": [
+    "Šodien man jāstrādā.",
+    "Man jāstrādā šodien."
+  ],
+  "glossAlternatives": [
+    "Today I have to work.",
+    "I must work today.",
+    "I need to work today.",
+    "I have got to work today."
+  ],
   "level": "a1",
   "tokens": [
     {

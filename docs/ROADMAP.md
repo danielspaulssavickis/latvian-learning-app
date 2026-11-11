@@ -69,6 +69,8 @@ Yours to repeat on approved content.)*
 
 - [x] `inflect`, `produce`, `recognize` exercise kinds (`inflect` answers are
       vouched for by an approved sentence — ADR-012 narrows ADR-008 here)
+- [x] `translate` (Latvian → typed English) and per-sentence accepted
+      alternatives for both translation directions (ADR-016)
 - [x] Per-feature retention tracking over trailing 30 reviews
 - [x] Dashboard: weak features surfaced, sorted worst-first
 - [x] JSON export/import of progress (+ weekly backup reminder)
@@ -102,6 +104,13 @@ a text-only card instead of breaking the session.
 ## Session log
 
 <!-- newest first, one line each: date — what landed — what to pick up next -->
+2026-11-11 — Translation both ways (ADR-016): new `translate` card (Latvian
+→ typed English, 50 more cards) and accepted alternatives per sentence
+(`alternatives` for Latvian word orders, `glossAlternatives` for English).
+Claude added the alternatives to the 50 approved sentences directly — they
+are Claude-written Latvian and English, not human-reviewed; see
+`content/_needed.json` (review:alternatives). Existing progress keeps: the
+new cards sync in as new.
 2026-11-05 — Live-site fixes from first real use: the site showed a blank
 page because Pages was set to "Deploy from a branch" (raw source); redeployed
 via the deploy workflow — switch Settings → Pages → Source to GitHub Actions

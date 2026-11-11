@@ -129,6 +129,26 @@ describe('reviewReducer', () => {
     expect(state.lastAnswer?.result).toBe('correct')
   })
 
+  it('records which accepted alternative a correct answer matched', () => {
+    let state = reviewReducer(initialReviewState, {
+      type: 'start',
+      exercises: [
+        {
+          kind: 'translate',
+          check: 'english',
+          cardId: 't',
+          feature: 'skill:translate',
+          text: 'Es dzīvoju Rīgā.',
+          expected: 'I live in Riga.',
+          alternatives: ['I am living in Riga.'],
+        },
+      ],
+      now: T0,
+    })
+    state = reviewReducer(state, { type: 'submit', given: "i'm living in riga", now: at(9) })
+    expect(state.lastAnswer).toMatchObject({ result: 'correct', matched: 'I am living in Riga.' })
+  })
+
   it('can be ended early, then reset to idle', () => {
     const state = reviewReducer(started(), { type: 'finish' })
     expect(state.phase).toBe('done')

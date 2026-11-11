@@ -79,6 +79,33 @@ describe('buildExercise — other kinds', () => {
     expect(buildExercise(card('recognize:snt_0001'), all)).toEqual(exercise)
   })
 
+  it('translate: the sentence in, its gloss out, checked as English with the listed alternatives', () => {
+    expect(buildExercise(card('translate:snt_0001'), all)).toEqual({
+      kind: 'translate',
+      check: 'english',
+      cardId: 'translate:snt_0001',
+      feature: 'skill:translate',
+      text: 'Es dzīvoju Rīgā.',
+      expected: 'I live in Riga.',
+      alternatives: ['I am living in Riga.'],
+    })
+    expect(buildExercise(card('translate:snt_0003'), all)).not.toHaveProperty('alternatives')
+  })
+
+  it("produce: carries the sentence's accepted Latvian alternatives", () => {
+    const withAlternatives = {
+      ...all,
+      sentenceById: new Map([
+        ...all.sentenceById,
+        ['snt_0003', { ...SNT_3, alternatives: ['Divi bērni man ir.'] }],
+      ]),
+    }
+    expect(buildExercise(card('produce:snt_0003'), withAlternatives)).toMatchObject({
+      kind: 'produce',
+      alternatives: ['Divi bērni man ir.'],
+    })
+  })
+
   it('produce: gloss in, whole sentence out', () => {
     expect(buildExercise(card('produce:snt_0003'), all)).toEqual({
       kind: 'produce',

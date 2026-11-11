@@ -1,4 +1,4 @@
-import { checkAnswer, matchConfusable, type CheckResult } from './checkAnswer'
+import { matchAnswer, matchConfusable, type CheckResult } from './checkAnswer'
 import { checkOptionsFor, type Exercise } from './exercise'
 
 export interface Answer {
@@ -13,6 +13,8 @@ export interface Answer {
   firstAttempt: boolean
   /** When the answer was another real form of the word: which one (ADR-014). */
   confusedWith?: string
+  /** When the answer matched an accepted alternative rather than `expected`: that alternative (ADR-016). */
+  matched?: string
 }
 
 export interface ReviewState {
@@ -77,7 +79,7 @@ export function reviewReducer(state: ReviewState, action: ReviewAction): ReviewS
       if (action.given.trim() === '') return state
       const exercise = state.current
       const options = checkOptionsFor(exercise)
-      const result = checkAnswer(exercise.expected, action.given, options)
+      const { result, target } = matchAnswer(exercise.expected, action.given, options)
       const confused = result === 'wrong' ? matchConfusable(action.given, options) : null
       const answer: Answer = {
         cardId: exercise.cardId,
@@ -89,6 +91,7 @@ export function reviewReducer(state: ReviewState, action: ReviewAction): ReviewS
         responseMs: action.now.getTime() - state.shownAt.getTime(),
         firstAttempt: !state.attempted.includes(exercise.cardId),
         ...(confused ? { confusedWith: confused.label } : {}),
+        ...(result !== 'wrong' && target !== exercise.expected ? { matched: target } : {}),
       }
       return {
         ...state,

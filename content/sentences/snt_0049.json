@@ -2,6 +2,13 @@
   "id": "snt_0049",
   "text": "Mēs sēžam pie galda.",
   "gloss": "We are sitting at the table.",
+  "alternatives": [
+    "Sēžam pie galda."
+  ],
+  "glossAlternatives": [
+    "We sit at the table.",
+    "We are sitting at a table."
+  ],
   "level": "a1",
   "tokens": [
     {

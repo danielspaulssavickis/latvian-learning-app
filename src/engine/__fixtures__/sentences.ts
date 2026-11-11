@@ -36,6 +36,7 @@ export const SNT_1: Sentence = {
   id: 'snt_0001',
   text: 'Es dzīvoju Rīgā.',
   gloss: 'I live in Riga.',
+  glossAlternatives: ['I am living in Riga.'],
   level: 'a1',
   tokens: [
     { surface: 'Es', lexeme: 'lex_es', features: { case: 'nom', number: 'sg' } },

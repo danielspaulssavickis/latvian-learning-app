@@ -2,6 +2,11 @@
   "id": "snt_0035",
   "text": "Ziemā ir sniegs.",
   "gloss": "In winter there is snow.",
+  "glossAlternatives": [
+    "There is snow in winter.",
+    "In the winter there is snow.",
+    "There is snow in the winter."
+  ],
   "level": "a1",
   "tokens": [
     {

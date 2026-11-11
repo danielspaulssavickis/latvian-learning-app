@@ -5,20 +5,20 @@ import { inflect, type Grammar } from './inflect'
  * What a card *is*, derived from content alone. Scheduling state is added on
  * top in src/db/ — this part must be reproducible from content at any time.
  */
-export type CardKind = 'recognize' | 'cloze' | 'inflect' | 'produce' | 'listen'
+export type CardKind = 'recognize' | 'translate' | 'cloze' | 'inflect' | 'produce' | 'listen'
 
 export interface CardSpec {
   /** `${kind}:${targetId}` — stable across regenerations (ADR-009, ADR-012). */
   id: string
   kind: CardKind
   /**
-   * cloze: `${sentenceId}#${tokenIndex}`; recognize/produce/listen: the sentence id;
+   * cloze: `${sentenceId}#${tokenIndex}`; recognize/translate/produce/listen: the sentence id;
    * inflect: `${lexemeId}@${formKey}`, e.g. "lex_maja@loc.sg".
    */
   targetId: string
   /** The sentence this card comes from (for inflect: the first one using that form). */
   sentenceId: string
-  /** The token drilled; null for whole-sentence cards (recognize, produce, listen). */
+  /** The token drilled; null for whole-sentence cards (recognize, translate, produce, listen). */
   tokenIndex: number | null
   /** The feature this card drills, e.g. "case:loc" — see `primaryFeature`. */
   feature: string
@@ -60,15 +60,17 @@ function featureList(features: Features, lexeme: Lexeme): string[] {
 
 /**
  * Within one sentence, new cards come easiest first: understand it
- * (recognize), fill one form in context (cloze), produce the form bare
- * (inflect), then write the whole sentence (produce).
+ * (recognize), put it into English (translate), fill one form in context
+ * (cloze), produce the form bare (inflect), then write the whole sentence
+ * in Latvian (produce).
  */
 const KIND_ORDER: Record<CardKind, number> = {
   recognize: 0,
-  cloze: 1,
-  inflect: 2,
-  produce: 3,
-  listen: 4,
+  translate: 1,
+  cloze: 2,
+  inflect: 3,
+  produce: 4,
+  listen: 5,
 }
 
 /**
@@ -127,7 +129,7 @@ function fold(text: string): string {
  * Every card the content supports (ADR-012), in content order:
  *
  * - `cloze` — one per drillable token (see `generateCards`);
- * - `recognize` and `produce` — one each per sentence;
+ * - `recognize`, `translate` and `produce` — one each per sentence;
  * - `listen` — one per sentence that has an `audio` file (M5);
  * - `inflect` — one per distinct (lexeme, case.number) among drillable noun
  *   and pronoun tokens, and only where `inflect()` reproduces the sentence's
@@ -145,8 +147,8 @@ export function generateAllCards(
 
   for (const sentence of [...sentences].sort((a, b) => (a.id < b.id ? -1 : 1))) {
     const sentenceKinds = sentence.audio
-      ? (['recognize', 'produce', 'listen'] as const)
-      : (['recognize', 'produce'] as const)
+      ? (['recognize', 'translate', 'produce', 'listen'] as const)
+      : (['recognize', 'translate', 'produce'] as const)
     for (const kind of sentenceKinds) {
       cards.push({
         id: `${kind}:${sentence.id}`,

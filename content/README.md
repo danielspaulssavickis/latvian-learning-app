@@ -11,3 +11,8 @@ content is tracked as an entry in `content/_needed.json` instead of being invent
 
 Review workflow: `npm run dev:drafts` to try drafts in the app, `npm run content:check:drafts`
 to validate them, then `npm run content:approve -- content/lexemes content/grammar content/drafts` (lexemes and grammar are approved first, then sentences).
+
+A sentence may list `alternatives` (other Latvian wordings accepted as correct in
+`produce`/`listen`) and `glossAlternatives` (other English translations accepted in
+`translate`) — ADR-016. They are answers the learner can be told are right, so they
+are reviewed like `text` and `gloss`; nothing is computed from them.

@@ -2,6 +2,14 @@
   "id": "snt_0011",
   "text": "Es eju uz skolu.",
   "gloss": "I am going to school.",
+  "alternatives": [
+    "Eju uz skolu."
+  ],
+  "glossAlternatives": [
+    "I go to school.",
+    "I am going to the school.",
+    "I am walking to school."
+  ],
   "level": "a1",
   "tokens": [
     {

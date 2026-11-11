@@ -2,6 +2,15 @@
   "id": "snt_0046",
   "text": "Naktī es guļu.",
   "gloss": "At night I sleep.",
+  "alternatives": [
+    "Es guļu naktī.",
+    "Naktī guļu."
+  ],
+  "glossAlternatives": [
+    "I sleep at night.",
+    "At night I am sleeping.",
+    "I am sleeping at night."
+  ],
   "level": "a1",
   "tokens": [
     {

@@ -2,6 +2,11 @@
   "id": "snt_0021",
   "text": "Upē ir daudz zivju.",
   "gloss": "There are a lot of fish in the river.",
+  "glossAlternatives": [
+    "There are many fish in the river.",
+    "There is a lot of fish in the river.",
+    "There are lots of fish in the river."
+  ],
   "level": "a1",
   "tokens": [
     {

@@ -9,12 +9,18 @@ interface ExerciseBase {
   feature: string
   /** What checkAnswer compares against. */
   expected: string
-  /** How the answer is checked: one word, a whole sentence (punctuation ignored), or a choice. */
-  check: 'word' | 'sentence' | 'choice'
+  /**
+   * How the answer is checked: one Latvian word, a whole Latvian sentence
+   * (punctuation ignored), an English sentence (punctuation and contractions
+   * ignored), or a choice.
+   */
+  check: 'word' | 'sentence' | 'english' | 'choice'
   /** The sentence's recording, if it has one — playable after answering. */
   audio?: string
   /** Other real forms of the word that differ only by diacritics (ADR-014). */
   confusables?: Confusable[]
+  /** Other answers accepted as correct besides `expected` (ADR-016). */
+  alternatives?: string[]
 }
 
 /** Sentence with one token blanked, lemma in brackets → typed form. */
@@ -42,6 +48,12 @@ export interface ProduceExercise extends ExerciseBase {
   gloss: string
 }
 
+/** Latvian sentence → typed English translation. */
+export interface TranslateExercise extends ExerciseBase {
+  kind: 'translate'
+  text: string
+}
+
 /**
  * Audio only → typed sentence. If the audio can't be played, the screen
  * falls back to `gloss` as a text prompt, so a missing file degrades to a
@@ -63,7 +75,12 @@ export interface InflectExercise extends ExerciseBase {
 }
 
 export type Exercise =
-  ClozeExercise | RecognizeExercise | ProduceExercise | ListenExercise | InflectExercise
+  | ClozeExercise
+  | RecognizeExercise
+  | TranslateExercise
+  | ProduceExercise
+  | ListenExercise
+  | InflectExercise
 
 export interface ExerciseContent {
   sentenceById: ReadonlyMap<string, Sentence>
@@ -72,7 +89,12 @@ export interface ExerciseContent {
 }
 
 export function checkOptionsFor(exercise: Exercise): CheckOptions {
-  return { ignorePunctuation: exercise.check === 'sentence', confusables: exercise.confusables }
+  return {
+    ignorePunctuation: exercise.check === 'sentence' || exercise.check === 'english',
+    language: exercise.check === 'english' ? 'en' : 'lv',
+    confusables: exercise.confusables,
+    alternatives: exercise.alternatives,
+  }
 }
 
 const CASES = ['nom', 'gen', 'dat', 'acc', 'ins', 'loc', 'voc'] as const
@@ -109,6 +131,10 @@ export function confusablesFor(
 
 function withConfusables(confusables: Confusable[]): { confusables?: Confusable[] } {
   return confusables.length > 0 ? { confusables } : {}
+}
+
+function withAlternatives(alternatives: string[] | undefined): { alternatives?: string[] } {
+  return alternatives && alternatives.length > 0 ? { alternatives } : {}
 }
 
 /**
@@ -207,6 +233,16 @@ export function buildExercise(card: CardSpec, content: ExerciseContent): Exercis
         expected: sentence.gloss,
       }
 
+    case 'translate':
+      return {
+        ...base,
+        kind: 'translate',
+        check: 'english',
+        text: sentence.text,
+        expected: sentence.gloss,
+        ...withAlternatives(sentence.glossAlternatives),
+      }
+
     case 'produce':
       return {
         ...base,
@@ -214,6 +250,7 @@ export function buildExercise(card: CardSpec, content: ExerciseContent): Exercis
         check: 'sentence',
         gloss: sentence.gloss,
         expected: sentence.text,
+        ...withAlternatives(sentence.alternatives),
       }
 
     case 'listen':
@@ -225,6 +262,7 @@ export function buildExercise(card: CardSpec, content: ExerciseContent): Exercis
         audio: sentence.audio,
         gloss: sentence.gloss,
         expected: sentence.text,
+        ...withAlternatives(sentence.alternatives),
       }
 
     case 'inflect': {

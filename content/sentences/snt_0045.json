@@ -2,6 +2,13 @@
   "id": "snt_0045",
   "text": "Es dzīvoju Baltijas valstī.",
   "gloss": "I live in a Baltic country.",
+  "alternatives": [
+    "Dzīvoju Baltijas valstī."
+  ],
+  "glossAlternatives": [
+    "I am living in a Baltic country.",
+    "I live in a Baltic state."
+  ],
   "level": "a1",
   "tokens": [
     {

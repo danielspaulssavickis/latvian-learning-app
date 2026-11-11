@@ -7,10 +7,12 @@ interface Props {
   onChange: (value: string) => void
   /** Inline sits inside a sentence (cloze); block is a full-width field. */
   variant: 'inline' | 'block'
+  /** The language being typed — Latvian unless the card asks for English. */
+  lang?: 'lv' | 'en'
 }
 
-/** The typed-answer field: Latvian input, no autocorrect or autocapitalize to "help". */
-export function AnswerInput({ inputRef, label, value, onChange, variant }: Props) {
+/** The typed-answer field: no autocorrect or autocapitalize to "help". */
+export function AnswerInput({ inputRef, label, value, onChange, variant, lang = 'lv' }: Props) {
   return (
     <input
       ref={inputRef}
@@ -21,7 +23,7 @@ export function AnswerInput({ inputRef, label, value, onChange, variant }: Props
       autoCorrect="off"
       autoCapitalize="off"
       spellCheck={false}
-      lang="lv"
+      lang={lang}
       size={variant === 'inline' ? Math.max(8, value.length + 1) : undefined}
       className={
         variant === 'inline'

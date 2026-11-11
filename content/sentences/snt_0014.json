@@ -2,6 +2,13 @@
   "id": "snt_0014",
   "text": "Es dzeru kafiju bez cukura.",
   "gloss": "I drink coffee without sugar.",
+  "alternatives": [
+    "Dzeru kafiju bez cukura."
+  ],
+  "glossAlternatives": [
+    "I am drinking coffee without sugar.",
+    "I drink my coffee without sugar."
+  ],
   "level": "a1",
   "tokens": [
     {

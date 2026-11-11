@@ -2,6 +2,15 @@
   "id": "snt_0030",
   "text": "Kaķis sēž uz skapja.",
   "gloss": "The cat is sitting on the cupboard.",
+  "alternatives": [
+    "Uz skapja sēž kaķis."
+  ],
+  "glossAlternatives": [
+    "The cat sits on the cupboard.",
+    "A cat is sitting on the cupboard.",
+    "The cat is sitting on the wardrobe.",
+    "The cat is sitting on the cabinet."
+  ],
   "level": "a1",
   "tokens": [
     {

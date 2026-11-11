@@ -2,6 +2,13 @@
   "id": "snt_0036",
   "text": "Es gaidu draugu.",
   "gloss": "I am waiting for a friend.",
+  "alternatives": [
+    "Gaidu draugu."
+  ],
+  "glossAlternatives": [
+    "I am waiting for my friend.",
+    "I wait for a friend."
+  ],
   "level": "a1",
   "tokens": [
     {

@@ -2,6 +2,14 @@
   "id": "snt_0033",
   "text": "Mēs braucam uz jūru.",
   "gloss": "We are going to the sea.",
+  "alternatives": [
+    "Braucam uz jūru."
+  ],
+  "glossAlternatives": [
+    "We are going to the seaside.",
+    "We are driving to the sea.",
+    "We go to the sea."
+  ],
   "level": "a1",
   "tokens": [
     {

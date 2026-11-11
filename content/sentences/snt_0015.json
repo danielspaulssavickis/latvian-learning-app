@@ -2,6 +2,10 @@
   "id": "snt_0015",
   "text": "Viņš nāk no darba.",
   "gloss": "He is coming from work.",
+  "glossAlternatives": [
+    "He comes from work.",
+    "He is coming back from work."
+  ],
   "level": "a1",
   "tokens": [
     {

@@ -2,6 +2,18 @@
   "id": "snt_0037",
   "text": "Es runāju ar tēvu.",
   "gloss": "I am talking with my father.",
+  "alternatives": [
+    "Runāju ar tēvu."
+  ],
+  "glossAlternatives": [
+    "I am talking to my father.",
+    "I am talking with father.",
+    "I am speaking with my father.",
+    "I am speaking to my father.",
+    "I talk with my father.",
+    "I am talking with my dad.",
+    "I am talking to my dad."
+  ],
   "level": "a1",
   "tokens": [
     {

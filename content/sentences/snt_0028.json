@@ -2,6 +2,14 @@
   "id": "snt_0028",
   "text": "Es rakstu vēstuli brālim.",
   "gloss": "I am writing a letter to my brother.",
+  "alternatives": [
+    "Es rakstu brālim vēstuli.",
+    "Rakstu vēstuli brālim."
+  ],
+  "glossAlternatives": [
+    "I am writing my brother a letter.",
+    "I write a letter to my brother."
+  ],
   "level": "a1",
   "tokens": [
     {
