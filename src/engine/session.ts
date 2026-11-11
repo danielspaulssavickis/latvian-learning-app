@@ -32,6 +32,15 @@ export interface Session {
   newCards: StoredCard[]
 }
 
+export interface SessionOptions {
+  /**
+   * One new card per sentence per day (ADR-012). Default on; off lets every
+   * card of a sentence come the same day — for trying the app out, not for
+   * learning.
+   */
+  burySiblings?: boolean
+}
+
 /**
  * Picks what to study now: due reviews (learning cards included), most
  * overdue first, and unseen cards in content order, each capped by the daily
@@ -49,6 +58,7 @@ export function selectSession(
   now: Date,
   limits: DailyLimits,
   doneToday: DoneToday,
+  options: SessionOptions = {},
 ): Session {
   const active = cards.filter((card) => !card.retired)
   const reviewRoom = Math.max(0, limits.reviewsPerDay - doneToday.reviews)
@@ -59,12 +69,13 @@ export function selectSession(
     .sort((a, b) => a.fsrs.due.getTime() - b.fsrs.due.getTime())
     .slice(0, reviewRoom)
 
-  const busy = new Set(doneToday.sentenceIds ?? [])
+  const bury = options.burySiblings ?? true
+  const busy = new Set(bury ? (doneToday.sentenceIds ?? []) : [])
   const newCards: StoredCard[] = []
   for (const card of active.filter((c) => isNew(c.fsrs)).sort(compareContentOrder)) {
     if (newCards.length >= newRoom) break
     if (busy.has(card.sentenceId)) continue
-    busy.add(card.sentenceId)
+    if (bury) busy.add(card.sentenceId)
     newCards.push(card)
   }
 
@@ -104,7 +115,8 @@ export function newCardsAvailable(
   cards: readonly StoredCard[],
   now: Date,
   doneToday: DoneToday,
+  options: SessionOptions = {},
 ): number {
   const uncapped = { newPerDay: Number.MAX_SAFE_INTEGER, reviewsPerDay: 0 }
-  return selectSession(cards, now, uncapped, { ...doneToday, newCards: 0 }).newCards.length
+  return selectSession(cards, now, uncapped, { ...doneToday, newCards: 0 }, options).newCards.length
 }

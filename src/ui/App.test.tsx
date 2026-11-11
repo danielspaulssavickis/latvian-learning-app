@@ -268,6 +268,29 @@ describe('App', () => {
     expect(await screen.findByText(/new card/)).toHaveTextContent('1 new card')
   })
 
+  it('resets all progress and can switch sibling burying off from Settings', async () => {
+    await studiedYesterday(TRANSLATED)
+    const user = userEvent.setup()
+    renderApp()
+    // Two sentences, siblings buried: one new card each.
+    expect(await screen.findByText(/new cards/)).toHaveTextContent('2 new cards')
+
+    await user.click(screen.getByRole('button', { name: 'Settings' }))
+    await user.click(await screen.findByLabelText(/One new card per sentence per day/))
+    await user.click(screen.getByRole('button', { name: 'Review' }))
+    // All unseen cards are offered (9 cards - 4 studied = 5, within the cap of 10).
+    expect(await screen.findByText(/new cards/)).toHaveTextContent('5 new cards')
+
+    window.confirm = () => true
+    await user.click(screen.getByRole('button', { name: 'Settings' }))
+    await user.click(await screen.findByRole('button', { name: 'Reset all progress' }))
+    expect(await screen.findByText('Progress reset.')).toBeInTheDocument()
+    expect(await db.reviews.count()).toBe(0)
+    expect(screen.getByLabelText(/One new card per sentence per day/)).toBeChecked()
+    await user.click(screen.getByRole('button', { name: 'Review' }))
+    expect(await screen.findByText(/new cards/)).toHaveTextContent('2 new cards')
+  })
+
   it('exports and re-imports progress from Settings', async () => {
     const user = userEvent.setup()
     let exported = ''

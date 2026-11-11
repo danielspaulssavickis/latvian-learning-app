@@ -103,6 +103,20 @@ describe('selectSession', () => {
     expect(session.newCards.map((c) => c.sentenceId)).toEqual(['snt_0002'])
   })
 
+  it('can switch sibling burying off', () => {
+    const cards = [newCard('snt_0001', 0), newCard('snt_0001', 2), newCard('snt_0002', 0)]
+    const studied = { ...nothingDone, sentenceIds: new Set(['snt_0002']) }
+    const session = selectSession(cards, NOW, { newPerDay: 10, reviewsPerDay: 10 }, studied, {
+      burySiblings: false,
+    })
+    expect(session.newCards.map((c) => c.id)).toEqual([
+      'cloze:snt_0001#0',
+      'cloze:snt_0001#2',
+      'cloze:snt_0002#0',
+    ])
+    expect(newCardsAvailable(cards, NOW, studied, { burySiblings: false })).toBe(3)
+  })
+
   it('skips retired cards', () => {
     const retired = { ...newCard('snt_0001'), retired: true }
     const session = selectSession([retired], NOW, limits, nothingDone)

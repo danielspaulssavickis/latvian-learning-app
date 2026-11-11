@@ -1,12 +1,14 @@
 import { useState } from 'react'
+import { resetProgress } from '../db/backup'
 import { getSettings, updateSettings } from '../db/settings'
 import { useApp } from './appContext'
 import { BackupSection } from './BackupSection'
 import { useLiveQuery } from './useLiveQuery'
 
 export function SettingsScreen() {
-  const { db } = useApp()
+  const { db, resync } = useApp()
   const settings = useLiveQuery(() => getSettings(db), [db])
+  const [resetDone, setResetDone] = useState(false)
   // Lives here, not in the form: saving changes the settings, which remounts the form.
   const [saved, setSaved] = useState(false)
   if (!settings) return <p className="text-slate-500">Loading…</p>
@@ -24,7 +26,52 @@ export function SettingsScreen() {
           setSaved(true)
         }}
       />
+      <div className="space-y-3">
+        <h3 className="font-medium">Pace</h3>
+        <label className="flex items-start gap-3 text-sm">
+          <input
+            type="checkbox"
+            checked={settings.burySiblings}
+            onChange={(event) => void updateSettings(db, { burySiblings: event.target.checked })}
+            className="mt-1 h-4 w-4 accent-emerald-700"
+          />
+          <span>
+            <span className="font-medium">One new card per sentence per day</span>
+            <span className="block text-slate-600 dark:text-slate-300">
+              Recommended: a sentence's cards would otherwise give away each other's answers minutes
+              apart. Turn off to see every exercise type right away.
+            </span>
+          </span>
+        </label>
+      </div>
       <BackupSection />
+      <div className="space-y-3">
+        <h3 className="font-medium">Start over</h3>
+        <p className="text-sm text-slate-600 dark:text-slate-300">
+          Deletes all progress and settings in this browser — every card goes back to new. Export a
+          backup first if you might want it back.
+        </p>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={async () => {
+              if (!window.confirm('Delete ALL progress in this browser? This cannot be undone.'))
+                return
+              await resetProgress(db)
+              await resync()
+              setResetDone(true)
+            }}
+            className="rounded-md border border-rose-700 px-4 py-2 font-medium text-rose-800 hover:bg-rose-50 dark:border-rose-400 dark:text-rose-300 dark:hover:bg-rose-950"
+          >
+            Reset all progress
+          </button>
+          {resetDone && (
+            <span role="status" className="text-sm text-emerald-700">
+              Progress reset.
+            </span>
+          )}
+        </div>
+      </div>
     </section>
   )
 }

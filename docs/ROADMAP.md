@@ -106,6 +106,10 @@ a text-only card instead of breaking the session.
 ## Session log
 
 <!-- newest first, one line each: date — what landed — what to pick up next -->
+2026-11-11 — Settings: "Reset all progress" (every card back to new) and a
+pace switch to turn sibling burying off (all of a sentence's cards may come
+the same day — for trying the app out). Learn-more and the daily cap still
+apply.
 2026-11-11 — Word classes: an "Aa" toggle on every card with a sentence
 underlines each word in a colour per part of speech with its label; a new
 Grammar tab lists all ten vārdšķiras (English + Latvian names, what to
