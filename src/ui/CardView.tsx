@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { checkOptionsFor, type Exercise } from '../engine/exercise'
 import type { Answer } from '../engine/reviewSession'
+import { AnnotatedSentence, WordClassToggle } from './AnnotatedSentence'
 import { AnswerInput } from './AnswerInput'
 import { AudioPlayer } from './AudioPlayer'
 import { DiacriticRow } from './DiacriticRow'
@@ -18,6 +19,9 @@ interface Props {
   answer: Answer | null
   onSubmit: (given: string) => void
   onNext: () => void
+  /** The word-class legend under each word of the sentence, kept across cards. */
+  showClasses: boolean
+  onToggleClasses: () => void
 }
 
 /**
@@ -25,7 +29,14 @@ interface Props {
  * on; recognize cards also take 1–4. Renders only — checking and grading
  * happen in the engine reducer the parent dispatches to.
  */
-export function CardView({ exercise, answer, onSubmit, onNext }: Props) {
+export function CardView({
+  exercise,
+  answer,
+  onSubmit,
+  onNext,
+  showClasses,
+  onToggleClasses,
+}: Props) {
   const [draft, setDraft] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
   const nextRef = useRef<HTMLButtonElement>(null)
@@ -76,7 +87,13 @@ export function CardView({ exercise, answer, onSubmit, onNext }: Props) {
       }}
       className="space-y-5"
     >
-      <Prompt exercise={exercise} answer={answer} input={input} onChoose={onSubmit} />
+      <Prompt
+        exercise={exercise}
+        answer={answer}
+        input={input}
+        onChoose={onSubmit}
+        sentence={{ showClasses, onToggleClasses }}
+      />
 
       {answer ? (
         <div className="space-y-4">
@@ -127,34 +144,88 @@ export function CardView({ exercise, answer, onSubmit, onNext }: Props) {
   )
 }
 
+interface SentenceOptions {
+  showClasses: boolean
+  onToggleClasses: () => void
+}
+
 interface PromptProps {
   exercise: Exercise
   answer: Answer | null
   input: (variant: 'inline' | 'block', label: string) => React.ReactNode
   onChoose: (choice: string) => void
+  sentence: SentenceOptions
 }
 
-function Prompt({ exercise, answer, input, onChoose }: PromptProps) {
+/**
+ * A Latvian sentence with the word-class toggle at its right. Falls back to
+ * plain text for an exercise without `words` (none in practice).
+ */
+function Sentence({
+  exercise,
+  options,
+  className,
+  renderToken,
+  children,
+}: {
+  exercise: Exercise
+  options: SentenceOptions
+  className: string
+  renderToken?: (tokenIndex: number) => React.ReactNode
+  /** Rendered when there are no words to annotate. */
+  children: React.ReactNode
+}) {
+  return (
+    <div className="flex items-start justify-between gap-3">
+      <p className={className}>
+        {exercise.words ? (
+          <AnnotatedSentence
+            words={exercise.words}
+            showClasses={options.showClasses}
+            renderToken={renderToken}
+          />
+        ) : (
+          children
+        )}
+      </p>
+      {exercise.words && (
+        <WordClassToggle pressed={options.showClasses} onToggle={options.onToggleClasses} />
+      )}
+    </div>
+  )
+}
+
+function Prompt({ exercise, answer, input, onChoose, sentence }: PromptProps) {
   switch (exercise.kind) {
-    case 'cloze':
+    case 'cloze': {
+      const blankIndex = Number(exercise.cardId.split('#')[1])
+      const blank = answer ? (
+        <span className={`font-semibold ${RESULT_COLOR[answer.result]}`}>{exercise.expected}</span>
+      ) : (
+        input('inline', `Answer: ${exercise.lemma}`)
+      )
       return (
         <div>
           <Instruction>Fill in the right form</Instruction>
-          <p className="text-2xl leading-relaxed sm:text-3xl" lang="lv">
-            {exercise.before}
-            {answer ? (
-              <span className={`font-semibold ${RESULT_COLOR[answer.result]}`}>
-                {exercise.expected}
-              </span>
-            ) : (
-              input('inline', `Answer: ${exercise.lemma}`)
-            )}
-            {exercise.after}{' '}
-            <span className="text-lg text-slate-500 dark:text-slate-400">({exercise.lemma})</span>
+          <Sentence
+            exercise={exercise}
+            options={sentence}
+            className="text-2xl leading-relaxed sm:text-3xl"
+            renderToken={(tokenIndex) => (tokenIndex === blankIndex ? blank : undefined)}
+          >
+            <span lang="lv">
+              {exercise.before}
+              {blank}
+              {exercise.after}
+            </span>
+          </Sentence>
+          <p className="text-lg text-slate-500 dark:text-slate-400" lang="lv">
+            ({exercise.lemma})
           </p>
           <p className="mt-2 text-slate-500 dark:text-slate-400">{exercise.gloss}</p>
         </div>
       )
+    }
 
     case 'inflect':
       return (
@@ -186,9 +257,13 @@ function Prompt({ exercise, answer, input, onChoose }: PromptProps) {
           <p className="text-2xl">{exercise.gloss}</p>
           <div className="mt-4">
             {answer ? (
-              <p className={`text-2xl font-semibold ${RESULT_COLOR[answer.result]}`} lang="lv">
-                {exercise.expected}
-              </p>
+              <Sentence
+                exercise={exercise}
+                options={sentence}
+                className={`text-2xl font-semibold ${RESULT_COLOR[answer.result]}`}
+              >
+                <span lang="lv">{exercise.expected}</span>
+              </Sentence>
             ) : (
               input('block', `Latvian for: ${exercise.gloss}`)
             )}
@@ -205,9 +280,9 @@ function Prompt({ exercise, answer, input, onChoose }: PromptProps) {
       return (
         <div>
           <Instruction>Say it in English</Instruction>
-          <p className="text-2xl sm:text-3xl" lang="lv">
-            {exercise.text}
-          </p>
+          <Sentence exercise={exercise} options={sentence} className="text-2xl sm:text-3xl">
+            <span lang="lv">{exercise.text}</span>
+          </Sentence>
           <div className="mt-4">
             {answer ? (
               <p className={`text-2xl font-semibold ${RESULT_COLOR[answer.result]}`}>
@@ -226,15 +301,15 @@ function Prompt({ exercise, answer, input, onChoose }: PromptProps) {
       )
 
     case 'listen':
-      return <ListenPrompt exercise={exercise} answer={answer} input={input} />
+      return <ListenPrompt exercise={exercise} answer={answer} input={input} sentence={sentence} />
 
     case 'recognize':
       return (
         <div>
           <Instruction>What does it mean?</Instruction>
-          <p className="text-2xl sm:text-3xl" lang="lv">
-            {exercise.text}
-          </p>
+          <Sentence exercise={exercise} options={sentence} className="text-2xl sm:text-3xl">
+            <span lang="lv">{exercise.text}</span>
+          </Sentence>
           <ol className="mt-4 space-y-2">
             {exercise.choices.map((choice, index) => {
               const isRight = choice === exercise.expected
@@ -270,10 +345,12 @@ function ListenPrompt({
   exercise,
   answer,
   input,
+  sentence,
 }: {
   exercise: Extract<Exercise, { kind: 'listen' }>
   answer: Answer | null
   input: PromptProps['input']
+  sentence: SentenceOptions
 }) {
   const [unavailable, setUnavailable] = useState(false)
   return (
@@ -296,9 +373,13 @@ function ListenPrompt({
       )}
       <div className="mt-4">
         {answer ? (
-          <p className={`text-2xl font-semibold ${RESULT_COLOR[answer.result]}`} lang="lv">
-            {exercise.expected}
-          </p>
+          <Sentence
+            exercise={exercise}
+            options={sentence}
+            className={`text-2xl font-semibold ${RESULT_COLOR[answer.result]}`}
+          >
+            <span lang="lv">{exercise.expected}</span>
+          </Sentence>
         ) : (
           input('block', unavailable ? `Latvian for: ${exercise.gloss}` : 'What you heard')
         )}

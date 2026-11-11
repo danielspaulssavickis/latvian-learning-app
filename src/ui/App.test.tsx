@@ -96,6 +96,39 @@ describe('App', () => {
     expect(await screen.findByText('What does it mean?')).toBeInTheDocument()
   })
 
+  it('marks each word with its class on request, and keeps the legend on across cards', async () => {
+    const user = userEvent.setup()
+    renderApp()
+    await startSession(user)
+    await screen.findByText('What does it mean?')
+    expect(screen.queryByLabelText('Rīgā: noun')).not.toBeInTheDocument()
+
+    const toggle = screen.getByRole('button', { name: 'Word classes' })
+    await user.click(toggle)
+    expect(toggle).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByLabelText('Es: pronoun')).toHaveTextContent('pron.')
+    expect(screen.getByLabelText('dzīvoju: verb')).toHaveTextContent('verb')
+    expect(screen.getByLabelText('Rīgā: noun')).toHaveTextContent('noun')
+
+    // Next card: the legend stays on.
+    await user.keyboard('1')
+    await user.keyboard('{Enter}')
+    await screen.findByText('What does it mean?')
+    expect(screen.getByLabelText('divi: numeral')).toHaveTextContent('num.')
+  })
+
+  it('explains every word class on the Grammar tab, with examples from the content', async () => {
+    const user = userEvent.setup()
+    renderApp()
+    await user.click(await screen.findByRole('button', { name: 'Grammar' }))
+    expect(await screen.findByRole('heading', { name: 'Word classes' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /noun lietvārds/ })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /adverb apstākļa vārds/ })).toBeInTheDocument()
+    expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(10)
+    expect(screen.getAllByText(/I have two children\./).length).toBeGreaterThan(0) // numeral example
+    expect(screen.getAllByText('No example in the current material yet.').length).toBeGreaterThan(0)
+  })
+
   it('shows the draft banner only in preview mode', async () => {
     renderApp(true)
     expect(screen.getByRole('note')).toHaveTextContent(/Draft preview/)
