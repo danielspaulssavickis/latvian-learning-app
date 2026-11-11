@@ -27,7 +27,7 @@ const fsrsSchema = z.looseObject({
 
 const cardSchema = z.looseObject({
   id: z.string().min(1),
-  kind: z.enum(['recognize', 'cloze', 'inflect', 'produce', 'listen']),
+  kind: z.enum(['recognize', 'translate', 'cloze', 'inflect', 'produce', 'listen']),
   targetId: z.string(),
   sentenceId: z.string(),
   tokenIndex: z.number().int().nullable(),

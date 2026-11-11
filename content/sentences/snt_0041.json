@@ -2,6 +2,12 @@
   "id": "snt_0041",
   "text": "Es esmu mājās.",
   "gloss": "I am at home.",
+  "alternatives": [
+    "Esmu mājās."
+  ],
+  "glossAlternatives": [
+    "I am home."
+  ],
   "level": "a1",
   "tokens": [
     {

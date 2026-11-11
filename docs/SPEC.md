@@ -171,7 +171,8 @@ produces two cards. Cards are generated deterministically from content and
 |---|---|---|---|---|
 | `cloze` | Sentence with one token blanked, lemma shown in brackets | typed form | one per drillable token | M3 |
 | `recognize` | Latvian sentence | English gloss, multiple choice (4) | one per sentence | M4 |
-| `produce` | English gloss | typed Latvian sentence (punctuation ignored) | one per sentence | M4 |
+| `translate` | Latvian sentence | typed English sentence (punctuation and contractions ignored; `glossAlternatives` accepted) | one per sentence | ADR-016 |
+| `produce` | English gloss | typed Latvian sentence (punctuation ignored; `alternatives` accepted) | one per sentence | M4 |
 | `inflect` | Lemma + target features ("māja, locative singular") | typed form | one per (lexeme, case.number) an approved sentence vouches for | M4 |
 | `listen` | Audio only | typed sentence | one per sentence with audio | M5 |
 
@@ -193,6 +194,9 @@ reflex, which is the thing a declension chart cannot do.
   highlighting the missing macron or softened consonant. Feed `nearMiss` to FSRS
   as a "hard" grade, not as a failure.
 - Everything else → `wrong`.
+- A sentence's listed `alternatives` / `glossAlternatives` are checked the same
+  way; the best result counts (ADR-016). English answers (`translate`) also
+  fold contractions. No permutations, no synonyms: what isn't listed is wrong.
 
 `diacriticDiff(expected, given)` returns the expected spelling split per
 letter with the wrong-diacritic letters marked, for the review screen; `null`

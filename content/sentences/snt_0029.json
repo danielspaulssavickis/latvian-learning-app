@@ -2,6 +2,15 @@
   "id": "snt_0029",
   "text": "Mēs dzīvojam pie upes.",
   "gloss": "We live by the river.",
+  "alternatives": [
+    "Dzīvojam pie upes."
+  ],
+  "glossAlternatives": [
+    "We live near the river.",
+    "We live next to the river.",
+    "We are living by the river.",
+    "We live by a river."
+  ],
   "level": "a1",
   "tokens": [
     {

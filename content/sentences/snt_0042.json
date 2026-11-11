@@ -2,6 +2,10 @@
   "id": "snt_0042",
   "text": "Viņš iet uz darbu.",
   "gloss": "He is going to work.",
+  "glossAlternatives": [
+    "He goes to work.",
+    "He is walking to work."
+  ],
   "level": "a1",
   "tokens": [
     {

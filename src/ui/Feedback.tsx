@@ -3,21 +3,29 @@ import type { Answer } from '../engine/reviewSession'
 
 /** The result line under an answered card: correct / near miss with the diacritic diff / wrong. */
 export function Feedback({ answer, options }: { answer: Answer; options?: CheckOptions }) {
+  // The learner wrote an accepted alternative: say so, and show the main wording too (ADR-016).
+  const viaAlternative = answer.matched !== undefined
   if (answer.result === 'correct') {
     return (
-      <p role="status" className="font-medium text-emerald-700 dark:text-emerald-400">
-        Correct.
-      </p>
+      <div role="status" className="space-y-1">
+        <p className="font-medium text-emerald-700 dark:text-emerald-400">Correct.</p>
+        {viaAlternative && (
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            Another way to say it: {answer.expected}
+          </p>
+        )}
+      </div>
     )
   }
   if (answer.result === 'nearMiss') {
+    const target = answer.matched ?? answer.expected
     const diff = diacriticDiff(answer.expected, answer.given, options) ?? []
     return (
       <div role="status" className="space-y-1">
         <p className="font-medium text-amber-700 dark:text-amber-400">
           Almost — right words, check the diacritics:
         </p>
-        <p className="text-2xl" aria-label={`Correct spelling: ${answer.expected}`}>
+        <p className="text-2xl" aria-label={`Correct spelling: ${target}`}>
           {diff.map((segment, index) =>
             segment.differs ? (
               <mark
@@ -44,6 +52,11 @@ export function Feedback({ answer, options }: { answer: Answer; options?: CheckO
         <p className="text-slate-700 dark:text-slate-200">
           <strong lang="lv">{answer.given}</strong> is a real form of this word — the{' '}
           {answer.confusedWith} — but not the form asked for here.
+        </p>
+      )}
+      {options?.alternatives && options.alternatives.length > 0 && (
+        <p className="text-sm text-slate-600 dark:text-slate-300">
+          Also accepted: {options.alternatives.join(' · ')}
         </p>
       )}
       <p className="text-sm text-slate-500 dark:text-slate-400">

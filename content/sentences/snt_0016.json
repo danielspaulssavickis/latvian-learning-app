@@ -2,6 +2,15 @@
   "id": "snt_0016",
   "text": "Mēs ejam pie ārsta.",
   "gloss": "We are going to the doctor.",
+  "alternatives": [
+    "Ejam pie ārsta."
+  ],
+  "glossAlternatives": [
+    "We are going to the doctor's.",
+    "We go to the doctor.",
+    "We are going to see the doctor.",
+    "We are going to a doctor."
+  ],
   "level": "a1",
   "tokens": [
     {

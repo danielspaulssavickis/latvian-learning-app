@@ -14,6 +14,18 @@ export interface CheckOptions {
    * "Rīgā") is still a near miss.
    */
   confusables?: readonly Confusable[]
+  /**
+   * Other answers accepted as correct besides `expected` (ADR-016): a
+   * sentence's reviewed alternative word orders or phrasings. Each is checked
+   * exactly like `expected`; the best result wins.
+   */
+  alternatives?: readonly string[]
+  /**
+   * The language of the answer. Latvian (the default) grades diacritics;
+   * English folds contractions ("I'm" = "I am", "don't" = "do not") because
+   * both are the same English, and diacritics never come into it.
+   */
+  language?: 'lv' | 'en'
 }
 
 export interface Confusable {
@@ -22,15 +34,37 @@ export interface Confusable {
   label: string
 }
 
+/** English contractions, folded on both sides so "I'm" and "I am" compare equal. */
+const CONTRACTIONS: [RegExp, string][] = [
+  [/\bcan't\b/g, 'cannot'],
+  [/\bwon't\b/g, 'will not'],
+  [/\bshan't\b/g, 'shall not'],
+  [/n't\b/g, ' not'],
+  [/\b(i)'m\b/g, '$1 am'],
+  [/'re\b/g, ' are'],
+  [/'ve\b/g, ' have'],
+  [/'ll\b/g, ' will'],
+  [/\b(let)'s\b/g, '$1 us'],
+  // 's is "is" after these; elsewhere (he's got, the dog's) it stays as typed.
+  [/\b(it|that|this|there|here|what|who|where|how)'s\b/g, '$1 is'],
+]
+
+function foldContractions(text: string): string {
+  let folded = text.replace(/[’‘]/g, "'")
+  for (const [pattern, replacement] of CONTRACTIONS) folded = folded.replace(pattern, replacement)
+  return folded
+}
+
 /** NFC, trimmed, internal whitespace collapsed to one space. Case is kept. */
 function tidy(text: string, options: CheckOptions = {}): string {
   const nfc = text.normalize('NFC')
-  const bare = options.ignorePunctuation ? nfc.replace(/[\p{P}]/gu, ' ') : nfc
+  const english = options.language === 'en' ? foldContractions(nfc.toLocaleLowerCase('en')) : nfc
+  const bare = options.ignorePunctuation ? english.replace(/[\p{P}]/gu, ' ') : english
   return bare.trim().replace(/\s+/g, ' ')
 }
 
-function caseFold(text: string): string {
-  return text.toLocaleLowerCase('lv')
+function caseFold(text: string, options: CheckOptions = {}): string {
+  return text.toLocaleLowerCase(options.language ?? 'lv')
 }
 
 /**
@@ -42,30 +76,58 @@ function foldDiacritics(text: string): string {
   return text.normalize('NFD').replace(/\p{M}/gu, '').normalize('NFC')
 }
 
-/**
- * The answer-checking contract from SPEC.md and CLAUDE.md rule 3:
- * `correct` on an exact match after NFC + trim + whitespace collapse + case
- * fold; `nearMiss` when the only difference is diacritics (on either side);
- * `wrong` otherwise. No edit distance: a one-letter difference in Latvian is
- * usually a different case, not a typo.
- */
-export function checkAnswer(
-  expected: string,
-  given: string,
-  options: CheckOptions = {},
-): CheckResult {
-  const want = caseFold(tidy(expected, options))
-  const got = caseFold(tidy(given, options))
+function checkOne(expected: string, given: string, options: CheckOptions): CheckResult {
+  const want = caseFold(tidy(expected, options), options)
+  const got = caseFold(tidy(given, options), options)
   if (got === '') return 'wrong'
   if (want === got) return 'correct'
   if (foldDiacritics(want) !== foldDiacritics(got)) return 'wrong'
   return matchConfusable(given, options) ? 'wrong' : 'nearMiss'
 }
 
+const RANK: Record<CheckResult, number> = { correct: 2, nearMiss: 1, wrong: 0 }
+
+export interface Match {
+  result: CheckResult
+  /** The accepted answer the learner's came closest to: `expected` unless an alternative did better. */
+  target: string
+}
+
+/**
+ * `checkAnswer` plus which accepted answer it was measured against, so the
+ * feedback can diff a near miss against the alternative the learner was
+ * actually writing. Ties go to `expected`.
+ */
+export function matchAnswer(expected: string, given: string, options: CheckOptions = {}): Match {
+  let best: Match = { result: checkOne(expected, given, options), target: expected }
+  for (const alternative of options.alternatives ?? []) {
+    if (best.result === 'correct') break
+    const result = checkOne(alternative, given, options)
+    if (RANK[result] > RANK[best.result]) best = { result, target: alternative }
+  }
+  return best
+}
+
+/**
+ * The answer-checking contract from SPEC.md and CLAUDE.md rule 3:
+ * `correct` on an exact match after NFC + trim + whitespace collapse + case
+ * fold; `nearMiss` when the only difference is diacritics (on either side);
+ * `wrong` otherwise. No edit distance: a one-letter difference in Latvian is
+ * usually a different case, not a typo. With `alternatives`, the best match
+ * among all accepted answers counts.
+ */
+export function checkAnswer(
+  expected: string,
+  given: string,
+  options: CheckOptions = {},
+): CheckResult {
+  return matchAnswer(expected, given, options).result
+}
+
 /** The other form of the word the answer exactly is, if any (see CheckOptions.confusables). */
 export function matchConfusable(given: string, options: CheckOptions = {}): Confusable | null {
-  const got = caseFold(tidy(given, options))
-  return options.confusables?.find((c) => caseFold(tidy(c.form, options)) === got) ?? null
+  const got = caseFold(tidy(given, options), options)
+  return options.confusables?.find((c) => caseFold(tidy(c.form, options), options) === got) ?? null
 }
 
 /** True when two spellings differ only by diacritics (and case). */
@@ -82,18 +144,20 @@ export interface DiffSegment {
 /**
  * For a near miss, the expected spelling split per letter with the letters
  * whose diacritic the learner got wrong marked — what the review screen
- * highlights. Returns null for anything that isn't a near miss.
+ * highlights. Measured against the accepted answer the learner came closest
+ * to (see `matchAnswer`). Returns null for anything that isn't a near miss.
  */
 export function diacriticDiff(
   expected: string,
   given: string,
   options: CheckOptions = {},
 ): DiffSegment[] | null {
-  if (checkAnswer(expected, given, options) !== 'nearMiss') return null
-  const want = [...tidy(expected, options)]
-  const got = [...caseFold(tidy(given, options))]
+  const match = matchAnswer(expected, given, options)
+  if (match.result !== 'nearMiss') return null
+  const want = [...tidy(match.target, options)]
+  const got = [...caseFold(tidy(given, options), options)]
   return want.map((letter, index) => ({
     text: letter,
-    differs: caseFold(letter) !== got[index],
+    differs: caseFold(letter, options) !== got[index],
   }))
 }

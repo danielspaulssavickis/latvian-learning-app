@@ -158,6 +158,26 @@ describe('sentenceBaseSchema', () => {
     expect(result.success).toBe(true)
   })
 
+  it('accepts accepted alternatives, but not ones that repeat the main answer (ADR-016)', () => {
+    const base = validSentence()
+    expect(
+      sentenceBaseSchema.safeParse({
+        ...base,
+        alternatives: ['Rīgā es dzīvoju.'],
+        glossAlternatives: ['I am living in Riga.'],
+      }).success,
+    ).toBe(true)
+    const duplicate = sentenceBaseSchema.safeParse({ ...base, alternatives: [base.text] })
+    expect(duplicate.success).toBe(false)
+    expect(duplicate.error?.issues[0].path).toEqual(['alternatives', 0])
+    expect(
+      sentenceBaseSchema.safeParse({ ...base, glossAlternatives: ['Same.', 'Same.'] }).success,
+    ).toBe(false)
+    expect(
+      sentenceBaseSchema.safeParse({ ...base, alternatives: ['Rīgā'.normalize('NFD')] }).success,
+    ).toBe(false)
+  })
+
   it('rejects an unrecognized source value', () => {
     const result = sentenceBaseSchema.safeParse({ ...validSentence(), source: 'invented' })
     expect(result.success).toBe(false)

@@ -55,6 +55,7 @@ export function CardView({ exercise, answer, onSubmit, onNext }: Props) {
   }, [exercise, answer, onSubmit])
 
   const typed = exercise.kind !== 'recognize'
+  const english = exercise.check === 'english'
   const input = (variant: 'inline' | 'block', label: string) => (
     <AnswerInput
       inputRef={inputRef}
@@ -62,6 +63,7 @@ export function CardView({ exercise, answer, onSubmit, onNext }: Props) {
       value={draft}
       onChange={setDraft}
       variant={variant}
+      lang={english ? 'en' : 'lv'}
     />
   )
 
@@ -108,14 +110,16 @@ export function CardView({ exercise, answer, onSubmit, onNext }: Props) {
             >
               Check <span className="text-emerald-200">(Enter)</span>
             </button>
-            <DiacriticRow
-              inputRef={inputRef}
-              value={draft}
-              onChange={(value, caret) => {
-                pendingCaret.current = caret
-                setDraft(value)
-              }}
-            />
+            {!english && (
+              <DiacriticRow
+                inputRef={inputRef}
+                value={draft}
+                onChange={(value, caret) => {
+                  pendingCaret.current = caret
+                  setDraft(value)
+                }}
+              />
+            )}
           </div>
         )
       )}
@@ -191,7 +195,31 @@ function Prompt({ exercise, answer, input, onChoose }: PromptProps) {
           </div>
           {!answer && (
             <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-              Word order is checked against the original sentence; punctuation is ignored.
+              Write the whole sentence. Punctuation is ignored.
+            </p>
+          )}
+        </div>
+      )
+
+    case 'translate':
+      return (
+        <div>
+          <Instruction>Say it in English</Instruction>
+          <p className="text-2xl sm:text-3xl" lang="lv">
+            {exercise.text}
+          </p>
+          <div className="mt-4">
+            {answer ? (
+              <p className={`text-2xl font-semibold ${RESULT_COLOR[answer.result]}`}>
+                {exercise.expected}
+              </p>
+            ) : (
+              input('block', `English for: ${exercise.text}`)
+            )}
+          </div>
+          {!answer && (
+            <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+              Write the whole sentence. Punctuation and contractions (I'm / I am) are ignored.
             </p>
           )}
         </div>

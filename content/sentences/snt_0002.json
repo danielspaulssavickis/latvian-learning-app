@@ -2,6 +2,11 @@
   "id": "snt_0002",
   "text": "Viņš strādā universitātē.",
   "gloss": "He works at the university.",
+  "glossAlternatives": [
+    "He works in the university.",
+    "He is working at the university.",
+    "He works at a university."
+  ],
   "level": "a1",
   "tokens": [
     {

@@ -2,6 +2,11 @@
   "id": "snt_0006",
   "text": "Viņa lasa grāmatu.",
   "gloss": "She is reading a book.",
+  "glossAlternatives": [
+    "She reads a book.",
+    "She is reading the book.",
+    "She reads the book."
+  ],
   "level": "a1",
   "tokens": [
     {

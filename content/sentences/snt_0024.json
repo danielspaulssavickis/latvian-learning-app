@@ -2,6 +2,16 @@
   "id": "snt_0024",
   "text": "Es pērku medu tirgū.",
   "gloss": "I buy honey at the market.",
+  "alternatives": [
+    "Es tirgū pērku medu.",
+    "Pērku medu tirgū.",
+    "Tirgū es pērku medu."
+  ],
+  "glossAlternatives": [
+    "I am buying honey at the market.",
+    "I buy honey in the market.",
+    "I am buying honey in the market."
+  ],
   "level": "a1",
   "tokens": [
     {

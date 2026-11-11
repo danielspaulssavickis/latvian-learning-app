@@ -2,6 +2,15 @@
   "id": "snt_0048",
   "text": "Es dzīvoju pie brāļa.",
   "gloss": "I live at my brother's.",
+  "alternatives": [
+    "Dzīvoju pie brāļa."
+  ],
+  "glossAlternatives": [
+    "I live with my brother.",
+    "I am living at my brother's.",
+    "I live at my brother's place.",
+    "I am living with my brother."
+  ],
   "level": "a1",
   "tokens": [
     {

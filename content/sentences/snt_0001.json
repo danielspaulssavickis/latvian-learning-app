@@ -2,6 +2,14 @@
   "id": "snt_0001",
   "text": "Es dzīvoju Rīgā.",
   "gloss": "I live in Riga.",
+  "alternatives": [
+    "Dzīvoju Rīgā."
+  ],
+  "glossAlternatives": [
+    "I am living in Riga.",
+    "I live in Rīga.",
+    "I am living in Rīga."
+  ],
   "level": "a1",
   "tokens": [
     {

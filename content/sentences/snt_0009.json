@@ -2,6 +2,11 @@
   "id": "snt_0009",
   "text": "Tas ir mājas numurs.",
   "gloss": "That is the house number.",
+  "glossAlternatives": [
+    "This is the house number.",
+    "It is the house number.",
+    "That is a house number."
+  ],
   "level": "a1",
   "tokens": [
     {

@@ -2,6 +2,16 @@
   "id": "snt_0008",
   "text": "Es runāju ar draugu.",
   "gloss": "I am talking with a friend.",
+  "alternatives": [
+    "Runāju ar draugu."
+  ],
+  "glossAlternatives": [
+    "I am talking to a friend.",
+    "I talk with a friend.",
+    "I talk to a friend.",
+    "I am speaking with a friend.",
+    "I am speaking to a friend."
+  ],
   "level": "a1",
   "tokens": [
     {

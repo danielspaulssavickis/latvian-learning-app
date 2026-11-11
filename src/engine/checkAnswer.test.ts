@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { checkAnswer, diacriticDiff, matchConfusable } from './checkAnswer'
+import { checkAnswer, diacriticDiff, matchAnswer, matchConfusable } from './checkAnswer'
 
 describe('checkAnswer', () => {
   it('Rīgā vs Riga is a near miss (missing macrons only)', () => {
@@ -109,5 +109,55 @@ describe('checkAnswer — real forms of the same word (ADR-014)', () => {
   it('changes nothing for correct answers or without confusables', () => {
     expect(checkAnswer('galdā', 'galdā', { confusables })).toBe('correct')
     expect(checkAnswer('galdā', 'galda')).toBe('nearMiss')
+  })
+})
+
+describe('checkAnswer — accepted alternatives (ADR-016)', () => {
+  const options = { ignorePunctuation: true, alternatives: ['Šodien man jāstrādā.'] }
+
+  it('accepts a listed alternative as correct and says which one matched', () => {
+    expect(checkAnswer('Man šodien jāstrādā.', 'šodien man jāstrādā', options)).toBe('correct')
+    expect(matchAnswer('Man šodien jāstrādā.', 'šodien man jāstrādā', options)).toEqual({
+      result: 'correct',
+      target: 'Šodien man jāstrādā.',
+    })
+  })
+
+  it('grades a near miss of an alternative against that alternative', () => {
+    expect(matchAnswer('Man šodien jāstrādā.', 'Sodien man jastrada', options)).toEqual({
+      result: 'nearMiss',
+      target: 'Šodien man jāstrādā.',
+    })
+    expect(diacriticDiff('Man šodien jāstrādā.', 'Sodien man jastrada', options)?.[0]).toEqual({
+      text: 'Š',
+      differs: true,
+    })
+  })
+
+  it('prefers the main answer on a tie and still rejects anything else', () => {
+    expect(matchAnswer('Man šodien jāstrādā.', 'man šodien jāstrādā', options).target).toBe(
+      'Man šodien jāstrādā.',
+    )
+    expect(checkAnswer('Man šodien jāstrādā.', 'Man jāstrādā šodien', options)).toBe('wrong')
+  })
+})
+
+describe('checkAnswer — English answers', () => {
+  const english = { ignorePunctuation: true, language: 'en' as const }
+
+  it('ignores case, punctuation and contractions', () => {
+    expect(checkAnswer("I don't have time.", 'i do not have time', english)).toBe('correct')
+    expect(checkAnswer('I am going to school.', "I'm going to school!", english)).toBe('correct')
+    expect(checkAnswer('We are going to Riga.', 'We’re going to Riga', english)).toBe('correct')
+    expect(checkAnswer('I cannot sleep.', "I can't sleep", english)).toBe('correct')
+    expect(checkAnswer('That is the house number.', "that's the house number", english)).toBe(
+      'correct',
+    )
+    expect(checkAnswer("I live at my brother's.", 'I live at my brothers', english)).toBe('wrong')
+  })
+
+  it('is otherwise exact', () => {
+    expect(checkAnswer('I live in Riga.', 'I live in Latvia.', english)).toBe('wrong')
+    expect(checkAnswer('I have two children.', 'I have two kids.', english)).toBe('wrong')
   })
 })

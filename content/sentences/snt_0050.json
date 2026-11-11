@@ -2,6 +2,13 @@
   "id": "snt_0050",
   "text": "Latvijā ir daudz upju.",
   "gloss": "There are many rivers in Latvia.",
+  "glossAlternatives": [
+    "There are a lot of rivers in Latvia.",
+    "There are lots of rivers in Latvia.",
+    "In Latvia there are many rivers.",
+    "Latvia has many rivers.",
+    "Latvia has a lot of rivers."
+  ],
   "level": "a1",
   "tokens": [
     {

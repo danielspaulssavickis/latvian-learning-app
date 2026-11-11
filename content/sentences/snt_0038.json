@@ -2,6 +2,17 @@
   "id": "snt_0038",
   "text": "Mēs ejam uz pilsētu ar draugiem.",
   "gloss": "We are going to town with friends.",
+  "alternatives": [
+    "Mēs ar draugiem ejam uz pilsētu.",
+    "Ejam uz pilsētu ar draugiem."
+  ],
+  "glossAlternatives": [
+    "We are going to the city with friends.",
+    "We are going to the town with friends.",
+    "We are going into town with friends.",
+    "We go to town with friends.",
+    "We are going to town with our friends."
+  ],
   "level": "a1",
   "tokens": [
     {

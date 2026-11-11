@@ -2,6 +2,17 @@
   "id": "snt_0034",
   "text": "Vasarā mēs esam pie jūras.",
   "gloss": "In summer we are at the seaside.",
+  "alternatives": [
+    "Mēs vasarā esam pie jūras.",
+    "Vasarā esam pie jūras."
+  ],
+  "glossAlternatives": [
+    "In the summer we are at the seaside.",
+    "We are at the seaside in summer.",
+    "In summer we are by the sea.",
+    "We are by the sea in summer.",
+    "In summer we are at the sea."
+  ],
   "level": "a1",
   "tokens": [
     {

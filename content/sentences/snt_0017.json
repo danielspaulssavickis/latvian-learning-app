@@ -2,6 +2,17 @@
   "id": "snt_0017",
   "text": "Es dodu grāmatu draugam.",
   "gloss": "I am giving the book to a friend.",
+  "alternatives": [
+    "Es dodu draugam grāmatu.",
+    "Dodu grāmatu draugam."
+  ],
+  "glossAlternatives": [
+    "I give the book to a friend.",
+    "I am giving a book to a friend.",
+    "I am giving a friend the book.",
+    "I give a book to a friend.",
+    "I am giving the book to my friend."
+  ],
   "level": "a1",
   "tokens": [
     {

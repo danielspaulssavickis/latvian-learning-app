@@ -2,6 +2,12 @@
   "id": "snt_0013",
   "text": "Viņa strādā skolā.",
   "gloss": "She works at a school.",
+  "glossAlternatives": [
+    "She works in a school.",
+    "She works at the school.",
+    "She works in the school.",
+    "She is working at a school."
+  ],
   "level": "a1",
   "tokens": [
     {

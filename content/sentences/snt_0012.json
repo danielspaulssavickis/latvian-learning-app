@@ -2,6 +2,12 @@
   "id": "snt_0012",
   "text": "Mēs dzīvojam Latvijā.",
   "gloss": "We live in Latvia.",
+  "alternatives": [
+    "Dzīvojam Latvijā."
+  ],
+  "glossAlternatives": [
+    "We are living in Latvia."
+  ],
   "level": "a1",
   "tokens": [
     {

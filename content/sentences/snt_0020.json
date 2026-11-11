@@ -2,6 +2,15 @@
   "id": "snt_0020",
   "text": "Es mācos latviešu valodu.",
   "gloss": "I am learning Latvian.",
+  "alternatives": [
+    "Mācos latviešu valodu."
+  ],
+  "glossAlternatives": [
+    "I learn Latvian.",
+    "I am learning the Latvian language.",
+    "I am studying Latvian.",
+    "I study Latvian."
+  ],
   "level": "a1",
   "tokens": [
     {

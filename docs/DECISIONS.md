@@ -338,10 +338,42 @@ through the normal human gate unless the owner asks again.
   bende) are not covered yet — see `content/_needed.json`.
 - ~~**Diacritic-only differences that are a different form.**~~ *Decided
   2026-11-04 — see ADR-014.*
-- **Word order in `produce`.** Latvian word order is flexible; `produce`
-  only accepts the authored order ("Man šodien jāstrādā" vs "Šodien man
-  jāstrādā"). Options: accept any permutation of the same words as correct,
-  or as a near miss, or list accepted alternatives per sentence. Decide once
-  there's review data showing how often this bites.
+- ~~**Word order in `produce`.**~~ *Decided 2026-11-11 — see ADR-016:
+  accepted alternatives are listed per sentence, never computed.*
 - **Seed corpus size.** How many sentences before the app is worth using daily?
   Guess: ~150 covering A1. Measure after M3 rather than guessing further.
+
+## ADR-016 — Translation both ways, with accepted alternatives listed per sentence
+**2026-11-11 · accepted** · extends ADR-012; closes the `produce` word-order question
+
+Two whole-sentence typed exercises: `produce` (English gloss → typed
+Latvian, existing) and the new `translate` (Latvian sentence → typed
+English, `translate:<sentenceId>`, one per sentence, between `recognize`
+and `cloze` in a sentence's kind order). Both expect the learner to write
+the full sentence themselves — no word bank, no choices.
+
+**Accepted alternatives are data.** A sentence may list `alternatives`
+(other Latvian wordings, mostly natural word orders: "Šodien man jāstrādā"
+for "Man šodien jāstrādā") and `glossAlternatives` (other English
+translations: "I am living in Riga" for "I live in Riga"). `checkAnswer`
+takes the best result across the main answer and the alternatives; the
+feedback diffs a near miss against the alternative the learner was
+writing, and a correct alternative shows the main wording too. Alternatives
+are reviewed like `text` and `gloss`: the schema only enforces NFC and no
+duplicates.
+
+**English is graded as English.** `check: "english"` ignores punctuation
+and folds contractions ("I'm" = "I am", "don't" = "do not"); diacritics
+don't come into it. Everything else stays exact — "kids" for "children" is
+wrong unless listed.
+
+*Why:* permuting the words of the authored sentence would accept orders
+that are odd or wrong in Latvian ("Man jāstrādā šodien" is fine; "Jāstrādā
+šodien man" is marked), and a near-miss grade would teach that word order
+doesn't matter. A reviewed list per sentence is more work but is the only
+option consistent with ADR-006: nothing is accepted as Latvian that no
+human has read. Translation into English was asked for as a comprehension
+step harder than multiple choice (`recognize`) but easier than production.
+
+*Rules out:* computed word-order acceptance; edit distance or synonym
+matching for English; a word bank for either direction.

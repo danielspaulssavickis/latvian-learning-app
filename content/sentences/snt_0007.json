@@ -2,6 +2,16 @@
   "id": "snt_0007",
   "text": "Mēs braucam uz Rīgu.",
   "gloss": "We are going to Riga.",
+  "alternatives": [
+    "Braucam uz Rīgu."
+  ],
+  "glossAlternatives": [
+    "We are driving to Riga.",
+    "We go to Riga.",
+    "We are going to Rīga.",
+    "We are travelling to Riga.",
+    "We are traveling to Riga."
+  ],
   "level": "a1",
   "tokens": [
     {

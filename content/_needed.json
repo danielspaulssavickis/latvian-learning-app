@@ -1,6 +1,12 @@
 [
   {
     "type": "review",
+    "id": "review:alternatives",
+    "description": "Claude-written, NOT human-reviewed (2026-11-11, ADR-016): the `alternatives` (other Latvian word orders / pronoun-dropped forms accepted in produce and listen) and `glossAlternatives` (other English translations accepted in translate) on the 50 files in content/sentences/. Each one is an answer the learner is told is correct, so please read them: delete any Latvian alternative that sounds off, add the ones you'd accept, and run `npm run content:check`. English variants were kept literal (articles, progressive vs simple, 'talking to/with'); synonyms were only added where the Latvian word genuinely covers both (pils: castle/palace; skapis: cupboard/wardrobe/cabinet).",
+    "reason": "Added directly to approved files at the owner's request for translation exercises; no draft/approve step exists for amending an approved sentence."
+  },
+  {
+    "type": "review",
     "id": "review:content/lexemes",
     "description": "APPROVED 2026-11-04 by Claude at the owner's request, after a self-review (ADR-015) — not an independent human review. Still worth a human pass; fix anything in place and run `npm run content:check`. Original note: All 81 files in content/lexemes/ are Claude drafts (review: \"draft\", source: \"generated\") covering every lexeme used by content/drafts/batch_001.json and batch_002.json. Check lemma, gender, declension/conjugation, gloss and — for the five pronouns — the full irregular paradigm, then approve: `npm run content:approve -- content/lexemes/*.json`. Sentences can't be approved before their lexemes (ADR-010).",
     "reason": "ADR-015: the human review gate was waived once, on request."

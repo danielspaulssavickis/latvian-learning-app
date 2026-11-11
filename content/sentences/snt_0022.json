@@ -2,6 +2,15 @@
   "id": "snt_0022",
   "text": "Es redzu pili.",
   "gloss": "I see a castle.",
+  "alternatives": [
+    "Redzu pili."
+  ],
+  "glossAlternatives": [
+    "I see the castle.",
+    "I can see a castle.",
+    "I can see the castle.",
+    "I see a palace."
+  ],
   "level": "a1",
   "tokens": [
     {

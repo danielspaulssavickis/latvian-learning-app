@@ -183,12 +183,38 @@ export const sentenceBaseSchema = z
     gloss: nfcString('gloss is not NFC-normalized'),
     level: levelSchema,
     tokens: z.array(tokenSchema).min(1),
+    /**
+     * Other Latvian wordings accepted as correct for this sentence (ADR-016):
+     * natural alternative word orders, mostly. Reviewed like `text`.
+     */
+    alternatives: z.array(nfcString('alternative is not NFC-normalized')).optional(),
+    /** Other English translations accepted as correct (ADR-016). */
+    glossAlternatives: z.array(nfcString('gloss alternative is not NFC-normalized')).optional(),
     audio: z.string().optional(),
     ...reviewFields,
   })
   .refine((sentence) => sentence.tokens.some((token) => token.drillable === true), {
     message: 'sentence must have at least one drillable token',
     path: ['tokens'],
+  })
+  .superRefine((sentence, ctx) => {
+    const lists = [
+      ['alternatives', sentence.text, sentence.alternatives],
+      ['glossAlternatives', sentence.gloss, sentence.glossAlternatives],
+    ] as const
+    for (const [field, primary, list] of lists) {
+      const seen = new Set([primary])
+      list?.forEach((entry, index) => {
+        if (seen.has(entry)) {
+          ctx.addIssue({
+            code: 'custom',
+            message: `"${entry}" duplicates the main answer or an earlier alternative`,
+            path: [field, index],
+          })
+        }
+        seen.add(entry)
+      })
+    }
   })
 
 export type Lexeme = z.infer<typeof lexemeSchema>

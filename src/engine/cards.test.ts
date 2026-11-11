@@ -71,13 +71,15 @@ describe('generateAllCards', () => {
   })
   const grammar = buildGrammar([])
 
-  it('adds recognize + produce per sentence and inflect where the form round-trips', () => {
+  it('adds recognize + translate + produce per sentence and inflect where the form round-trips', () => {
     const cards = generateAllCards([SNT_1, SNT_3], lexemes, grammar)
     expect(cards.map((c) => c.id)).toEqual([
       'recognize:snt_0001',
+      'translate:snt_0001',
       'cloze:snt_0001#2',
       'produce:snt_0001',
       'recognize:snt_0003',
+      'translate:snt_0003',
       'cloze:snt_0003#0',
       'cloze:snt_0003#3',
       'inflect:lex_es@dat.sg',
@@ -112,8 +114,9 @@ describe('generateAllCards', () => {
   it('adds a listen card only for sentences with audio, last in the sentence', () => {
     const withAudio = { ...SNT_1, audio: 'audio/snt_0001.mp3' }
     const ids = generateAllCards([withAudio, SNT_3], lexemes, grammar).map((c) => c.id)
-    expect(ids.slice(0, 4)).toEqual([
+    expect(ids.slice(0, 5)).toEqual([
       'recognize:snt_0001',
+      'translate:snt_0001',
       'cloze:snt_0001#2',
       'produce:snt_0001',
       'listen:snt_0001',

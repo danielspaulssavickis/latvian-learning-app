@@ -2,6 +2,13 @@
   "id": "snt_0031",
   "text": "Grāmata ir uz galda.",
   "gloss": "The book is on the table.",
+  "alternatives": [
+    "Uz galda ir grāmata."
+  ],
+  "glossAlternatives": [
+    "A book is on the table.",
+    "There is a book on the table."
+  ],
   "level": "a1",
   "tokens": [
     {

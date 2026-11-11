@@ -2,6 +2,16 @@
   "id": "snt_0026",
   "text": "Pie mājas aug egle.",
   "gloss": "A spruce grows by the house.",
+  "alternatives": [
+    "Egle aug pie mājas."
+  ],
+  "glossAlternatives": [
+    "A spruce is growing by the house.",
+    "A spruce tree grows by the house.",
+    "A spruce grows next to the house.",
+    "A spruce grows near the house.",
+    "There is a spruce growing by the house."
+  ],
   "level": "a1",
   "tokens": [
     {
