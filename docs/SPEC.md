@@ -182,6 +182,14 @@ sentence, and at most one new card per sentence per day (ADR-012).
 `cloze` is the primary type. It is deliberately the one that teaches endings as a
 reflex, which is the thing a declension chart cannot do.
 
+### Word-class legend
+
+Every card that shows a Latvian sentence has an "Aa" toggle at its right. On,
+each word sits on a coloured line with its part of speech underneath (noun,
+verb, pron., …), from the token's lexeme `pos`. The Grammar tab explains all
+ten classes (English name, Latvian term, what to watch for) with examples
+drawn from approved sentences — never invented prose examples.
+
 ## Answer checking
 
 `checkAnswer(expected, given)` returns `"correct" | "nearMiss" | "wrong"`.

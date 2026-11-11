@@ -7,6 +7,14 @@ import { buildExercise, confusablesFor, splitAroundToken } from './exercise'
 
 const sentenceById = new Map([SNT_1, SNT_3].map((s) => [s.id, s]))
 const content = { sentenceById, lexemeById: FIXTURE_LEXEMES }
+const SNT_1_WORDS = [
+  { text: 'Es', tokenIndex: 0, pos: 'pronoun' },
+  { text: ' ', tokenIndex: null },
+  { text: 'dzīvoju', tokenIndex: 1, pos: 'verb' },
+  { text: ' ', tokenIndex: null },
+  { text: 'Rīgā', tokenIndex: 2, pos: 'noun' },
+  { text: '.', tokenIndex: null },
+]
 
 describe('splitAroundToken', () => {
   it('splits the sentence text around the token, keeping punctuation', () => {
@@ -46,6 +54,7 @@ describe('buildExercise — cloze', () => {
       lemma: 'Rīga',
       gloss: 'I live in Riga.',
       expected: 'Rīgā',
+      words: SNT_1_WORDS,
     })
   })
 
@@ -88,6 +97,7 @@ describe('buildExercise — other kinds', () => {
       text: 'Es dzīvoju Rīgā.',
       expected: 'I live in Riga.',
       alternatives: ['I am living in Riga.'],
+      words: SNT_1_WORDS,
     })
     expect(buildExercise(card('translate:snt_0003'), all)).not.toHaveProperty('alternatives')
   })
@@ -114,6 +124,7 @@ describe('buildExercise — other kinds', () => {
       feature: 'skill:produce',
       gloss: 'I have two children.',
       expected: 'Man ir divi bērni.',
+      words: expect.arrayContaining([{ text: 'divi', tokenIndex: 2, pos: 'numeral' }]),
     })
   })
 
@@ -131,6 +142,7 @@ describe('buildExercise — other kinds', () => {
       audio: 'audio/snt_0001.mp3',
       gloss: 'I live in Riga.',
       expected: 'Es dzīvoju Rīgā.',
+      words: SNT_1_WORDS,
     })
     expect(buildExercise(listen, all)).toBeNull()
   })

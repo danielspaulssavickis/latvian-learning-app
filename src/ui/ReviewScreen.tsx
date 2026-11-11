@@ -24,6 +24,8 @@ export function ReviewScreen() {
   const { db, content, clock, scheduler } = useApp()
   const [state, dispatch] = useReducer(reviewReducer, initialReviewState)
   const [error, setError] = useState<string | null>(null)
+  // The word-class legend (lines + labels under each word); stays as set across cards.
+  const [showClasses, setShowClasses] = useState(false)
 
   // Re-plan once a minute while idle, so cards that fall due show up
   // without a reload (the live query itself only reruns on database writes).
@@ -174,6 +176,8 @@ export function ReviewScreen() {
         answer={answered}
         onSubmit={submit}
         onNext={next}
+        showClasses={showClasses}
+        onToggleClasses={() => setShowClasses((on) => !on)}
       />
     </section>
   )

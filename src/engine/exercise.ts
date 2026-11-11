@@ -3,6 +3,7 @@ import type { CardSpec } from './cards'
 import { sameLettersIgnoringDiacritics, type CheckOptions, type Confusable } from './checkAnswer'
 import { inflect, type Grammar } from './inflect'
 import { featureLabel } from './labels'
+import { segmentSentence, type SentenceWord } from './wordClasses'
 
 interface ExerciseBase {
   cardId: string
@@ -21,6 +22,11 @@ interface ExerciseBase {
   confusables?: Confusable[]
   /** Other answers accepted as correct besides `expected` (ADR-016). */
   alternatives?: string[]
+  /**
+   * The sentence's text split into its words, each with its part of speech,
+   * for the word-class legend. Absent on `inflect` (no sentence).
+   */
+  words?: SentenceWord[]
 }
 
 /** Sentence with one token blanked, lemma in brackets → typed form. */
@@ -204,6 +210,7 @@ export function buildExercise(card: CardSpec, content: ExerciseContent): Exercis
     cardId: card.id,
     feature: card.feature,
     ...(sentence.audio && card.kind !== 'inflect' ? { audio: sentence.audio } : {}),
+    ...(card.kind !== 'inflect' ? { words: segmentSentence(sentence, content.lexemeById) } : {}),
   }
 
   switch (card.kind) {

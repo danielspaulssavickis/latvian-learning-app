@@ -9,12 +9,14 @@ import { ErrorBoundary } from './ErrorBoundary'
 import { ProgressScreen } from './ProgressScreen'
 import { ReviewScreen } from './ReviewScreen'
 import { SettingsScreen } from './SettingsScreen'
+import { WordClassesScreen } from './WordClassesScreen'
 
-type Tab = 'review' | 'progress' | 'settings'
+type Tab = 'review' | 'progress' | 'grammar' | 'settings'
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'review', label: 'Review' },
   { id: 'progress', label: 'Progress' },
+  { id: 'grammar', label: 'Grammar' },
   { id: 'settings', label: 'Settings' },
 ]
 
@@ -64,11 +66,11 @@ export function App({ content, db, clock, preview = false }: Props) {
           </div>
         )}
         <header className="border-b border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
-          <div className="mx-auto flex max-w-2xl items-center justify-between gap-2 px-4 py-3">
+          <div className="mx-auto flex max-w-2xl flex-wrap items-center justify-between gap-x-2 gap-y-1 px-4 py-2 sm:py-3">
             <h1 className="text-base font-semibold whitespace-nowrap sm:text-lg">
               Latvian Trainer
             </h1>
-            <nav aria-label="Main">
+            <nav aria-label="Main" className="ml-auto">
               <ul className="flex gap-1">
                 {TABS.map(({ id, label }) => (
                   <li key={id}>
@@ -102,6 +104,8 @@ export function App({ content, db, clock, preview = false }: Props) {
               <ReviewScreen />
             ) : tab === 'progress' ? (
               <ProgressScreen />
+            ) : tab === 'grammar' ? (
+              <WordClassesScreen />
             ) : (
               <SettingsScreen />
             )}
