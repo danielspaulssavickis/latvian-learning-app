@@ -27,6 +27,7 @@ describe('settings', () => {
       dailyLimits: { newPerDay: 5, reviewsPerDay: 50 },
       lastExportAt: when,
       extraNew: null,
+      burySiblings: true,
     })
   })
 })

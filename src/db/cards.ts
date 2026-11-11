@@ -14,6 +14,7 @@ import {
   type DailyLimits,
   type DoneToday,
   type Session,
+  type SessionOptions,
   type StoredCard,
 } from '../engine/session'
 import type { TrainerDb } from './db'
@@ -155,10 +156,11 @@ export async function loadSession(
   now: Date,
   limits: DailyLimits,
   dayStart: Date,
+  options: SessionOptions = {},
 ): Promise<SessionPlan> {
   const [cards, doneToday] = await Promise.all([db.cards.toArray(), countDoneSince(db, dayStart)])
-  const session = selectSession(cards, now, limits, doneToday)
-  const available = newCardsAvailable(cards, now, doneToday)
+  const session = selectSession(cards, now, limits, doneToday, options)
+  const available = newCardsAvailable(cards, now, doneToday, options)
   return {
     ...session,
     nextDueAt: nextDueAt(cards, now),

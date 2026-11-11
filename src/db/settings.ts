@@ -7,12 +7,15 @@ export interface Settings {
   lastExportAt: Date | null
   /** Extra new cards allowed on one day only ("Learn more" on the Review screen). */
   extraNew: { day: string; count: number } | null
+  /** One new card per sentence per day (ADR-012). Off = all of a sentence's cards may come the same day. */
+  burySiblings: boolean
 }
 
 export const DEFAULT_SETTINGS: Settings = {
   dailyLimits: DEFAULT_DAILY_LIMITS,
   lastExportAt: null,
   extraNew: null,
+  burySiblings: true,
 }
 
 const KEY = 'settings'

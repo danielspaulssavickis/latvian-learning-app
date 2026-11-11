@@ -39,7 +39,9 @@ export function ReviewScreen() {
   const plan = useLiveQuery(async () => {
     const now = clock()
     const settings = await getSettings(db)
-    return loadSession(db, now, limitsFor(settings, now), startOfLocalDay(now))
+    return loadSession(db, now, limitsFor(settings, now), startOfLocalDay(now), {
+      burySiblings: settings.burySiblings,
+    })
   }, [db, clock, minute])
 
   // Persist each new answer, in order. The ref survives re-renders (and

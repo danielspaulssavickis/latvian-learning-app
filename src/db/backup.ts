@@ -83,6 +83,16 @@ export async function exportProgress(db: TrainerDb, now: Date): Promise<string> 
 }
 
 /**
+ * Deletes every card, review and setting — a fresh start. The caller re-runs
+ * syncCards so the cards come back as new. Not undoable; the UI confirms first.
+ */
+export async function resetProgress(db: TrainerDb): Promise<void> {
+  await db.transaction('rw', db.cards, db.reviews, db.settings, async () => {
+    await Promise.all([db.cards.clear(), db.reviews.clear(), db.settings.clear()])
+  })
+}
+
+/**
  * Validates a backup and, only if it's entirely valid, replaces all cards,
  * reviews and settings with it in one transaction. The caller should re-run
  * syncCards afterwards so the cards match the current content.
