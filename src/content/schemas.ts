@@ -100,6 +100,11 @@ export const lexemeSchema = z
     declension: declensionSchema.nullable(),
     conjugation: conjugationSchema.nullable(),
     gloss: z.array(z.string().min(1)).min(1),
+    /**
+     * The feminine nominative of a word whose lemma is masculine and pairs
+     * genders: šis / šī, mans / mana. Shown next to the lemma in lists.
+     */
+    feminine: nfcString('feminine form is not NFC-normalized').optional(),
     tags: z.array(z.string()).default([]),
     /**
      * Forms that override the generated one. For nouns and pronouns the key

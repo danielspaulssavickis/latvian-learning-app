@@ -1,0 +1,20 @@
+{
+  "id": "lex_viss",
+  "lemma": "viss",
+  "pos": "pronoun",
+  "gender": "m",
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "all, everything",
+    "whole"
+  ],
+  "tags": [
+    "a1",
+    "pronoun:definitive",
+    "order:2"
+  ],
+  "feminine": "visa",
+  "review": "draft",
+  "source": "generated"
+}

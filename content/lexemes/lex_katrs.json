@@ -1,0 +1,19 @@
+{
+  "id": "lex_katrs",
+  "lemma": "katrs",
+  "pos": "pronoun",
+  "gender": "m",
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "each, every"
+  ],
+  "tags": [
+    "a1",
+    "pronoun:definitive",
+    "order:3"
+  ],
+  "feminine": "katra",
+  "review": "draft",
+  "source": "generated"
+}

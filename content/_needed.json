@@ -1,6 +1,12 @@
 [
   {
     "type": "review",
+    "id": "review:pronouns",
+    "description": "Claude drafts, NOT reviewed (2026-11-12, PLAN.md §5): 21 pronoun lexemes for the full pronoun list on Grammar → Word classes — lex_tu, lex_jus, lex_sevis, lex_mans, lex_tavs, lex_savs, lex_sis, lex_tads, lex_sads, lex_kas, lex_kurs, lex_kads, lex_kaut_kas, lex_kaut_kads, lex_neviens, lex_nekas, lex_nekads, lex_pats, lex_viss, lex_katrs, lex_ikviens. Check lemma, the new `feminine` field (šis / šī …), the English gloss, the group tag (pronoun:personal, …) and, for tu / jūs / sevis, the full case forms in `irregular`. Try them with `npm run dev:drafts` (Grammar tab shows drafts there, marked). Approve with `npm run content:approve -- content/lexemes`. Also: the approved lex_tas has no `feminine` yet — add \"feminine\": \"tā\" if you agree, so it shows as tas / tā. Until approved, the live site lists only the 5 approved pronouns (es, viņš, viņa, mēs, tas).",
+    "reason": "Latvian presented as fact goes through the review gate (CLAUDE.md rule 1, ADR-010)."
+  },
+  {
+    "type": "review",
     "id": "review:alternatives",
     "description": "Claude-written, NOT human-reviewed (2026-11-11, ADR-016): the `alternatives` (other Latvian word orders / pronoun-dropped forms accepted in produce and listen) and `glossAlternatives` (other English translations accepted in translate) on the 50 files in content/sentences/. Each one is an answer the learner is told is correct, so please read them: delete any Latvian alternative that sounds off, add the ones you'd accept, and run `npm run content:check`. English variants were kept literal (articles, progressive vs simple, 'talking to/with'); synonyms were only added where the Latvian word genuinely covers both (pils: castle/palace; skapis: cupboard/wardrobe/cabinet).",
     "reason": "Added directly to approved files at the owner's request for translation exercises; no draft/approve step exists for amending an approved sentence."

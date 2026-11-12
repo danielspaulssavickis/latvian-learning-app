@@ -1,0 +1,20 @@
+{
+  "id": "lex_neviens",
+  "lemma": "neviens",
+  "pos": "pronoun",
+  "gender": "m",
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "nobody, no one",
+    "not a single"
+  ],
+  "tags": [
+    "a1",
+    "pronoun:negative",
+    "order:1"
+  ],
+  "feminine": "neviena",
+  "review": "draft",
+  "source": "generated"
+}

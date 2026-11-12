@@ -1,0 +1,29 @@
+{
+  "id": "lex_tu",
+  "lemma": "tu",
+  "pos": "pronoun",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "you (singular, informal)"
+  ],
+  "tags": [
+    "a1",
+    "pronoun:personal",
+    "order:2"
+  ],
+  "irregular": {
+    "nom.sg": "tu",
+    "gen.sg": "tevis",
+    "dat.sg": "tev",
+    "acc.sg": "tevi",
+    "ins.sg": "tevi",
+    "loc.sg": "tevī"
+  },
+  "notes": [
+    "ins = the form used after 'ar' (acc in the singular, dat in the plural), as for the other personal pronouns."
+  ],
+  "review": "draft",
+  "source": "generated"
+}

@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 // Dexie's liveQuery only observes a *global* IndexedDB, so UI tests install
 // fake-indexeddb globally and isolate tests by database name instead.
 import 'fake-indexeddb/auto'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { recordReview, syncCards } from '../db/cards'
 import { openDb, type TrainerDb } from '../db/db'
 import { updateSettings } from '../db/settings'
@@ -19,6 +19,7 @@ let dbCount = 0
 const clock = () => now
 
 beforeEach(() => {
+  localStorage.clear() // the remembered Grammar subtab
   dbCount += 1
   db = openDb(`app-test-${dbCount}`)
   now = new Date('2026-09-25T09:00:00.000Z')
@@ -127,6 +128,92 @@ describe('App', () => {
     expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(10)
     expect(screen.getAllByText(/I have two children\./).length).toBeGreaterThan(0) // numeral example
     expect(screen.getAllByText('No example in the current material yet.').length).toBeGreaterThan(0)
+  })
+
+  it('has Word classes and Inflections subtabs, and remembers the last one', async () => {
+    const user = userEvent.setup()
+    const { unmount } = renderApp()
+    await user.click(await screen.findByRole('button', { name: 'Grammar' }))
+    expect(await screen.findByRole('heading', { name: 'Word classes' })).toBeInTheDocument()
+    await user.click(await screen.findByRole('button', { name: 'Inflections' }))
+    expect(await screen.findByRole('heading', { name: 'Inflections' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'The seven cases' })).toBeInTheDocument()
+    expect(screen.getByRole('row', { name: /^locative/ })).toHaveTextContent('Rīgā')
+    unmount()
+
+    renderApp()
+    await user.click(await screen.findByRole('button', { name: 'Grammar' }))
+    expect(await screen.findByRole('heading', { name: 'Inflections' })).toBeInTheDocument()
+  })
+
+  it('opens a word on Tēzaurs in a new tab, or says it needs a connection', async () => {
+    const user = userEvent.setup()
+    const opened: unknown[][] = []
+    const open = window.open
+    window.open = (...args: unknown[]) => (opened.push(args), null)
+    try {
+      renderApp()
+      await user.click(await screen.findByRole('button', { name: 'Grammar' }))
+      await user.click(await screen.findByRole('button', { name: 'Inflections' }))
+      await user.type(await screen.findByLabelText('Word to check on Tēzaurs'), ' māja ')
+      await user.click(screen.getByRole('button', { name: 'Check' }))
+      expect(opened).toEqual([['https://tezaurs.lv/m%C4%81ja', '_blank', 'noopener']])
+
+      const onLine = vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
+      await user.click(screen.getByRole('button', { name: 'Check' }))
+      expect(screen.getByRole('status')).toHaveTextContent(/offline/)
+      expect(opened).toHaveLength(1)
+      onLine.mockRestore()
+    } finally {
+      window.open = open
+    }
+  })
+
+  it('lists approved pronouns by type, hides drafts outside preview, and links to their tables', async () => {
+    const user = userEvent.setup()
+    const content = fixtureContent()
+    const lexemes = new Map(content.lexemeById)
+    lexemes.set('lex_es', {
+      ...lexemes.get('lex_es')!,
+      gloss: ['I'],
+      tags: ['pronoun:personal', 'order:1'],
+      irregular: { 'nom.sg': 'es', 'gen.sg': 'manis' },
+      review: 'approved',
+    })
+    lexemes.set('lex_sis', {
+      id: 'lex_sis',
+      lemma: 'šis',
+      feminine: 'šī',
+      pos: 'pronoun',
+      gender: 'm',
+      declension: null,
+      conjugation: null,
+      gloss: ['this'],
+      tags: ['pronoun:demonstrative'],
+      review: 'draft',
+    })
+    const withPronouns = { ...content, lexemeById: lexemes }
+
+    const { unmount } = render(<App content={withPronouns} db={db} clock={clock} />)
+    await user.click(await screen.findByRole('button', { name: 'Grammar' }))
+    const all = await screen.findByRole('heading', { name: 'All pronouns' })
+    expect(all).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Personal' })).toBeInTheDocument()
+    expect(screen.queryByText('šis')).not.toBeInTheDocument()
+    expect(screen.getByText(/1 more pronoun is drafted/)).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Case tables → Inflections' }))
+    const table = await screen.findByRole('table', { name: 'Personal pronouns, singular' })
+    expect(table).toHaveTextContent('manis')
+    unmount()
+    localStorage.clear()
+
+    render(<App content={withPronouns} db={db} clock={clock} preview />)
+    await user.click(await screen.findByRole('button', { name: 'Grammar' }))
+    await screen.findByRole('heading', { name: 'All pronouns' })
+    expect(screen.getByRole('heading', { name: 'Demonstrative' })).toBeInTheDocument()
+    expect(screen.getByText('draft')).toBeInTheDocument()
+    expect(screen.getByText(/\/ šī/)).toBeInTheDocument()
   })
 
   it('shows the draft banner only in preview mode', async () => {

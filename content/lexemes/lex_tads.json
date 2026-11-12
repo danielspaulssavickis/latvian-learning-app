@@ -1,0 +1,19 @@
+{
+  "id": "lex_tads",
+  "lemma": "tāds",
+  "pos": "pronoun",
+  "gender": "m",
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "such, that kind of"
+  ],
+  "tags": [
+    "a2",
+    "pronoun:demonstrative",
+    "order:3"
+  ],
+  "feminine": "tāda",
+  "review": "draft",
+  "source": "generated"
+}

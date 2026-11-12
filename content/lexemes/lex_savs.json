@@ -1,0 +1,19 @@
+{
+  "id": "lex_savs",
+  "lemma": "savs",
+  "pos": "pronoun",
+  "gender": "m",
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "one's own (refers back to the subject: my own, his own …)"
+  ],
+  "tags": [
+    "a2",
+    "pronoun:possessive",
+    "order:3"
+  ],
+  "feminine": "sava",
+  "review": "draft",
+  "source": "generated"
+}

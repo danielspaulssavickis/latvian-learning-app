@@ -1,0 +1,18 @@
+{
+  "id": "lex_kaut_kas",
+  "lemma": "kaut kas",
+  "pos": "pronoun",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "something, anything"
+  ],
+  "tags": [
+    "a2",
+    "pronoun:indefinite",
+    "order:4"
+  ],
+  "review": "draft",
+  "source": "generated"
+}

@@ -1,0 +1,29 @@
+{
+  "id": "lex_jus",
+  "lemma": "jūs",
+  "pos": "pronoun",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "you (plural, or polite singular)"
+  ],
+  "tags": [
+    "a1",
+    "pronoun:personal",
+    "order:6"
+  ],
+  "irregular": {
+    "nom.pl": "jūs",
+    "gen.pl": "jūsu",
+    "dat.pl": "jums",
+    "acc.pl": "jūs",
+    "ins.pl": "jums",
+    "loc.pl": "jūsos"
+  },
+  "notes": [
+    "ins = the form used after 'ar' (acc in the singular, dat in the plural), as for the other personal pronouns."
+  ],
+  "review": "draft",
+  "source": "generated"
+}

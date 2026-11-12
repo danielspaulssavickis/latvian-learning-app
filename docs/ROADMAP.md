@@ -106,6 +106,17 @@ a text-only card instead of breaking the session.
 ## Session log
 
 <!-- newest first, one line each: date — what landed — what to pick up next -->
+2026-11-12 — PLAN.md §1, §2, §5: Grammar tab split into Word classes /
+Inflections. Inflections: what each case is for, full tables for all six
+declensions (alternating forms highlighted), the alternation rules,
+pronoun paradigms, preposition → case from the sentences, and a
+"Check on Tēzaurs" box. Word classes: the full pronoun list by type — 21
+pronouns drafted for your review (ADR-018); the live site shows the
+approved 5 until then.
+2026-11-12 — docs/PLAN.md: your wish list worked out (Grammar subtabs,
+Inflections page + Tēzaurs link, two voice-note exercises, full pronoun
+list) with what each needs. docs/AUDIO.md: how to record, compress and add
+voice recordings.
 2026-11-12 — A day's new cards now mix kinds (ADR-017): sentences under
 way get their next card (translate, cloze, produce …) interleaved with
 first-time sentences' recognize cards. Before, the first days were all

@@ -5,8 +5,14 @@
   "gender": null,
   "declension": null,
   "conjugation": null,
-  "gloss": ["I"],
-  "tags": ["a1"],
+  "gloss": [
+    "I"
+  ],
+  "tags": [
+    "a1",
+    "pronoun:personal",
+    "order:1"
+  ],
   "irregular": {
     "nom.sg": "es",
     "gen.sg": "manis",
@@ -15,7 +21,9 @@
     "ins.sg": "mani",
     "loc.sg": "manī"
   },
-  "notes": ["ins = acc form in the singular and dat form in the plural, as used after 'ar'."],
+  "notes": [
+    "ins = acc form in the singular and dat form in the plural, as used after 'ar'."
+  ],
   "review": "approved",
   "source": "generated",
   "reviewedAt": "2026-11-04T15:45:02.210Z"

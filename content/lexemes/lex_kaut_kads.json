@@ -1,0 +1,19 @@
+{
+  "id": "lex_kaut_kads",
+  "lemma": "kaut kāds",
+  "pos": "pronoun",
+  "gender": "m",
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "some kind of, some"
+  ],
+  "tags": [
+    "a2",
+    "pronoun:indefinite",
+    "order:5"
+  ],
+  "feminine": "kaut kāda",
+  "review": "draft",
+  "source": "generated"
+}

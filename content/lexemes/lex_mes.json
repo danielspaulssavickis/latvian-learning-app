@@ -5,8 +5,14 @@
   "gender": null,
   "declension": null,
   "conjugation": null,
-  "gloss": ["we"],
-  "tags": ["a1"],
+  "gloss": [
+    "we"
+  ],
+  "tags": [
+    "a1",
+    "pronoun:personal",
+    "order:5"
+  ],
   "irregular": {
     "nom.pl": "mēs",
     "gen.pl": "mūsu",

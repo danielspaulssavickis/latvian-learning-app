@@ -5,8 +5,14 @@
   "gender": "f",
   "declension": null,
   "conjugation": null,
-  "gloss": ["she"],
-  "tags": ["a1"],
+  "gloss": [
+    "she"
+  ],
+  "tags": [
+    "a1",
+    "pronoun:personal",
+    "order:4"
+  ],
   "irregular": {
     "nom.sg": "viņa",
     "gen.sg": "viņas",

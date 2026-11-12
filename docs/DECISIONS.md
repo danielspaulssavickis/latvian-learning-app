@@ -396,3 +396,35 @@ finishes sentences already under way before opening many new ones.
 
 *Rules out:* a day that is all one exercise kind while several kinds are
 available.
+
+## ADR-018 — Grammar reference pages are generated; pronoun list via tagged lexemes
+**2026-11-12 · accepted** · applies ADR-008/ADR-010 and CLAUDE.md rule 5 to reference pages
+
+The Grammar tab's Inflections subtab shows only what `inflect()` produces
+from `content/grammar/` and the lexemes (`src/engine/grammarReference.ts`):
+noun tables per declension with example nouns taken from approved sentences,
+the alternation rules, pronoun paradigms, and preposition → case read off the
+approved sentences. Only `verified` forms show in a production build; the
+draft preview shows unverified ones in italics. A gap is a dash, never a
+guess. Verbs and adjectives are named as "not in the app yet" instead of
+hand-written tables. Example sentences on both subtabs come from approved
+sentences only.
+
+**Pronoun list.** A pronoun's type is a `pronoun:<type>` tag on its lexeme
+(personal, reflexive, possessive, demonstrative, interrogative, indefinite,
+negative, definitive; a word may carry two, like kāds), and `order:<n>`
+fixes its place in the group. New optional lexeme field **`feminine`**: the
+feminine nominative of a word whose lemma is masculine and pairs genders
+(šis / šī, mans / mana), shown next to the lemma. Production lists only
+approved pronouns and says how many drafts are waiting.
+
+For pronouns, a paradigm uses only the forms listed in `irregular`:
+`inflect()` returns the lemma for nom.sg, which would invent a singular for
+mēs and a nominative for sevis.
+
+**Tēzaurs.** "Check" opens `https://tezaurs.lv/<word>` in a new tab — an
+outbound link only. The app never fetches or stores Tēzaurs data, so it
+adds no runtime dependency (ADR-002).
+
+*Rules out:* hand-typed inflection tables in components; showing
+unreviewed pronouns or forms on the live site; scraping Tēzaurs.

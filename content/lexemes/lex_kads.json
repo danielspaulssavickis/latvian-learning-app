@@ -1,0 +1,24 @@
+{
+  "id": "lex_kads",
+  "lemma": "kāds",
+  "pos": "pronoun",
+  "gender": "m",
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "what kind of",
+    "someone, some"
+  ],
+  "tags": [
+    "a1",
+    "pronoun:interrogative",
+    "pronoun:indefinite",
+    "order:3"
+  ],
+  "feminine": "kāda",
+  "notes": [
+    "Both interrogative (\"kāds laiks?\") and indefinite (\"kāds zvana\"), so it is listed in both groups."
+  ],
+  "review": "draft",
+  "source": "generated"
+}

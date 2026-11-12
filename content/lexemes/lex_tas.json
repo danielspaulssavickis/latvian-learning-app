@@ -5,8 +5,15 @@
   "gender": "m",
   "declension": null,
   "conjugation": null,
-  "gloss": ["that", "it"],
-  "tags": ["a1"],
+  "gloss": [
+    "that",
+    "it"
+  ],
+  "tags": [
+    "a1",
+    "pronoun:demonstrative",
+    "order:2"
+  ],
   "irregular": {
     "nom.sg": "tas",
     "gen.sg": "tā",

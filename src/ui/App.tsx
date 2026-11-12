@@ -9,7 +9,7 @@ import { ErrorBoundary } from './ErrorBoundary'
 import { ProgressScreen } from './ProgressScreen'
 import { ReviewScreen } from './ReviewScreen'
 import { SettingsScreen } from './SettingsScreen'
-import { WordClassesScreen } from './WordClassesScreen'
+import { GrammarScreen } from './GrammarScreen'
 
 type Tab = 'review' | 'progress' | 'grammar' | 'settings'
 
@@ -105,7 +105,7 @@ export function App({ content, db, clock, preview = false }: Props) {
             ) : tab === 'progress' ? (
               <ProgressScreen />
             ) : tab === 'grammar' ? (
-              <WordClassesScreen />
+              <GrammarScreen />
             ) : (
               <SettingsScreen />
             )}
