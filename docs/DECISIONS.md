@@ -377,3 +377,22 @@ step harder than multiple choice (`recognize`) but easier than production.
 
 *Rules out:* computed word-order acceptance; edit distance or synonym
 matching for English; a word bank for either direction.
+
+## ADR-017 — A day's new cards mix exercise kinds
+**2026-11-12 · accepted** · amends ADR-012's "new cards in content order"
+
+New cards are still one per sentence per day (sibling burying), each
+sentence offering its easiest unseen kind. But instead of taking those in
+plain content order, `selectSession` interleaves them by kind, most advanced
+first: one produce, one inflect, one cloze, one translate, one recognize,
+then round again (each kind in content order).
+
+*Why:* first real use: every sentence starts with `recognize`, and content
+order is sentence-major, so the first days were 10 multiple-choice cards and
+nothing else — "Learn more" only opened more sentences, i.e. more recognize.
+Typed exercises (the point of the app, ADR-001) didn't appear until day two
+at the earliest, and then all at once as one kind. Most-advanced-first also
+finishes sentences already under way before opening many new ones.
+
+*Rules out:* a day that is all one exercise kind while several kinds are
+available.

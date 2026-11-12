@@ -73,6 +73,11 @@ const KIND_ORDER: Record<CardKind, number> = {
   listen: 5,
 }
 
+/** How far along a sentence a kind sits: recognize 0 … listen 5. */
+export function kindRank(kind: CardKind): number {
+  return KIND_ORDER[kind]
+}
+
 /**
  * Content order: by sentence id, then kind (KIND_ORDER), then token position.
  * New cards are introduced in this order.
