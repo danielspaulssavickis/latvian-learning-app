@@ -1,0 +1,16 @@
+{
+  "id": "lex_bet",
+  "lemma": "bet",
+  "pos": "conjunction",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "but"
+  ],
+  "tags": [
+    "a1"
+  ],
+  "review": "draft",
+  "source": "generated"
+}

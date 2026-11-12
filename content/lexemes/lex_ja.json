@@ -1,0 +1,16 @@
+{
+  "id": "lex_ja",
+  "lemma": "jā",
+  "pos": "particle",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "yes"
+  ],
+  "tags": [
+    "a1"
+  ],
+  "review": "draft",
+  "source": "generated"
+}

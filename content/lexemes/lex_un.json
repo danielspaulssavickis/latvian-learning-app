@@ -1,0 +1,16 @@
+{
+  "id": "lex_un",
+  "lemma": "un",
+  "pos": "conjunction",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "and"
+  ],
+  "tags": [
+    "a1"
+  ],
+  "review": "draft",
+  "source": "generated"
+}

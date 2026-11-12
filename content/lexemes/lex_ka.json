@@ -1,0 +1,19 @@
+{
+  "id": "lex_ka",
+  "lemma": "ka",
+  "pos": "conjunction",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "that"
+  ],
+  "tags": [
+    "a1"
+  ],
+  "notes": [
+    "Introduces a clause: \"saka, ka …\" (says that …). Always after a comma."
+  ],
+  "review": "draft",
+  "source": "generated"
+}

@@ -1,0 +1,18 @@
+{
+  "id": "lex_kaja",
+  "lemma": "kāja",
+  "pos": "noun",
+  "gender": "f",
+  "declension": 4,
+  "conjugation": null,
+  "gloss": [
+    "leg",
+    "foot"
+  ],
+  "tags": [
+    "a1",
+    "body"
+  ],
+  "review": "draft",
+  "source": "generated"
+}
