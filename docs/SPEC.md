@@ -182,6 +182,16 @@ sentence, and at most one new card per sentence per day (ADR-012).
 `cloze` is the primary type. It is deliberately the one that teaches endings as a
 reflex, which is the thing a declension chart cannot do.
 
+### Grammar tab
+
+Two subtabs. **Word classes**: the ten parts of speech with examples from
+approved sentences, and under Pronoun the full pronoun list by type (from
+`pronoun:<type>` tags on lexemes; `feminine` gives the paired form).
+**Inflections**: what each case is for, noun tables for every declension,
+consonant alternation, pronoun paradigms, preposition → case, all generated
+by `inflect()` (verified forms only outside the draft preview — ADR-018), and
+a box that opens a word on tezaurs.lv in a new tab.
+
 ### Word-class legend
 
 Every card that shows a Latvian sentence has an "Aa" toggle at its right. On,

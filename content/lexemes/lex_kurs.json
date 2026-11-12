@@ -1,0 +1,20 @@
+{
+  "id": "lex_kurs",
+  "lemma": "kurš",
+  "pos": "pronoun",
+  "gender": "m",
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "which",
+    "who, which (relative)"
+  ],
+  "tags": [
+    "a1",
+    "pronoun:interrogative",
+    "order:2"
+  ],
+  "feminine": "kura",
+  "review": "draft",
+  "source": "generated"
+}

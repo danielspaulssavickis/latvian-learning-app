@@ -1,0 +1,18 @@
+{
+  "id": "lex_nekas",
+  "lemma": "nekas",
+  "pos": "pronoun",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "nothing"
+  ],
+  "tags": [
+    "a1",
+    "pronoun:negative",
+    "order:2"
+  ],
+  "review": "draft",
+  "source": "generated"
+}

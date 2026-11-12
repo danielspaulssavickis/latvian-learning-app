@@ -1,0 +1,19 @@
+{
+  "id": "lex_sads",
+  "lemma": "šāds",
+  "pos": "pronoun",
+  "gender": "m",
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "such, this kind of"
+  ],
+  "tags": [
+    "a2",
+    "pronoun:demonstrative",
+    "order:4"
+  ],
+  "feminine": "šāda",
+  "review": "draft",
+  "source": "generated"
+}

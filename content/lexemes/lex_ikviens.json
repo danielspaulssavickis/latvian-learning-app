@@ -1,0 +1,19 @@
+{
+  "id": "lex_ikviens",
+  "lemma": "ikviens",
+  "pos": "pronoun",
+  "gender": "m",
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "everyone, every single"
+  ],
+  "tags": [
+    "a2",
+    "pronoun:definitive",
+    "order:4"
+  ],
+  "feminine": "ikviena",
+  "review": "draft",
+  "source": "generated"
+}

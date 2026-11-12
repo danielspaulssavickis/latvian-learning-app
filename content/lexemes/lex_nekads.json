@@ -1,0 +1,19 @@
+{
+  "id": "lex_nekads",
+  "lemma": "nekāds",
+  "pos": "pronoun",
+  "gender": "m",
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "no, no kind of"
+  ],
+  "tags": [
+    "a2",
+    "pronoun:negative",
+    "order:3"
+  ],
+  "feminine": "nekāda",
+  "review": "draft",
+  "source": "generated"
+}

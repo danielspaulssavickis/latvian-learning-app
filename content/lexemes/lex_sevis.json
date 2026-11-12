@@ -1,0 +1,27 @@
+{
+  "id": "lex_sevis",
+  "lemma": "sevis",
+  "pos": "pronoun",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "oneself (myself, yourself, himself …)"
+  ],
+  "tags": [
+    "a2",
+    "pronoun:reflexive"
+  ],
+  "irregular": {
+    "gen.sg": "sevis",
+    "dat.sg": "sev",
+    "acc.sg": "sevi",
+    "ins.sg": "sevi",
+    "loc.sg": "sevī"
+  },
+  "notes": [
+    "No nominative and no plural: the same forms serve every person and number. Stored under .sg keys because the schema has no number-less key; inflect() would return the lemma for nom.sg, so the app shows no table for it."
+  ],
+  "review": "draft",
+  "source": "generated"
+}

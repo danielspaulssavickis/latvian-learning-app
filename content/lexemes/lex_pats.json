@@ -1,0 +1,19 @@
+{
+  "id": "lex_pats",
+  "lemma": "pats",
+  "pos": "pronoun",
+  "gender": "m",
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "self (I myself, the very …)"
+  ],
+  "tags": [
+    "a2",
+    "pronoun:definitive",
+    "order:1"
+  ],
+  "feminine": "pati",
+  "review": "draft",
+  "source": "generated"
+}

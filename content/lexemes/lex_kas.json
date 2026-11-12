@@ -1,0 +1,19 @@
+{
+  "id": "lex_kas",
+  "lemma": "kas",
+  "pos": "pronoun",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "who",
+    "what"
+  ],
+  "tags": [
+    "a1",
+    "pronoun:interrogative",
+    "order:1"
+  ],
+  "review": "draft",
+  "source": "generated"
+}

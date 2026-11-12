@@ -1,0 +1,19 @@
+{
+  "id": "lex_mans",
+  "lemma": "mans",
+  "pos": "pronoun",
+  "gender": "m",
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "my, mine"
+  ],
+  "tags": [
+    "a1",
+    "pronoun:possessive",
+    "order:1"
+  ],
+  "feminine": "mana",
+  "review": "draft",
+  "source": "generated"
+}

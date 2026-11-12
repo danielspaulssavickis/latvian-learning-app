@@ -1,0 +1,19 @@
+{
+  "id": "lex_sis",
+  "lemma": "šis",
+  "pos": "pronoun",
+  "gender": "m",
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "this"
+  ],
+  "tags": [
+    "a1",
+    "pronoun:demonstrative",
+    "order:1"
+  ],
+  "feminine": "šī",
+  "review": "draft",
+  "source": "generated"
+}
