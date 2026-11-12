@@ -117,6 +117,32 @@ describe('selectSession', () => {
     expect(newCardsAvailable(cards, NOW, studied, { burySiblings: false })).toBe(3)
   })
 
+  it('mixes kinds: sentences under way get their next card alongside first-time sentences', () => {
+    const kindCard = (kind: StoredCard['kind'], sentenceId: string): StoredCard => ({
+      ...newCard(sentenceId),
+      id: `${kind}:${sentenceId}`,
+      kind,
+      tokenIndex: null,
+    })
+    const cards = [
+      // snt_0001 and snt_0002 already had their recognize card: next is translate.
+      kindCard('translate', 'snt_0001'),
+      kindCard('produce', 'snt_0001'),
+      kindCard('translate', 'snt_0002'),
+      kindCard('recognize', 'snt_0003'),
+      kindCard('translate', 'snt_0003'),
+      kindCard('recognize', 'snt_0004'),
+      kindCard('recognize', 'snt_0005'),
+    ]
+    const session = selectSession(cards, NOW, { newPerDay: 4, reviewsPerDay: 0 }, nothingDone)
+    expect(session.newCards.map((c) => c.id)).toEqual([
+      'translate:snt_0001',
+      'recognize:snt_0003',
+      'translate:snt_0002',
+      'recognize:snt_0004',
+    ])
+  })
+
   it('skips retired cards', () => {
     const retired = { ...newCard('snt_0001'), retired: true }
     const session = selectSession([retired], NOW, limits, nothingDone)

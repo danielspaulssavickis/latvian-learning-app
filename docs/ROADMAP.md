@@ -106,6 +106,10 @@ a text-only card instead of breaking the session.
 ## Session log
 
 <!-- newest first, one line each: date — what landed — what to pick up next -->
+2026-11-12 — A day's new cards now mix kinds (ADR-017): sentences under
+way get their next card (translate, cloze, produce …) interleaved with
+first-time sentences' recognize cards. Before, the first days were all
+multiple choice.
 2026-11-11 — Settings: "Reset all progress" (every card back to new) and a
 pace switch to turn sibling burying off (all of a sentence's cards may come
 the same day — for trying the app out). Learn-more and the daily cap still

@@ -1,4 +1,4 @@
-import { compareContentOrder, type CardSpec } from './cards'
+import { compareContentOrder, kindRank, type CardSpec } from './cards'
 import { isNew, type SchedulingState } from './schedule'
 
 /** A card as persisted: its content-derived spec plus scheduling state. */
@@ -71,15 +71,39 @@ export function selectSession(
 
   const bury = options.burySiblings ?? true
   const busy = new Set(bury ? (doneToday.sentenceIds ?? []) : [])
-  const newCards: StoredCard[] = []
+  const candidates: StoredCard[] = []
   for (const card of active.filter((c) => isNew(c.fsrs)).sort(compareContentOrder)) {
-    if (newCards.length >= newRoom) break
     if (busy.has(card.sentenceId)) continue
     if (bury) busy.add(card.sentenceId)
-    newCards.push(card)
+    candidates.push(card)
   }
 
-  return { reviews, newCards }
+  return { reviews, newCards: mixKinds(candidates).slice(0, newRoom) }
+}
+
+/**
+ * Interleaves new cards by kind (ADR-017), most advanced kind first: one
+ * produce, one cloze, one translate, one recognize, then round again, each
+ * kind in content order. Without this, a day's new cards were all the same
+ * kind — every sentence starts with recognize, so the first days were
+ * nothing but multiple choice. Sentences already under way come first, so
+ * they're finished before many new ones are opened.
+ */
+function mixKinds(cards: readonly StoredCard[]): StoredCard[] {
+  const byKind = new Map<number, StoredCard[]>()
+  for (const card of cards) {
+    const rank = kindRank(card.kind)
+    byKind.set(rank, [...(byKind.get(rank) ?? []), card])
+  }
+  const queues = [...byKind.entries()].sort(([a], [b]) => b - a).map(([, queue]) => queue)
+  const mixed: StoredCard[] = []
+  while (mixed.length < cards.length) {
+    for (const queue of queues) {
+      const next = queue.shift()
+      if (next) mixed.push(next)
+    }
+  }
+  return mixed
 }
 
 /**
