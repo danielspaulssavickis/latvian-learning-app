@@ -106,6 +106,10 @@ a text-only card instead of breaking the session.
 ## Session log
 
 <!-- newest first, one line each: date — what landed — what to pick up next -->
+2026-11-12 — docs/PLAN.md: your wish list worked out (Grammar subtabs,
+Inflections page + Tēzaurs link, two voice-note exercises, full pronoun
+list) with what each needs. docs/AUDIO.md: how to record, compress and add
+voice recordings.
 2026-11-12 — A day's new cards now mix kinds (ADR-017): sentences under
 way get their next card (translate, cloze, produce …) interleaved with
 first-time sentences' recognize cards. Before, the first days were all
