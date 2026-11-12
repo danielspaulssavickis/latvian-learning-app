@@ -1,0 +1,49 @@
+{
+  "id": "snt_0060",
+  "text": "Es dzeru tikai tēju.",
+  "gloss": "I only drink tea.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Es",
+      "lexeme": "lex_es",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "dzeru",
+      "lexeme": "lex_dzert",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 1
+      }
+    },
+    {
+      "surface": "tikai",
+      "lexeme": "lex_tikai",
+      "features": {}
+    },
+    {
+      "surface": "tēju",
+      "lexeme": "lex_teja",
+      "features": {
+        "case": "acc",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "alternatives": [
+    "Dzeru tikai tēju."
+  ],
+  "glossAlternatives": [
+    "I drink only tea.",
+    "I am only drinking tea."
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-12T20:01:21.417Z"
+}

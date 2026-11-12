@@ -106,6 +106,9 @@ a text-only card instead of breaking the session.
 ## Session log
 
 <!-- newest first, one line each: date — what landed — what to pick up next -->
+2026-11-12 — At your request Claude approved the pronoun drafts and
+batch_003 (ADR-015 again, for this named batch): 64 sentences, all lexemes
+approved. Word classes now has examples for every class on the live site.
 2026-11-12 — content/drafts/batch_003.json: 14 draft sentences (snt_0051–
 0064) + 20 draft lexemes so Word classes has examples for adjectives,
 conjunctions, particles and interjections. Waiting for your review

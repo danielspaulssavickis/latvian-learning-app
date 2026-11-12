@@ -5,9 +5,15 @@
   "gender": "m",
   "declension": 1,
   "conjugation": null,
-  "gloss": ["time", "weather"],
-  "tags": ["a1", "time"],
+  "gloss": [
+    "time",
+    "weather"
+  ],
+  "tags": [
+    "a1",
+    "time"
+  ],
   "review": "approved",
-  "source": "generated",
-  "reviewedAt": "2026-11-04T15:45:02.210Z"
+  "reviewedAt": "2026-11-12T20:01:21.417Z",
+  "source": "generated"
 }

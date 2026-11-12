@@ -1,0 +1,56 @@
+{
+  "id": "snt_0055",
+  "text": "Es dzeru kafiju un tēju.",
+  "gloss": "I drink coffee and tea.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Es",
+      "lexeme": "lex_es",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "dzeru",
+      "lexeme": "lex_dzert",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 1
+      }
+    },
+    {
+      "surface": "kafiju",
+      "lexeme": "lex_kafija",
+      "features": {
+        "case": "acc",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "un",
+      "lexeme": "lex_un",
+      "features": {}
+    },
+    {
+      "surface": "tēju",
+      "lexeme": "lex_teja",
+      "features": {
+        "case": "acc",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "alternatives": [
+    "Dzeru kafiju un tēju."
+  ],
+  "glossAlternatives": [
+    "I am drinking coffee and tea."
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-12T20:01:21.417Z"
+}

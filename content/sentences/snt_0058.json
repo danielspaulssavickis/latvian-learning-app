@@ -1,0 +1,55 @@
+{
+  "id": "snt_0058",
+  "text": "Viņš saka, ka strādā Rīgā.",
+  "gloss": "He says that he works in Riga.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Viņš",
+      "lexeme": "lex_vins",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "saka",
+      "lexeme": "lex_teikt",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 3
+      }
+    },
+    {
+      "surface": "ka",
+      "lexeme": "lex_ka",
+      "features": {}
+    },
+    {
+      "surface": "strādā",
+      "lexeme": "lex_stradat",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 3
+      }
+    },
+    {
+      "surface": "Rīgā",
+      "lexeme": "lex_riga",
+      "features": {
+        "case": "loc",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "glossAlternatives": [
+    "He says he works in Riga.",
+    "He says that he works in Rīga."
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-12T20:01:21.417Z"
+}

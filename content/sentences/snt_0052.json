@@ -1,0 +1,53 @@
+{
+  "id": "snt_0052",
+  "text": "Es dzeru melnu kafiju.",
+  "gloss": "I drink black coffee.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Es",
+      "lexeme": "lex_es",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "dzeru",
+      "lexeme": "lex_dzert",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 1
+      }
+    },
+    {
+      "surface": "melnu",
+      "lexeme": "lex_melns",
+      "features": {
+        "case": "acc",
+        "number": "sg",
+        "gender": "f",
+        "definiteness": "indefinite"
+      }
+    },
+    {
+      "surface": "kafiju",
+      "lexeme": "lex_kafija",
+      "features": {
+        "case": "acc",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "alternatives": [
+    "Dzeru melnu kafiju."
+  ],
+  "glossAlternatives": [
+    "I am drinking black coffee."
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-12T20:01:21.417Z"
+}

@@ -9,16 +9,17 @@
     "what kind of",
     "someone, some"
   ],
+  "feminine": "kāda",
   "tags": [
     "a1",
     "pronoun:interrogative",
     "pronoun:indefinite",
     "order:3"
   ],
-  "feminine": "kāda",
   "notes": [
     "Both interrogative (\"kāds laiks?\") and indefinite (\"kāds zvana\"), so it is listed in both groups."
   ],
-  "review": "draft",
-  "source": "generated"
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-12T20:01:21.417Z"
 }
