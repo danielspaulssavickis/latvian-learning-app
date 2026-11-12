@@ -106,6 +106,11 @@ a text-only card instead of breaking the session.
 ## Session log
 
 <!-- newest first, one line each: date — what landed — what to pick up next -->
+2026-11-12 — content/drafts/batch_003.json: 14 draft sentences (snt_0051–
+0064) + 20 draft lexemes so Word classes has examples for adjectives,
+conjunctions, particles and interjections. Waiting for your review
+(`review:content/drafts/batch_003.json` in _needed.json); shown in
+`npm run dev:drafts` now, on the live site once approved.
 2026-11-12 — PLAN.md §1, §2, §5: Grammar tab split into Word classes /
 Inflections. Inflections: what each case is for, full tables for all six
 declensions (alternating forms highlighted), the alternation rules,

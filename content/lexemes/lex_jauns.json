@@ -1,0 +1,17 @@
+{
+  "id": "lex_jauns",
+  "lemma": "jauns",
+  "pos": "adjective",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "new",
+    "young"
+  ],
+  "tags": [
+    "a1"
+  ],
+  "review": "draft",
+  "source": "generated"
+}

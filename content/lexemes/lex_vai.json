@@ -1,0 +1,19 @@
+{
+  "id": "lex_vai",
+  "lemma": "vai",
+  "pos": "particle",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "(question word: turns a statement into a yes/no question)"
+  ],
+  "tags": [
+    "a1"
+  ],
+  "notes": [
+    "This lexeme is the question particle. \"vai\" is also a conjunction (\"or\"), which would be its own lexeme."
+  ],
+  "review": "draft",
+  "source": "generated"
+}

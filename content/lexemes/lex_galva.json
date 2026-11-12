@@ -1,0 +1,17 @@
+{
+  "id": "lex_galva",
+  "lemma": "galva",
+  "pos": "noun",
+  "gender": "f",
+  "declension": 4,
+  "conjugation": null,
+  "gloss": [
+    "head"
+  ],
+  "tags": [
+    "a1",
+    "body"
+  ],
+  "review": "draft",
+  "source": "generated"
+}

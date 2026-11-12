@@ -42,6 +42,10 @@ export function featureLabel(feature: string): string {
       return `${ORDINALS[Number(value)] ?? value} declension`
     case 'conjugation':
       return `${ORDINALS[Number(value)] ?? value} conjugation`
+    case 'gender':
+      return value === 'm' ? 'masculine' : value === 'f' ? 'feminine' : feature
+    case 'definiteness':
+      return value === 'definite' || value === 'indefinite' ? value : feature
     case 'skill':
       return SKILLS[value] ?? value
     default:

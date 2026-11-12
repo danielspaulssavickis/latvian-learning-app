@@ -1,0 +1,16 @@
+{
+  "id": "lex_ai",
+  "lemma": "ai",
+  "pos": "interjection",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "ouch, ow"
+  ],
+  "tags": [
+    "a1"
+  ],
+  "review": "draft",
+  "source": "generated"
+}

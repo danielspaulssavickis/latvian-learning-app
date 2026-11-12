@@ -1,0 +1,16 @@
+{
+  "id": "lex_tikai",
+  "lemma": "tikai",
+  "pos": "particle",
+  "gender": null,
+  "declension": null,
+  "conjugation": null,
+  "gloss": [
+    "only, just"
+  ],
+  "tags": [
+    "a1"
+  ],
+  "review": "draft",
+  "source": "generated"
+}
