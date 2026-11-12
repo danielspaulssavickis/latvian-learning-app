@@ -5,9 +5,14 @@
   "gender": "f",
   "declension": 5,
   "conjugation": null,
-  "gloss": ["grass"],
-  "tags": ["a1", "nature"],
+  "gloss": [
+    "grass"
+  ],
+  "tags": [
+    "a1",
+    "nature"
+  ],
   "review": "approved",
-  "source": "generated",
-  "reviewedAt": "2026-11-04T15:45:02.210Z"
+  "reviewedAt": "2026-11-12T20:01:21.417Z",
+  "source": "generated"
 }

@@ -1,0 +1,46 @@
+{
+  "id": "snt_0063",
+  "text": "Ai, man sāp galva!",
+  "gloss": "Ouch, my head hurts!",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Ai",
+      "lexeme": "lex_ai",
+      "features": {}
+    },
+    {
+      "surface": "man",
+      "lexeme": "lex_es",
+      "features": {
+        "case": "dat",
+        "number": "sg"
+      },
+      "drillable": true
+    },
+    {
+      "surface": "sāp",
+      "lexeme": "lex_sapet",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 3
+      }
+    },
+    {
+      "surface": "galva",
+      "lexeme": "lex_galva",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    }
+  ],
+  "glossAlternatives": [
+    "Ow, my head hurts!",
+    "Ouch, I have a headache!"
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-12T20:01:21.417Z"
+}

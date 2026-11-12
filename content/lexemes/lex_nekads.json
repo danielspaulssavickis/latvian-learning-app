@@ -8,12 +8,13 @@
   "gloss": [
     "no, no kind of"
   ],
+  "feminine": "nekāda",
   "tags": [
     "a2",
     "pronoun:negative",
     "order:3"
   ],
-  "feminine": "nekāda",
-  "review": "draft",
-  "source": "generated"
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-12T20:01:21.417Z"
 }

@@ -5,10 +5,18 @@
   "gender": null,
   "declension": null,
   "conjugation": null,
-  "gloss": ["a lot", "many", "much"],
-  "tags": ["a1"],
-  "notes": ["Takes the genitive plural: 'daudz zivju'."],
+  "gloss": [
+    "a lot",
+    "many",
+    "much"
+  ],
+  "tags": [
+    "a1"
+  ],
+  "notes": [
+    "Takes the genitive plural: 'daudz zivju'."
+  ],
   "review": "approved",
-  "source": "generated",
-  "reviewedAt": "2026-11-04T15:45:02.210Z"
+  "reviewedAt": "2026-11-12T20:01:21.417Z",
+  "source": "generated"
 }

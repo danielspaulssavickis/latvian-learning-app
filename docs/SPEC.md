@@ -174,6 +174,7 @@ produces two cards. Cards are generated deterministically from content and
 | `translate` | Latvian sentence | typed English sentence (punctuation and contractions ignored; `glossAlternatives` accepted) | one per sentence | ADR-016 |
 | `produce` | English gloss | typed Latvian sentence (punctuation ignored; `alternatives` accepted) | one per sentence | M4 |
 | `inflect` | Lemma + target features ("māja, locative singular") | typed form | one per (lexeme, case.number) an approved sentence vouches for | M4 |
+| `hear` | Audio only (transcript after) | English gloss, multiple choice (4) | one per sentence with audio | ADR-019 |
 | `listen` | Audio only | typed sentence | one per sentence with audio | M5 |
 
 New cards are introduced in content order, easiest kind first within a

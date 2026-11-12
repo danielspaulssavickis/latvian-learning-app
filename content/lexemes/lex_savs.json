@@ -8,12 +8,13 @@
   "gloss": [
     "one's own (refers back to the subject: my own, his own …)"
   ],
+  "feminine": "sava",
   "tags": [
     "a2",
     "pronoun:possessive",
     "order:3"
   ],
-  "feminine": "sava",
-  "review": "draft",
-  "source": "generated"
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-12T20:01:21.417Z"
 }

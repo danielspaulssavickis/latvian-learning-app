@@ -5,9 +5,14 @@
   "gender": "m",
   "declension": 1,
   "conjugation": null,
-  "gloss": ["friend"],
-  "tags": ["a1", "people"],
+  "gloss": [
+    "friend"
+  ],
+  "tags": [
+    "a1",
+    "people"
+  ],
   "review": "approved",
-  "source": "generated",
-  "reviewedAt": "2026-11-04T15:45:02.210Z"
+  "reviewedAt": "2026-11-12T20:01:21.417Z",
+  "source": "generated"
 }

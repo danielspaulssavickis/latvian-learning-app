@@ -5,10 +5,18 @@
   "gender": null,
   "declension": null,
   "conjugation": null,
-  "gloss": ["at", "by", "near"],
-  "tags": ["a1"],
-  "notes": ["Takes the genitive."],
+  "gloss": [
+    "at",
+    "by",
+    "near"
+  ],
+  "tags": [
+    "a1"
+  ],
+  "notes": [
+    "Takes the genitive."
+  ],
   "review": "approved",
-  "source": "generated",
-  "reviewedAt": "2026-11-04T15:45:02.210Z"
+  "reviewedAt": "2026-11-12T20:01:21.417Z",
+  "source": "generated"
 }

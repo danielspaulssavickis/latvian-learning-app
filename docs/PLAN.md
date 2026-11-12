@@ -69,23 +69,28 @@ dictionary form.
 
 ## 3. Voice note → pick the English meaning (new exercise)
 
-- [ ] New card kind, working name **`hear`**: the recording plays (no text
+- [x] New card kind, working name **`hear`**: the recording plays (no text
       shown), the learner picks the English translation from four choices
       — like `recognize`, but by ear.
-- [ ] After answering, the **transcript** appears under the player: the
+- [x] After answering, the **transcript** appears under the player: the
       sentence's Latvian text, with the word-class **Aa** legend toggle
       like every other sentence.
-- [ ] One `hear` card per sentence that has a recording. Comes before
+- [x] One `hear` card per sentence that has a recording. Comes before
       `listen` in a sentence's order (understanding by ear is easier than
       writing what you heard).
-- [ ] Choices reuse `recognize`'s stable distractor picking, so they don't
+- [x] Choices reuse `recognize`'s stable distractor picking, so they don't
       reshuffle between visits.
-- [ ] If the file is missing or won't play, the card falls back to showing
+- [x] If the file is missing or won't play, the card falls back to showing
       the text, exactly like `listen` does today (M5).
-- [ ] Progress tab: `hear` shows as its own skill ("understanding by ear").
+- [x] Progress tab: `hear` shows as its own skill ("understanding by ear").
 
 *Needs from you:* recordings ([`AUDIO.md`](AUDIO.md)).
 *Size:* medium. New kind, card generation, UI, tests, an ADR.
+**Done 2026-11-12 (ADR-019)** — with generated audio instead of recordings:
+Piper TTS, Latvian voice "Aivars" (CC0). `npm run audio:generate` makes
+the files; it needs a network that reaches huggingface.co, which Claude's
+session didn't have, so the first audio run is still to do (see
+AUDIO.md → "Generated voice").
 
 ## 4. Voice note → write what you heard, with a second try
 

@@ -9,12 +9,13 @@
     "all, everything",
     "whole"
   ],
+  "feminine": "visa",
   "tags": [
     "a1",
     "pronoun:definitive",
     "order:2"
   ],
-  "feminine": "visa",
-  "review": "draft",
-  "source": "generated"
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-12T20:01:21.417Z"
 }

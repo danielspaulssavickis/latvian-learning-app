@@ -1,0 +1,85 @@
+{
+  "id": "snt_0056",
+  "text": "Es gribu braukt uz jūru, bet man nav laika.",
+  "gloss": "I want to go to the sea, but I don't have time.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Es",
+      "lexeme": "lex_es",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "gribu",
+      "lexeme": "lex_gribet",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 1
+      }
+    },
+    {
+      "surface": "braukt",
+      "lexeme": "lex_braukt",
+      "features": {}
+    },
+    {
+      "surface": "uz",
+      "lexeme": "lex_uz",
+      "features": {}
+    },
+    {
+      "surface": "jūru",
+      "lexeme": "lex_jura",
+      "features": {
+        "case": "acc",
+        "number": "sg"
+      },
+      "drillable": true
+    },
+    {
+      "surface": "bet",
+      "lexeme": "lex_bet",
+      "features": {}
+    },
+    {
+      "surface": "man",
+      "lexeme": "lex_es",
+      "features": {
+        "case": "dat",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "nav",
+      "lexeme": "lex_but",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 3
+      }
+    },
+    {
+      "surface": "laika",
+      "lexeme": "lex_laiks",
+      "features": {
+        "case": "gen",
+        "number": "sg"
+      }
+    }
+  ],
+  "alternatives": [
+    "Gribu braukt uz jūru, bet man nav laika."
+  ],
+  "glossAlternatives": [
+    "I want to go to the sea, but I have no time.",
+    "I want to go to the seaside, but I don't have time.",
+    "I want to drive to the sea, but I don't have time."
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-12T20:01:21.417Z"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "snt_0062",
+  "text": "Vai tev ir brālis?",
+  "gloss": "Do you have a brother?",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Vai",
+      "lexeme": "lex_vai",
+      "features": {}
+    },
+    {
+      "surface": "tev",
+      "lexeme": "lex_tu",
+      "features": {
+        "case": "dat",
+        "number": "sg"
+      },
+      "drillable": true
+    },
+    {
+      "surface": "ir",
+      "lexeme": "lex_but",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 3
+      }
+    },
+    {
+      "surface": "brālis",
+      "lexeme": "lex_bralis",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    }
+  ],
+  "glossAlternatives": [
+    "Have you got a brother?"
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-12T20:01:21.417Z"
+}

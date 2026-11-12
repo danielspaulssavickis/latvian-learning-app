@@ -8,12 +8,13 @@
   "gloss": [
     "some kind of, some"
   ],
+  "feminine": "kaut kāda",
   "tags": [
     "a2",
     "pronoun:indefinite",
     "order:5"
   ],
-  "feminine": "kaut kāda",
-  "review": "draft",
-  "source": "generated"
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-12T20:01:21.417Z"
 }

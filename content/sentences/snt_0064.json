@@ -1,0 +1,50 @@
+{
+  "id": "snt_0064",
+  "text": "Ak, es aizmirsu grāmatu!",
+  "gloss": "Oh, I forgot the book!",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Ak",
+      "lexeme": "lex_ak",
+      "features": {}
+    },
+    {
+      "surface": "es",
+      "lexeme": "lex_es",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "aizmirsu",
+      "lexeme": "lex_aizmirst",
+      "features": {
+        "number": "sg",
+        "tense": "past",
+        "person": 1
+      }
+    },
+    {
+      "surface": "grāmatu",
+      "lexeme": "lex_gramata",
+      "features": {
+        "case": "acc",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "alternatives": [
+    "Ak, aizmirsu grāmatu!"
+  ],
+  "glossAlternatives": [
+    "Oh, I forgot my book!",
+    "Oh, I have forgotten the book!",
+    "Oh no, I forgot the book!"
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-12T20:01:21.417Z"
+}

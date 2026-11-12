@@ -1,0 +1,51 @@
+{
+  "id": "snt_0054",
+  "text": "Viņam ir mazs suns.",
+  "gloss": "He has a small dog.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Viņam",
+      "lexeme": "lex_vins",
+      "features": {
+        "case": "dat",
+        "number": "sg"
+      },
+      "drillable": true
+    },
+    {
+      "surface": "ir",
+      "lexeme": "lex_but",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 3
+      }
+    },
+    {
+      "surface": "mazs",
+      "lexeme": "lex_mazs",
+      "features": {
+        "case": "nom",
+        "number": "sg",
+        "gender": "m",
+        "definiteness": "indefinite"
+      }
+    },
+    {
+      "surface": "suns",
+      "lexeme": "lex_suns",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    }
+  ],
+  "glossAlternatives": [
+    "He has got a small dog.",
+    "He has a little dog."
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-12T20:01:21.417Z"
+}

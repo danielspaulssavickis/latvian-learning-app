@@ -8,12 +8,13 @@
   "gloss": [
     "your, yours (singular)"
   ],
+  "feminine": "tava",
   "tags": [
     "a1",
     "pronoun:possessive",
     "order:2"
   ],
-  "feminine": "tava",
-  "review": "draft",
-  "source": "generated"
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-12T20:01:21.417Z"
 }

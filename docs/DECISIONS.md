@@ -428,3 +428,45 @@ adds no runtime dependency (ADR-002).
 
 *Rules out:* hand-typed inflection tables in components; showing
 unreviewed pronouns or forms on the live site; scraping Tēzaurs.
+
+## ADR-019 — `hear` exercise, and Piper TTS (Latvian voice "Aivars") for recordings
+**2026-11-12 · accepted** · amends ADR-005 (TTS allowed once a voice's licence is checked) · extends ADR-012/017
+
+**`hear` cards.** One per sentence with `audio`: the recording plays with
+no text, the learner picks the English meaning from four choices (the same
+stable distractors as `recognize`). After answering, the transcript — the
+sentence's `text` — appears under the player with the word-class toggle.
+If the audio can't play, the text is shown up front, so the card degrades
+to a recognize card instead of breaking (as `listen` does, M5). Kind order:
+… produce, **hear**, listen (understanding by ear before writing what you
+heard). Skill label "understanding by ear".
+
+**Voice: generated, not recorded.** The owner chose TTS over recording
+(microphone noise). Requirement from ADR-005: free to use, including for
+future commercial use, and the licence read before anything ships.
+
+- **Chosen: Piper TTS with the `lv_LV-aivars-medium` voice.** Runs offline;
+  the voice model's card on Hugging Face (RaivisDejus/Piper-lv_LV-Aivars-medium,
+  mirrored in rhasspy/piper-voices) states **CC0 1.0** (public domain), no
+  commercial restriction. Provenance stated there: trained on audiobooks of
+  Latvijas Neredzīgo bibliotēka used with the library's permission, with the
+  original readers' voices cloned to a LibriVox voice for privacy. The
+  Piper program is GPL-3.0; that covers the program, not audio it produces,
+  and the app doesn't ship it.
+- **Ruled out:** Meta MMS-TTS Latvian (CC-BY-NC — non-commercial);
+  Coqui XTTS (non-commercial licence, no Latvian); hosted voices (Azure /
+  Google lv-LV, Tilde) — paid accounts and per-provider terms for
+  redistributing audio; the browser's own speech synthesis — no Latvian voice
+  on many devices.
+- **Checked by the tool, every time:** `npm run audio:generate`
+  (`scripts/generate-audio.py`) fetches the voice's model card into
+  `docs/tts-voice-licence.md` and stops unless its licence lines allow
+  commercial redistribution. Claude's session on 2026-11-12 could not reach
+  huggingface.co, so the CC0 statement above comes from the card as found by
+  web search; the first run of the script records the card itself — read it
+  then.
+
+*Rules out:* shipping audio from a voice whose licence wasn't read;
+non-commercial voices; making audio required for any card.
+*Revisit if:* a native speaker can record (human audio is still preferred
+for prosody), or a better-sounding Latvian voice with an open licence appears.

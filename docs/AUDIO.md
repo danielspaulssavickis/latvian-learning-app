@@ -7,7 +7,30 @@ form*, which has no sentence). The planned
 voice-note exercises in [`PLAN.md`](PLAN.md) §3–4 will use the same files,
 so nothing here has to be redone later.
 
-## In short
+## Generated voice (no microphone needed)
+
+The app can use a computer voice instead of recordings (ADR-019): Piper
+TTS with the Latvian voice **Aivars**, licensed CC0 (free, commercial use
+included). One command makes a file for every sentence that doesn't have
+one yet, compresses it exactly as below, and links it:
+
+```bash
+pip install piper-tts        # once (Python 3.9+); ffmpeg must be installed too
+npm run audio:generate       # first run downloads the voice (~60 MB) into .tts/
+```
+
+- It fetches the voice's licence (model card) into
+  `docs/tts-voice-licence.md` first and **stops** unless it allows
+  commercial use. Read that file once.
+- Needs internet access to huggingface.co the first time. Claude's cloud
+  sessions can use the environment "latvian-learning-app", which allows it.
+- `--force` regenerates everything; `--ids snt_0001 snt_0002` only those;
+  `--length-scale 1.0` for normal speed (default 1.1, slightly slower).
+- Later sentences: run it again after approving them — existing files are kept.
+- Listen to a handful afterwards. If one word is mispronounced, a human
+  recording of that sentence (steps below, same file name) replaces it.
+
+## Recording your own — in short
 
 1. Record one sentence per file, saying **exactly** the sentence's `text`.
 2. Convert it to a small MP3 (below).

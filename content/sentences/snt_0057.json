@@ -1,0 +1,75 @@
+{
+  "id": "snt_0057",
+  "text": "Es esmu mājās, jo man sāp kāja.",
+  "gloss": "I am at home because my leg hurts.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Es",
+      "lexeme": "lex_es",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "esmu",
+      "lexeme": "lex_but",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 1
+      }
+    },
+    {
+      "surface": "mājās",
+      "lexeme": "lex_maja",
+      "features": {
+        "case": "loc",
+        "number": "pl"
+      },
+      "drillable": true
+    },
+    {
+      "surface": "jo",
+      "lexeme": "lex_jo",
+      "features": {}
+    },
+    {
+      "surface": "man",
+      "lexeme": "lex_es",
+      "features": {
+        "case": "dat",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "sāp",
+      "lexeme": "lex_sapet",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 3
+      }
+    },
+    {
+      "surface": "kāja",
+      "lexeme": "lex_kaja",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    }
+  ],
+  "alternatives": [
+    "Esmu mājās, jo man sāp kāja."
+  ],
+  "glossAlternatives": [
+    "I am home because my leg hurts.",
+    "I am at home because my foot hurts.",
+    "I am at home, because my leg hurts."
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-12T20:01:21.417Z"
+}

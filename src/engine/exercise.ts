@@ -48,6 +48,18 @@ export interface RecognizeExercise extends ExerciseBase {
   choices: string[]
 }
 
+/**
+ * Audio only → pick the English meaning (ADR-019). `text` is the transcript,
+ * shown after answering — or before, as a fallback, if the audio can't play.
+ */
+export interface HearExercise extends ExerciseBase {
+  kind: 'hear'
+  audio: string
+  text: string
+  /** The correct gloss plus up to three others, in a stable shuffled order. */
+  choices: string[]
+}
+
 /** English gloss → typed Latvian sentence. */
 export interface ProduceExercise extends ExerciseBase {
   kind: 'produce'
@@ -85,6 +97,7 @@ export type Exercise =
   | RecognizeExercise
   | TranslateExercise
   | ProduceExercise
+  | HearExercise
   | ListenExercise
   | InflectExercise
 
@@ -235,6 +248,18 @@ export function buildExercise(card: CardSpec, content: ExerciseContent): Exercis
         ...base,
         kind: 'recognize',
         check: 'choice',
+        text: sentence.text,
+        choices: recognizeChoices(card.id, sentence, content.sentenceById.values()),
+        expected: sentence.gloss,
+      }
+
+    case 'hear':
+      if (!sentence.audio) return null
+      return {
+        ...base,
+        kind: 'hear',
+        check: 'choice',
+        audio: sentence.audio,
         text: sentence.text,
         choices: recognizeChoices(card.id, sentence, content.sentenceById.values()),
         expected: sentence.gloss,

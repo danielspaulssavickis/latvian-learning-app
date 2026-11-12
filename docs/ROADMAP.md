@@ -106,6 +106,16 @@ a text-only card instead of breaking the session.
 ## Session log
 
 <!-- newest first, one line each: date — what landed — what to pick up next -->
+2026-11-12 — PLAN §3 (ADR-019): `hear` cards — recording plays, pick the
+English meaning, transcript (with the word-class toggle) after answering,
+text fallback if audio fails. Audio comes from Piper TTS, Latvian voice
+"Aivars" (CC0): `npm run audio:generate` (scripts/generate-audio.py) checks
+the voice licence, generates, compresses and links every sentence. Not run
+yet — Claude's session couldn't reach huggingface.co; run it in an
+environment that can (see AUDIO.md).
+2026-11-12 — At your request Claude approved the pronoun drafts and
+batch_003 (ADR-015 again, for this named batch): 64 sentences, all lexemes
+approved. Word classes now has examples for every class on the live site.
 2026-11-12 — content/drafts/batch_003.json: 14 draft sentences (snt_0051–
 0064) + 20 draft lexemes so Word classes has examples for adjectives,
 conjunctions, particles and interjections. Waiting for your review

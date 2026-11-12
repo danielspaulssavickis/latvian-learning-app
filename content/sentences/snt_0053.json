@@ -1,0 +1,58 @@
+{
+  "id": "snt_0053",
+  "text": "Mēs ejam uz jauno skolu.",
+  "gloss": "We are going to the new school.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Mēs",
+      "lexeme": "lex_mes",
+      "features": {
+        "case": "nom",
+        "number": "pl"
+      }
+    },
+    {
+      "surface": "ejam",
+      "lexeme": "lex_iet",
+      "features": {
+        "number": "pl",
+        "tense": "pres",
+        "person": 1
+      }
+    },
+    {
+      "surface": "uz",
+      "lexeme": "lex_uz",
+      "features": {}
+    },
+    {
+      "surface": "jauno",
+      "lexeme": "lex_jauns",
+      "features": {
+        "case": "acc",
+        "number": "sg",
+        "gender": "f",
+        "definiteness": "definite"
+      }
+    },
+    {
+      "surface": "skolu",
+      "lexeme": "lex_skola",
+      "features": {
+        "case": "acc",
+        "number": "sg"
+      },
+      "drillable": true
+    }
+  ],
+  "alternatives": [
+    "Ejam uz jauno skolu."
+  ],
+  "glossAlternatives": [
+    "We go to the new school."
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-12T20:01:21.417Z"
+}

@@ -13,6 +13,7 @@ describe('featureLabel', () => {
     ['conjugation:2', '2nd conjugation'],
     ['skill:produce', 'writing sentences (produce)'],
     ['gender:f', 'feminine'],
+    ['skill:hear', 'understanding by ear (hear)'],
     ['definiteness:definite', 'definite'],
     ['something:else', 'something:else'],
   ])('%s → %s', (feature, label) => {

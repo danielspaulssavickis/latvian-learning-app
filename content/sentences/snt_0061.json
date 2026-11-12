@@ -1,0 +1,48 @@
+{
+  "id": "snt_0061",
+  "text": "Jā, es esmu mājās.",
+  "gloss": "Yes, I am at home.",
+  "level": "a1",
+  "tokens": [
+    {
+      "surface": "Jā",
+      "lexeme": "lex_ja",
+      "features": {}
+    },
+    {
+      "surface": "es",
+      "lexeme": "lex_es",
+      "features": {
+        "case": "nom",
+        "number": "sg"
+      }
+    },
+    {
+      "surface": "esmu",
+      "lexeme": "lex_but",
+      "features": {
+        "number": "sg",
+        "tense": "pres",
+        "person": 1
+      }
+    },
+    {
+      "surface": "mājās",
+      "lexeme": "lex_maja",
+      "features": {
+        "case": "loc",
+        "number": "pl"
+      },
+      "drillable": true
+    }
+  ],
+  "alternatives": [
+    "Jā, esmu mājās."
+  ],
+  "glossAlternatives": [
+    "Yes, I am home."
+  ],
+  "review": "approved",
+  "source": "generated",
+  "reviewedAt": "2026-11-12T20:01:21.417Z"
+}
