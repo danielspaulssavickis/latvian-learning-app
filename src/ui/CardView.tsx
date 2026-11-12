@@ -26,7 +26,7 @@ interface Props {
 
 /**
  * One card, any kind. Keyboard flow: type, Enter checks, Enter again moves
- * on; recognize cards also take 1–4. Renders only — checking and grading
+ * on; multiple-choice cards (recognize, hear) also take 1–4. Renders only — checking and grading
  * happen in the engine reducer the parent dispatches to.
  */
 export function CardView({
@@ -53,9 +53,9 @@ export function CardView({
     pendingCaret.current = null
   })
 
-  // Number keys pick a recognize choice.
+  // Number keys pick a multiple-choice answer.
   useEffect(() => {
-    if (exercise.kind !== 'recognize' || answer) return
+    if ((exercise.kind !== 'recognize' && exercise.kind !== 'hear') || answer) return
     const choices = exercise.choices
     function onKey(event: KeyboardEvent) {
       const index = Number(event.key) - 1
@@ -65,7 +65,7 @@ export function CardView({
     return () => window.removeEventListener('keydown', onKey)
   }, [exercise, answer, onSubmit])
 
-  const typed = exercise.kind !== 'recognize'
+  const typed = exercise.check !== 'choice'
   const english = exercise.check === 'english'
   const input = (variant: 'inline' | 'block', label: string) => (
     <AnswerInput
@@ -97,13 +97,11 @@ export function CardView({
 
       {answer ? (
         <div className="space-y-4">
-          {exercise.audio && exercise.kind !== 'listen' && (
+          {exercise.audio && exercise.kind !== 'listen' && exercise.kind !== 'hear' && (
             <AudioPlayer src={exercise.audio} label="Hear the sentence" />
           )}
-          {exercise.kind !== 'recognize' && (
-            <Feedback answer={answer} options={checkOptionsFor(exercise)} />
-          )}
-          {exercise.kind === 'recognize' && (
+          {typed && <Feedback answer={answer} options={checkOptionsFor(exercise)} />}
+          {!typed && (
             <p role="status" className={`font-medium ${RESULT_COLOR[answer.result]}`}>
               {answer.result === 'correct'
                 ? 'Correct.'
@@ -303,6 +301,11 @@ function Prompt({ exercise, answer, input, onChoose, sentence }: PromptProps) {
     case 'listen':
       return <ListenPrompt exercise={exercise} answer={answer} input={input} sentence={sentence} />
 
+    case 'hear':
+      return (
+        <HearPrompt exercise={exercise} answer={answer} onChoose={onChoose} sentence={sentence} />
+      )
+
     case 'recognize':
       return (
         <div>
@@ -310,35 +313,103 @@ function Prompt({ exercise, answer, input, onChoose, sentence }: PromptProps) {
           <Sentence exercise={exercise} options={sentence} className="text-2xl sm:text-3xl">
             <span lang="lv">{exercise.text}</span>
           </Sentence>
-          <ol className="mt-4 space-y-2">
-            {exercise.choices.map((choice, index) => {
-              const isRight = choice === exercise.expected
-              const isPicked = answer?.given === choice
-              const tone = !answer
-                ? 'border-slate-300 bg-white hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700'
-                : isRight
-                  ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950'
-                  : isPicked
-                    ? 'border-rose-600 bg-rose-50 dark:bg-rose-950'
-                    : 'border-slate-200 opacity-60 dark:border-slate-700'
-              return (
-                <li key={choice}>
-                  <button
-                    type="button"
-                    disabled={answer !== null}
-                    onClick={() => onChoose(choice)}
-                    className={`flex w-full items-start gap-3 rounded-md border-2 px-3 py-2 text-left ${tone}`}
-                  >
-                    <kbd className="mt-0.5 text-sm text-slate-400">{index + 1}</kbd>
-                    <span>{choice}</span>
-                  </button>
-                </li>
-              )
-            })}
-          </ol>
+          <Choices exercise={exercise} answer={answer} onChoose={onChoose} />
         </div>
       )
   }
+}
+
+/** The four numbered English choices of a recognize or hear card. */
+function Choices({
+  exercise,
+  answer,
+  onChoose,
+}: {
+  exercise: Extract<Exercise, { kind: 'recognize' | 'hear' }>
+  answer: Answer | null
+  onChoose: (choice: string) => void
+}) {
+  return (
+    <ol className="mt-4 space-y-2">
+      {exercise.choices.map((choice, index) => {
+        const isRight = choice === exercise.expected
+        const isPicked = answer?.given === choice
+        const tone = !answer
+          ? 'border-slate-300 bg-white hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700'
+          : isRight
+            ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950'
+            : isPicked
+              ? 'border-rose-600 bg-rose-50 dark:bg-rose-950'
+              : 'border-slate-200 opacity-60 dark:border-slate-700'
+        return (
+          <li key={choice}>
+            <button
+              type="button"
+              disabled={answer !== null}
+              onClick={() => onChoose(choice)}
+              className={`flex w-full items-start gap-3 rounded-md border-2 px-3 py-2 text-left ${tone}`}
+            >
+              <kbd className="mt-0.5 text-sm text-slate-400">{index + 1}</kbd>
+              <span>{choice}</span>
+            </button>
+          </li>
+        )
+      })}
+    </ol>
+  )
+}
+
+/**
+ * Hear (ADR-019): the recording plays, no text; pick the meaning. After
+ * answering, the transcript appears under the player with the word-class
+ * toggle. If the audio can't play, the text is shown up front instead, so
+ * the card still works (as recognize).
+ */
+function HearPrompt({
+  exercise,
+  answer,
+  onChoose,
+  sentence,
+}: {
+  exercise: Extract<Exercise, { kind: 'hear' }>
+  answer: Answer | null
+  onChoose: (choice: string) => void
+  sentence: SentenceOptions
+}) {
+  const [unavailable, setUnavailable] = useState(false)
+  const showText = unavailable || answer !== null
+  return (
+    <div>
+      <Instruction>
+        {unavailable ? 'What does it mean?' : 'Listen — what does it mean?'}
+      </Instruction>
+      {unavailable ? (
+        <p role="status" className="mb-2 text-sm text-slate-500 dark:text-slate-400">
+          Audio unavailable — read the sentence instead.
+        </p>
+      ) : (
+        <AudioPlayer
+          src={exercise.audio}
+          autoPlay={!answer}
+          label={answer ? 'Hear it again' : 'Play'}
+          onUnavailable={() => setUnavailable(true)}
+        />
+      )}
+      {showText && (
+        <div className="mt-3">
+          {!unavailable && (
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
+              Transcript
+            </p>
+          )}
+          <Sentence exercise={exercise} options={sentence} className="text-2xl sm:text-3xl">
+            <span lang="lv">{exercise.text}</span>
+          </Sentence>
+        </div>
+      )}
+      <Choices exercise={exercise} answer={answer} onChoose={onChoose} />
+    </div>
+  )
 }
 
 function ListenPrompt({

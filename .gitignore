@@ -24,3 +24,7 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+
+# Piper TTS voice models (scripts/generate-audio.py)
+.tts/
+__pycache__/

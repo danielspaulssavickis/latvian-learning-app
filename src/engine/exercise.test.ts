@@ -147,6 +147,29 @@ describe('buildExercise — other kinds', () => {
     expect(buildExercise(listen, all)).toBeNull()
   })
 
+  it('hear: the audio file, four English choices, the transcript; null once the audio is gone', () => {
+    const withAudio = { ...SNT_1, audio: 'audio/snt_0001.mp3' }
+    const sentences = new Map([...all.sentenceById, [withAudio.id, withAudio]])
+    const content = { ...all, sentenceById: sentences }
+    const [hear] = generateAllCards([withAudio], lexemes, grammar).filter((c) => c.kind === 'hear')
+    const exercise = buildExercise(hear, content)
+    expect(exercise).toMatchObject({
+      kind: 'hear',
+      check: 'choice',
+      cardId: 'hear:snt_0001',
+      feature: 'skill:hear',
+      audio: 'audio/snt_0001.mp3',
+      text: 'Es dzīvoju Rīgā.',
+      expected: 'I live in Riga.',
+      words: SNT_1_WORDS,
+    })
+    if (exercise?.kind !== 'hear') throw new Error('not hear')
+    expect(exercise.choices).toHaveLength(4)
+    expect(exercise.choices).toContain('I live in Riga.')
+    expect(buildExercise(hear, content)).toEqual(exercise) // stable order
+    expect(buildExercise(hear, all)).toBeNull()
+  })
+
   it('inflect: lemma and target form in, the generated form out', () => {
     expect(buildExercise(card('inflect:lex_es@dat.sg'), all)).toEqual({
       kind: 'inflect',

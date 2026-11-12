@@ -16,6 +16,7 @@ const TENSES: Record<string, string> = {
 const ORDINALS = ['', '1st', '2nd', '3rd', '4th', '5th', '6th']
 const SKILLS: Record<string, string> = {
   recognize: 'understanding (recognize)',
+  hear: 'understanding by ear (hear)',
   translate: 'translating to English (translate)',
   produce: 'writing sentences (produce)',
   listen: 'listening',

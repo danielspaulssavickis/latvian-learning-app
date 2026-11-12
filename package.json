@@ -14,7 +14,8 @@
     "content:check": "tsx scripts/content-check.ts",
     "content:check:drafts": "tsx scripts/content-check.ts --drafts",
     "content:approve": "tsx scripts/content-approve.ts",
-    "dev:drafts": "vite --mode drafts"
+    "dev:drafts": "vite --mode drafts",
+    "audio:generate": "python3 scripts/generate-audio.py"
   },
   "dependencies": {
     "dexie": "^4.4.6",

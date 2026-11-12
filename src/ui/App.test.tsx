@@ -306,9 +306,56 @@ describe('App', () => {
     expect(grammar).not.toHaveTextContent('singular')
   })
 
+  it('plays a hear card: pick the meaning by ear, then the transcript appears (ADR-019)', async () => {
+    const content = fixtureContent([{ ...SNT_1, audio: 'audio/snt_0001.mp3' }, SNT_3])
+    await studiedYesterday(
+      [...TRANSLATED, 'cloze:snt_0001#2', 'produce:snt_0001', 'cloze:snt_0003#0'],
+      content,
+    )
+    const user = userEvent.setup()
+    const { container } = render(<App content={content} db={db} clock={clock} />)
+    await startSession(user)
+
+    expect(await screen.findByText('Listen — what does it mean?')).toBeInTheDocument()
+    expect(container.querySelector('audio')?.getAttribute('src')).toBe('/audio/snt_0001.mp3')
+    expect(screen.queryByText('Transcript')).not.toBeInTheDocument()
+    expect(screen.queryByText('Rīgā')).not.toBeInTheDocument() // no text before answering
+
+    const choices = screen.getAllByRole('button').filter((b) => /^\d/.test(b.textContent ?? ''))
+    const right = choices.findIndex((b) => b.textContent?.includes('I live in Riga.'))
+    await user.keyboard(String(right + 1))
+    expect(await screen.findByText('Correct.')).toBeInTheDocument()
+    expect(screen.getByText('Transcript')).toBeInTheDocument()
+    expect(screen.getByText('Rīgā')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Word classes' }))
+    expect(screen.getByLabelText('Rīgā: noun')).toBeInTheDocument()
+    await waitFor(async () =>
+      expect((await db.reviews.toArray()).at(-1)).toMatchObject({ cardId: 'hear:snt_0001' }),
+    )
+  })
+
+  it('shows a hear card as text when its audio is missing', async () => {
+    const content = fixtureContent([{ ...SNT_1, audio: 'audio/missing.mp3' }, SNT_3])
+    await studiedYesterday(
+      [...TRANSLATED, 'cloze:snt_0001#2', 'produce:snt_0001', 'cloze:snt_0003#0'],
+      content,
+    )
+    const user = userEvent.setup()
+    const { container } = render(<App content={content} db={db} clock={clock} />)
+    await startSession(user)
+    await screen.findByText('Listen — what does it mean?')
+    fireEvent.error(container.querySelector('audio')!)
+    expect(await screen.findByText(/Audio unavailable — read the sentence/)).toBeInTheDocument()
+    expect(screen.getByText('Rīgā')).toBeInTheDocument()
+    expect(screen.getByText('What does it mean?')).toBeInTheDocument()
+  })
+
   it('degrades a listen card with a missing audio file to a text-only card (M5 done-when)', async () => {
     const content = fixtureContent([{ ...SNT_1, audio: 'audio/missing.mp3' }, SNT_3])
-    await studiedYesterday([...TRANSLATED, 'cloze:snt_0001#2', 'produce:snt_0001'], content)
+    await studiedYesterday(
+      [...TRANSLATED, 'cloze:snt_0001#2', 'produce:snt_0001', 'hear:snt_0001'],
+      content,
+    )
     const user = userEvent.setup()
     const { container } = render(<App content={content} db={db} clock={clock} />)
     await startSession(user)
